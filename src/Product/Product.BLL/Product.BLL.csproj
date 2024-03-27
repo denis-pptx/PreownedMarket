@@ -10,4 +10,12 @@
     <ProjectReference Include="..\Product.WEB\Product.WEB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\DTOs\" />
+    <Folder Include="Models\Validators\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Services\Implementations\" />
+    <Folder Include="Services\Interfaces\" />
+  </ItemGroup>
+
 </Project>

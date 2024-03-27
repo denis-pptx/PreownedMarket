@@ -10,4 +10,11 @@
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Data\Configurations\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
 </Project>
