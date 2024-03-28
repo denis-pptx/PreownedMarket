@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Identity.Application.Features.Users.Commands.DeleteUser;
 
-public class DeleteUserByIdHandler(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) 
+public class DeleteUserByIdHandler(UserManager<User> userManager, IUserService userService) 
     : ICommandHandler<DeleteUserByIdCommand, Unit>
 {
-    private readonly ClaimsPrincipal? _userActor = httpContextAccessor.HttpContext?.User;
 
     public async Task<Unit> Handle(DeleteUserByIdCommand request, CancellationToken cancellationToken)
     {
@@ -16,7 +15,7 @@ public class DeleteUserByIdHandler(UserManager<User> userManager, IHttpContextAc
             throw new NotFoundException();
         }
 
-        var userActorId = _userActor?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userActorId = userService.GetMyId();
         if (userActorId == userIdentity.Id) 
         {
             throw new ConflictException();

@@ -4,6 +4,7 @@ using Identity.Domain.Models;
 using Identity.Infrastructure.Authentication;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Data.Seed;
+using Identity.Infrastructure.Services;
 using Identity.WEB.ExceptionHandlers;
 using Identity.WEB.OptionsSetup;
 using MediatR;
@@ -24,6 +25,8 @@ builder.Services.AddSwaggerGen();
 var connection = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlite(connection));
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddIdentity<User, IdentityRole>(opt =>
                 {

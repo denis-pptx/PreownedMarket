@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Features.Users.Commands.DeleteUser;
+using Identity.Application.Features.Users.Commands.UpdateUserRole;
 using Identity.Application.Features.Users.Queries.GetAllUsers;
 using Identity.Application.Features.Users.Queries.GetUserById;
 using Identity.Domain.Enums;
@@ -35,6 +36,16 @@ public class UserController(IMediator mediator) : Controller
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpDelete]
     public async Task<IActionResult> DeleteUserById(DeleteUserByIdCommand command, CancellationToken cancellationToken)
+    {
+        await mediator.Send(command, cancellationToken);
+
+        return Ok();
+    }
+
+    // PUT api/<UserController>/role
+    [Authorize(Roles = nameof(Role.Administrator))]
+    [HttpPut("role")]
+    public async Task<IActionResult> UpdateUserRole(UpdateUserRoleCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
 
