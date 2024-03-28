@@ -15,6 +15,18 @@ builder.Services.AddIdentity<User, IdentityRole>(opt =>
                 {
                     opt.User.RequireUniqueEmail = true;
                 }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+builder.Services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer();
+
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +38,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
