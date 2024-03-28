@@ -21,7 +21,7 @@ public class RefreshTokenHandler(IJwtProvider jwtProvider, UserManager<User> use
             throw new UnauthorizedException();
         }
 
-        var accessToken = jwtProvider.GenerateAccessToken(user);
+        var accessToken = await jwtProvider.GenerateAccessTokenAsync(user);
         var refreshToken = jwtProvider.GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;

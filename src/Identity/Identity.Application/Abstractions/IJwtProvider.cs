@@ -2,7 +2,7 @@
 
 public interface IJwtProvider
 {
-    string GenerateAccessToken(User user);
+    Task<string> GenerateAccessTokenAsync(User user);
     string GenerateRefreshToken();
     ClaimsPrincipal? GetPrincipalFromAccessToken(string accessToken);
 }

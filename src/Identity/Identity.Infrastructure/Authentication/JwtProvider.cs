@@ -1,19 +1,28 @@
-﻿namespace Identity.Infrastructure.Authentication;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
 
-public class JwtProvider(IOptions<JwtOptions> jwtOptions, IOptions<JwtBearerOptions> jwtBearerOptions) 
+namespace Identity.Infrastructure.Authentication;
+
+public class JwtProvider(
+    IOptions<JwtOptions> jwtOptions,
+    IOptions<JwtBearerOptions> jwtBearerOptions, 
+    UserManager<User> userManager) 
     : IJwtProvider
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
     private readonly JwtBearerOptions _jwtBearerOptions = jwtBearerOptions.Value;
 
-    public string GenerateAccessToken(User user)
+    public async Task<string> GenerateAccessTokenAsync(User user)
     {
+        string role = (await userManager.GetRolesAsync(user)).Single();
+
         var claims = new Claim[]
         {
             new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Name, user.UserName ?? "")
+            new(ClaimTypes.Name, user.UserName ?? ""),
+            new(ClaimTypes.Role, role)
         };
-
+        
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)), 
             SecurityAlgorithms.HmacSha256);

@@ -9,12 +9,11 @@ public class TestController : ControllerBase
     [HttpGet("test")]
     public IActionResult Test()
     {
-        var a = HttpContext.User;
         return Ok();
     }
     
     [HttpGet("authorize-test")]
-    [Authorize]
+    [Authorize(Roles ="Moderator")]
     public IActionResult AuthorizedTest()
     {
         return Ok("authorized");

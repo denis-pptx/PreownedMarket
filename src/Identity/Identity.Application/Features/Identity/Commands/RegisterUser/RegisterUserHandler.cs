@@ -14,6 +14,8 @@ public class RegisterUserHandler(UserManager<User> userManager, IMapper mapper)
             throw new IdentityException(result.Errors);
         }
 
+        await userManager.AddToRoleAsync(user, nameof(Role.User));
+
         return Unit.Value;
     }
 }

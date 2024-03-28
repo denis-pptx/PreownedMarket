@@ -17,7 +17,7 @@ public class LoginUserHandler(UserManager<User> userManager, IJwtProvider jwtPro
             throw new UnauthorizedException();
         }
 
-        var accessToken = jwtProvider.GenerateAccessToken(user);
+        var accessToken = await jwtProvider.GenerateAccessTokenAsync(user);
         var refreshToken = jwtProvider.GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;
