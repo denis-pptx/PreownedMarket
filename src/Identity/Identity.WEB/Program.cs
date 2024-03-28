@@ -1,3 +1,16 @@
+using Identity.Application.Abstractions;
+using Identity.Application.Mappings;
+using Identity.Domain.Models;
+using Identity.Infrastructure.Authentication;
+using Identity.Infrastructure.Data;
+using Identity.WEB.ExceptionHandlers;
+using Identity.WEB.OptionsSetup;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,8 +40,20 @@ builder.Services.AddAuthentication(options =>
                 .AddJwtBearer();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
+builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(UserMappingProfile)));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(Identity.Application.Features.Identity.Commands.LoginUser.LoginUserHandler)));
+// builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+builder.Services.AddExceptionHandler<IdentityExceptionHandler>();
 builder.Services.AddExceptionHandler<UnauthorizedExceptionHandler>();
+
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
