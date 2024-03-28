@@ -1,4 +1,6 @@
-﻿using Identity.Application.Features.Users.Queries.GetAllUsers;
+﻿using Identity.Application.Features.Users.Commands.DeleteUser;
+using Identity.Application.Features.Users.Queries.GetAllUsers;
+using Identity.Application.Features.Users.Queries.GetUserById;
 using Identity.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +13,31 @@ public class UserController(IMediator mediator) : Controller
     // GET api/<UserController>
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpGet]
-    public IActionResult GetAllUsers(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
-        var result = mediator.Send(new GetAllUsersQuery(), cancellationToken);
+        var users = await mediator.Send(new GetAllUsersQuery(), cancellationToken);
 
-        return Ok(result);
+        return Ok(users);
+    }
+
+    // GET api/<UserController>/<id>
+    [Authorize(Roles = nameof(Role.Administrator))]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetUserByIdQuery(id);
+        var user = await mediator.Send(query, cancellationToken);
+
+        return Ok(user);
+    }
+
+    // DELETE api/<UserController>/<id>
+    [Authorize(Roles = nameof(Role.Administrator))]
+    [HttpDelete]
+    public async Task<IActionResult> DeleteUserById(DeleteUserByIdCommand command, CancellationToken cancellationToken)
+    {
+        await mediator.Send(command, cancellationToken);
+
+        return Ok();
     }
 }

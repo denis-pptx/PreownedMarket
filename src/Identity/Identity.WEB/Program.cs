@@ -46,9 +46,12 @@ builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(UserMappingProfile)))
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(LoginUserHandler)));
 
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddExceptionHandler<IdentityExceptionHandler>();
 builder.Services.AddExceptionHandler<UnauthorizedExceptionHandler>();
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 
 builder.Services.AddProblemDetails();
 
