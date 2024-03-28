@@ -7,6 +7,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connection = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options => options.UseSqlite(connection));
+
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
+                {
+                    opt.User.RequireUniqueEmail = true;
+                }).AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
