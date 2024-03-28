@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace AuthServer.Api.Controllers;
+﻿namespace AuthServer.Api.Controllers;
 
 
 [Route("api/[controller]")]

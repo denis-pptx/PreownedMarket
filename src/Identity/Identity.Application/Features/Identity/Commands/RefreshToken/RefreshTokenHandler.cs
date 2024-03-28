@@ -1,13 +1,4 @@
-﻿using Identity.Application.Abstractions;
-using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Exceptions;
-using Identity.Application.Features.AuthenticaIdentitytion.Commands.RefreshToken;
-using Identity.Domain.Models;
-using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
-namespace Identity.Application.Features.Identity.Commands.RefreshToken;
+﻿namespace Identity.Application.Features.Identity.Commands.RefreshToken;
 
 public class RefreshTokenHandler(IJwtProvider jwtProvider, UserManager<User> userManager)
     : ICommandHandler<RefreshTokenCommand, RefreshTokenVm>

@@ -1,11 +1,4 @@
-﻿using Identity.Application.Features.Identity.Commands.LoginUser;
-using Identity.Application.Features.Identity.Commands.RefreshToken;
-using Identity.Application.Features.Identity.Commands.RegisterUser;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Identity.WEB.Controllers;
+﻿namespace Identity.WEB.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

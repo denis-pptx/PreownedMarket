@@ -1,10 +1,4 @@
-﻿using Identity.Infrastructure.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
-namespace Identity.WEB.OptionsSetup;
+﻿namespace Identity.WEB.OptionsSetup;
 
 public class JwtBearerOptionsSetup (IOptions<JwtOptions> jwtOptions)
     : IConfigureNamedOptions<JwtBearerOptions>

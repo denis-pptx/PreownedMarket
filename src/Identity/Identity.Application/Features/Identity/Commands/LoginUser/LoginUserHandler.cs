@@ -1,10 +1,4 @@
-﻿using Identity.Application.Abstractions;
-using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Exceptions;
-using Identity.Domain.Models;
-using Microsoft.AspNetCore.Identity;
-
-namespace Identity.Application.Features.Identity.Commands.LoginUser;
+﻿namespace Identity.Application.Features.Identity.Commands.LoginUser;
 
 public class LoginUserHandler(UserManager<User> userManager, IJwtProvider jwtProvider)
     : ICommandHandler<LoginUserCommand, LoginUserVm>

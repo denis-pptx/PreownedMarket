@@ -44,7 +44,6 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(UserMappingProfile)));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(Identity.Application.Features.Identity.Commands.LoginUser.LoginUserHandler)));
-// builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 builder.Services.AddExceptionHandler<IdentityExceptionHandler>();
 builder.Services.AddExceptionHandler<UnauthorizedExceptionHandler>();

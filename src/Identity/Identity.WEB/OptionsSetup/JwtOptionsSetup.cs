@@ -1,7 +1,4 @@
-﻿using Identity.Infrastructure.Authentication;
-using Microsoft.Extensions.Options;
-
-namespace Identity.WEB.OptionsSetup;
+﻿namespace Identity.WEB.OptionsSetup;
 
 public class JwtOptionsSetup(IConfiguration configuration) 
     : IConfigureOptions<JwtOptions>

@@ -1,10 +1,4 @@
-﻿using Identity.Application.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-
-namespace Identity.WEB.ExceptionHandlers;
+﻿namespace Identity.WEB.ExceptionHandlers;
 
 public class IdentityExceptionHandler : IExceptionHandler
 {

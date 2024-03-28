@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Exceptions;
-using Identity.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-
-namespace Identity.Application.Features.Identity.Commands.RegisterUser;
+﻿namespace Identity.Application.Features.Identity.Commands.RegisterUser;
 
 public class RegisterUserHandler(UserManager<User> userManager, IMapper mapper)
     : ICommandHandler<RegisterUserCommand, Unit>

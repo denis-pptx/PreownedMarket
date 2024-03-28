@@ -1,12 +1,8 @@
-﻿using Identity.Application.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
-
-namespace Identity.WEB.ExceptionHandlers;
+﻿namespace Identity.WEB.ExceptionHandlers;
 
 public class UnauthorizedExceptionHandler : IExceptionHandler
 {
-    public async ValueTask<bool> TryHandleAsync(
+    public ValueTask<bool> TryHandleAsync(
         HttpContext httpContext, 
         Exception exception, 
         CancellationToken cancellationToken)
@@ -15,9 +11,9 @@ public class UnauthorizedExceptionHandler : IExceptionHandler
         {
             httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
-            return true;
+            return ValueTask.FromResult(true);
         }
 
-        return false;
+        return ValueTask.FromResult(false);
     }
 }

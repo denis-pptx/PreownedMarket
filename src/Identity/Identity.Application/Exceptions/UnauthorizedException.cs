@@ -1,5 +1,3 @@
 ﻿namespace Identity.Application.Exceptions;
 
-public class UnauthorizedException : ApplicationException
-{
-}
+public class UnauthorizedException : ApplicationException;

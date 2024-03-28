@@ -1,7 +1,4 @@
-﻿using Identity.Domain.Models;
-using System.Security.Claims;
-
-namespace Identity.Application.Abstractions;
+﻿namespace Identity.Application.Abstractions;
 
 public interface IJwtProvider
 {
