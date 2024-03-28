@@ -27,6 +27,7 @@ builder.Services.AddAuthentication(options =>
                 .AddJwtBearer();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddExceptionHandler<UnauthorizedExceptionHandler>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
