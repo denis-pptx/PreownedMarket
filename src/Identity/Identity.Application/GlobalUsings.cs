@@ -4,6 +4,7 @@ global using Identity.Application.Exceptions;
 global using Identity.Application.Features.Identity.Commands.RegisterUser;
 global using Identity.Application.Features.AuthenticaIdentitytion.Commands.RefreshToken;
 global using Identity.Domain.Models;
+global using Identity.Domain.Enums;
 
 global using Microsoft.AspNetCore.Identity;
 global using System.Security.Claims;

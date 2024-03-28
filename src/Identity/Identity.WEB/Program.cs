@@ -3,6 +3,7 @@ using Identity.Application.Mappings;
 using Identity.Domain.Models;
 using Identity.Infrastructure.Authentication;
 using Identity.Infrastructure.Data;
+using Identity.Infrastructure.Data.Seed;
 using Identity.WEB.ExceptionHandlers;
 using Identity.WEB.OptionsSetup;
 using MediatR;
@@ -70,6 +71,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await DataInitializer.SeedRoles(app.Services);
+await DataInitializer.Seed(app.Services);
 
 app.Run();
