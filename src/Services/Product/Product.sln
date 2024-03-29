@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Product.DAL", "Product.DAL\Product.DAL.csproj", "{657A7885-F40D-4EE4-9DBC-0974BB991367}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Product.DataAccess", "Product.DAL\Product.DataAccess.csproj", "{657A7885-F40D-4EE4-9DBC-0974BB991367}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Product.BLL", "Product.BLL\Product.BLL.csproj", "{81B60D2D-A6FE-47B4-94AE-5B38665B85B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Product.BusinessLogic", "Product.BLL\Product.BusinessLogic.csproj", "{81B60D2D-A6FE-47B4-94AE-5B38665B85B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Product.WEB", "Product.WEB\Product.WEB.csproj", "{C6CDB798-AA41-408F-905C-129C57B6A062}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Product.Presentation", "Product.WEB\Product.Presentation.csproj", "{C6CDB798-AA41-408F-905C-129C57B6A062}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

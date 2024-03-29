@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.DAL", "Chat.DAL\Chat.DAL.csproj", "{A8D86075-BCE5-4495-8D82-ABE00277672E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.DataAccess", "Chat.DAL\Chat.DataAccess.csproj", "{A8D86075-BCE5-4495-8D82-ABE00277672E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.BLL", "Chat.BLL\Chat.BLL.csproj", "{EC309769-292B-47C9-9428-358014BF0073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.BusinessLogic", "Chat.BLL\Chat.BusinessLogic.csproj", "{EC309769-292B-47C9-9428-358014BF0073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.WEB", "Chat.WEB\Chat.WEB.csproj", "{6FB8DE06-E559-4903-B740-8A518D7D1A91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Presentation", "Chat.WEB\Chat.Presentation.csproj", "{6FB8DE06-E559-4903-B740-8A518D7D1A91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
