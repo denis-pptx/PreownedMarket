@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  identity.webui:
+    image: ${DOCKER_REGISTRY-}identitywebui
+    build:
+      context: .
+      dockerfile: Identity.WebUI/Dockerfile
+    depends_on:
+      - identity_db
+    networks:
+      - my-network
+
+  identity_db:
+    image: mysql:8.3.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: 'identity_db'
+      MYSQL_USER: 'dbuser'  
+      MYSQL_PASSWORD: 'dbpassword' 
+      MYSQL_ROOT_PASSWORD: 'dbrootpassword' 
+    ports:
+      - "3307:3306"  
+    volumes:
+      - mysql_data:/var/lib/mysql 
+    networks:
+      - my-network
+
+volumes:
+  mysql_data:
+networks:
+  my-network:  
