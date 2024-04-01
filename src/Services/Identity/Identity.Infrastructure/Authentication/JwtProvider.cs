@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Identity.Application.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Identity.Infrastructure.Authentication;
@@ -32,7 +33,7 @@ public class JwtProvider(
             audience: _jwtOptions.Audience,
             claims: claims,
             null,
-            expires: DateTime.Now.AddHours(1),
+            expires: DateTime.Now.AddMinutes(_jwtOptions.AccessTokenLifeTimeMinutes),
             signingCredentials: signingCredentials);
 
         string tokenValue = new JwtSecurityTokenHandler()
@@ -41,14 +42,17 @@ public class JwtProvider(
         return tokenValue;
     }
 
-    public string GenerateRefreshToken()
+    public RefreshTokenModel GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
 
         using var numberGenerator = RandomNumberGenerator.Create();
         numberGenerator.GetBytes(randomNumber);
-        
-        return Convert.ToBase64String(randomNumber);
+
+        string tokenString = Convert.ToBase64String(randomNumber);
+        DateTime tokenLifeTime = DateTime.Now.AddMinutes(_jwtOptions.RefreshTokenLifeTimeMinutes);
+
+        return new(tokenString, tokenLifeTime);
     }
 
     public ClaimsPrincipal? GetPrincipalFromAccessToken(string accessToken)

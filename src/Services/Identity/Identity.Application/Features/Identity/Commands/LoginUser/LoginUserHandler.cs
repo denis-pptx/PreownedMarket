@@ -18,12 +18,12 @@ public class LoginUserHandler(UserManager<User> userManager, IJwtProvider jwtPro
         }
 
         var accessToken = await jwtProvider.GenerateAccessTokenAsync(user);
-        var refreshToken = jwtProvider.GenerateRefreshToken();
+        var refreshTokenModel = jwtProvider.GenerateRefreshToken();
 
-        user.RefreshToken = refreshToken;
-        user.RefreshExpiryTime = DateTime.Now.AddDays(1);
+        user.RefreshToken = refreshTokenModel.Token;
+        user.RefreshExpiryTime = refreshTokenModel.ExpiryTime;
         await userManager.UpdateAsync(user);
 
-        return new LoginUserVm(accessToken, refreshToken);
+        return new LoginUserVm(accessToken, refreshTokenModel.Token);
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Identity.Application.Features.Identity.Commands.RefreshToken;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+
+namespace Identity.Application.Features.Identity.Commands.RefreshToken;
 
 public class RefreshTokenHandler(IJwtProvider jwtProvider, UserManager<User> userManager)
     : ICommandHandler<RefreshTokenCommand, RefreshTokenVm>
@@ -22,12 +25,12 @@ public class RefreshTokenHandler(IJwtProvider jwtProvider, UserManager<User> use
         }
 
         var accessToken = await jwtProvider.GenerateAccessTokenAsync(user);
-        var refreshToken = jwtProvider.GenerateRefreshToken();
-
-        user.RefreshToken = refreshToken;
-        user.RefreshExpiryTime = DateTime.Now.AddDays(1);
+        var refreshTokenModel = jwtProvider.GenerateRefreshToken();
+      
+        user.RefreshToken = refreshTokenModel.Token;
+        user.RefreshExpiryTime = refreshTokenModel.ExpiryTime;
         await userManager.UpdateAsync(user);
 
-        return new RefreshTokenVm(accessToken, refreshToken);
+        return new RefreshTokenVm(accessToken, refreshTokenModel.Token);
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace Identity.Application.Abstractions;
+﻿using Identity.Application.Models;
+
+namespace Identity.Application.Abstractions;
 
 public interface IJwtProvider
 {
     Task<string> GenerateAccessTokenAsync(User user);
-    string GenerateRefreshToken();
+    RefreshTokenModel GenerateRefreshToken();
     ClaimsPrincipal? GetPrincipalFromAccessToken(string accessToken);
 }
