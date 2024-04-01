@@ -1,3 +1,5 @@
-﻿namespace Identity.Application.Features.Users.Queries.GetAllUsers;
+﻿using Identity.Application.Features.Users.Queries.Models;
 
-public record GetAllUsersQuery() : IQuery<IEnumerable<User>>;
+namespace Identity.Application.Features.Users.Queries.GetAllUsers;
+
+public record GetAllUsersQuery() : IQuery<IEnumerable<UserVm>>;

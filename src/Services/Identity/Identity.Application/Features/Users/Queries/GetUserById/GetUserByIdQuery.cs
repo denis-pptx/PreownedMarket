@@ -1,3 +1,5 @@
-﻿namespace Identity.Application.Features.Users.Queries.GetUserById;
+﻿using Identity.Application.Features.Users.Queries.Models;
 
-public record GetUserByIdQuery(Guid Id) : IQuery<User>;
+namespace Identity.Application.Features.Users.Queries.GetUserById;
+
+public record GetUserByIdQuery(Guid Id) : IQuery<UserVm>;

@@ -24,7 +24,7 @@ public class UserController(IMediator mediator) : Controller
     // GET api/<UserController>/<id>
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetUserById([FromQuery] Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(id);
         var user = await mediator.Send(query, cancellationToken);
@@ -45,7 +45,7 @@ public class UserController(IMediator mediator) : Controller
     // PUT api/<UserController>/role
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpPut("role")]
-    public async Task<IActionResult> UpdateUserRole(UpdateUserRoleCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
 

@@ -21,8 +21,8 @@ public class UpdateUserRoleHandler(
             throw new NotFoundException("User not found");
         }
 
-        var currentRole = (await userManager.GetRolesAsync(user)).Single();
-        var newRole = (await roleManager.FindByNameAsync(request.NewRole))?.Name;
+        string? currentRole = (await userManager.GetRolesAsync(user)).SingleOrDefault();
+        string? newRole = (await roleManager.FindByNameAsync(request.NewRole))?.Name;
 
         if (newRole is null)
         {
@@ -30,7 +30,11 @@ public class UpdateUserRoleHandler(
         } 
         else
         {
-            await userManager.RemoveFromRoleAsync(user, currentRole);
+            if (currentRole is not null)
+            {
+                await userManager.RemoveFromRoleAsync(user, currentRole);
+            }
+            
             await userManager.AddToRoleAsync(user, newRole);
 
             return Unit.Value;
