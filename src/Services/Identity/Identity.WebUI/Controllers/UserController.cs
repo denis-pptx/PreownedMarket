@@ -24,7 +24,7 @@ public class UserController(IMediator mediator) : Controller
     // GET api/<UserController>/<id>
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserById([FromQuery] Guid id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(id);
         var user = await mediator.Send(query, cancellationToken);
@@ -32,10 +32,10 @@ public class UserController(IMediator mediator) : Controller
         return Ok(user);
     }
 
-    // DELETE api/<UserController>/<id>
+    // DELETE api/<UserController>
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpDelete]
-    public async Task<IActionResult> DeleteUserById(DeleteUserByIdCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteUserById([FromBody] DeleteUserByIdCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
 
