@@ -1,24 +1,23 @@
 ﻿namespace Identity.Application.Features.Users.Commands.DeleteUser;
 
-public class DeleteUserByIdHandler(UserManager<User> userManager, IUserService userService) 
+public class DeleteUserByIdHandler(UserManager<User> _userManager, IUserService _userService) 
     : ICommandHandler<DeleteUserByIdCommand, Unit>
 {
-
     public async Task<Unit> Handle(DeleteUserByIdCommand request, CancellationToken cancellationToken)
     {
-        var userIdentity = await userManager.FindByIdAsync(request.Id.ToString());
+        var userIdentity = await _userManager.FindByIdAsync(request.Id.ToString());
         if (userIdentity == null)
         {
             throw new NotFoundException("User not found");
         }
 
-        var userActorId = userService.GetMyId();
+        var userActorId = _userService.GetMyId();
         if (userActorId == userIdentity.Id) 
         {
             throw new ConflictException("It is impossible to delete yourself");
         }
 
-        await userManager.DeleteAsync(userIdentity);
+        await _userManager.DeleteAsync(userIdentity);
 
         return Unit.Value;
     }

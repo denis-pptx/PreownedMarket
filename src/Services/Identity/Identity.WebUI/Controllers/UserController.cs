@@ -9,14 +9,14 @@ namespace Identity.WebUI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IMediator mediator) : Controller
+public class UserController(IMediator _mediator) : Controller
 {
     // GET api/<UserController>
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpGet]
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
-        var users = await mediator.Send(new GetAllUsersQuery(), cancellationToken);
+        var users = await _mediator.Send(new GetAllUsersQuery(), cancellationToken);
 
         return Ok(users);
     }
@@ -27,7 +27,7 @@ public class UserController(IMediator mediator) : Controller
     public async Task<IActionResult> GetUserById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(id);
-        var user = await mediator.Send(query, cancellationToken);
+        var user = await _mediator.Send(query, cancellationToken);
 
         return Ok(user);
     }
@@ -37,7 +37,7 @@ public class UserController(IMediator mediator) : Controller
     [HttpDelete]
     public async Task<IActionResult> DeleteUserById([FromBody] DeleteUserByIdCommand command, CancellationToken cancellationToken)
     {
-        await mediator.Send(command, cancellationToken);
+        await _mediator.Send(command, cancellationToken);
 
         return Ok();
     }
@@ -47,7 +47,7 @@ public class UserController(IMediator mediator) : Controller
     [HttpPut("role")]
     public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleCommand command, CancellationToken cancellationToken)
     {
-        await mediator.Send(command, cancellationToken);
+        await _mediator.Send(command, cancellationToken);
 
         return Ok();
     }

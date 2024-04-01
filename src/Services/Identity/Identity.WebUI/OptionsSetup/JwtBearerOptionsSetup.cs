@@ -1,9 +1,9 @@
 ﻿namespace Identity.WebUI.OptionsSetup;
 
-public class JwtBearerOptionsSetup (IOptions<JwtOptions> jwtOptions)
+public class JwtBearerOptionsSetup (IOptions<JwtOptions> _jwtOptions)
     : IConfigureNamedOptions<JwtBearerOptions>
 {
-    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+    private readonly JwtOptions _jwtOptions = _jwtOptions.Value;
 
     public void Configure(JwtBearerOptions options)
     {

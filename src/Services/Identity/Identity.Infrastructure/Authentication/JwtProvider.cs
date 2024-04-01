@@ -5,17 +5,17 @@ using Microsoft.IdentityModel.JsonWebTokens;
 namespace Identity.Infrastructure.Authentication;
 
 public class JwtProvider(
-    IOptions<JwtOptions> jwtOptions,
-    IOptions<JwtBearerOptions> jwtBearerOptions, 
-    UserManager<User> userManager) 
+    IOptions<JwtOptions> _jwtOptions,
+    IOptions<JwtBearerOptions> _jwtBearerOptions, 
+    UserManager<User> _userManager) 
     : IJwtProvider
 {
-    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
-    private readonly JwtBearerOptions _jwtBearerOptions = jwtBearerOptions.Value;
+    private readonly JwtOptions _jwtOptions = _jwtOptions.Value;
+    private readonly JwtBearerOptions _jwtBearerOptions = _jwtBearerOptions.Value;
 
     public async Task<string> GenerateAccessTokenAsync(User user)
     {
-        string role = (await userManager.GetRolesAsync(user)).Single();
+        string role = (await _userManager.GetRolesAsync(user)).Single();
 
         var claims = new Claim[]
         {

@@ -2,14 +2,14 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController(IMediator mediator) 
+public class AuthController(IMediator _mediator) 
     : ControllerBase
 {
     // POST api/<AuthController>/register
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        await mediator.Send(command, cancellationToken);
+        await _mediator.Send(command, cancellationToken);
 
         return Ok();
     }
@@ -18,7 +18,7 @@ public class AuthController(IMediator mediator)
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserCommand command, CancellationToken cancellationToken)
     {
-        var loginUserVm = await mediator.Send(command, cancellationToken);
+        var loginUserVm = await _mediator.Send(command, cancellationToken);
 
         return Ok(loginUserVm);
     }
@@ -27,7 +27,7 @@ public class AuthController(IMediator mediator)
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command, CancellationToken cancellationToken)
     {
-        var refreshTokenVm = await mediator.Send(command, cancellationToken);
+        var refreshTokenVm = await _mediator.Send(command, cancellationToken);
 
         return Ok(refreshTokenVm);
     }
