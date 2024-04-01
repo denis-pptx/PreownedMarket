@@ -1,3 +1,18 @@
-﻿namespace Identity.Application.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
 
-public class NotFoundException : ApplicationException;
+namespace Identity.Application.Exceptions;
+
+public class NotFoundException : BaseApiException
+{
+    public NotFoundException(string message) 
+        : base(StatusCodes.Status404NotFound, message)
+    {
+
+    }
+
+    public NotFoundException() 
+        : base(StatusCodes.Status404NotFound)
+    {
+        
+    }
+}

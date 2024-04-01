@@ -1,7 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http;
-
-namespace Identity.Application.Features.Users.Commands.DeleteUser;
+﻿namespace Identity.Application.Features.Users.Commands.DeleteUser;
 
 public class DeleteUserByIdHandler(UserManager<User> userManager, IUserService userService) 
     : ICommandHandler<DeleteUserByIdCommand, Unit>
@@ -12,13 +9,13 @@ public class DeleteUserByIdHandler(UserManager<User> userManager, IUserService u
         var userIdentity = await userManager.FindByIdAsync(request.Id.ToString());
         if (userIdentity == null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("User not found");
         }
 
         var userActorId = userService.GetMyId();
         if (userActorId == userIdentity.Id) 
         {
-            throw new ConflictException();
+            throw new ConflictException("It is impossible to delete yourself");
         }
 
         await userManager.DeleteAsync(userIdentity);

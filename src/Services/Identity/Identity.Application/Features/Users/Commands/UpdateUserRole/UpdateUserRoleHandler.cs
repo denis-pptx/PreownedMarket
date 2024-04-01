@@ -12,13 +12,13 @@ public class UpdateUserRoleHandler(
         var userActorId = userSerivce.GetMyId();
         if (userActorId == request.UserId.ToString())
         {
-            throw new ConflictException();
+            throw new ConflictException("It is not possible to update the role for yourself");
         }
 
         var user = await userManager.FindByIdAsync(request.UserId.ToString());
         if (user is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("User not found");
         }
 
         var currentRole = (await userManager.GetRolesAsync(user)).Single();
@@ -26,7 +26,7 @@ public class UpdateUserRoleHandler(
 
         if (newRole is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Role not found");
         } 
         else
         {

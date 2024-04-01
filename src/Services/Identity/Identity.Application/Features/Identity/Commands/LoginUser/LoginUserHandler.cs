@@ -8,13 +8,13 @@ public class LoginUserHandler(UserManager<User> userManager, IJwtProvider jwtPro
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException("Incorrect Email or Password");
         }
 
         bool isPasswordValid = await userManager.CheckPasswordAsync(user, request.Password);
         if (!isPasswordValid)
         {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException("Incorrect Email or Password");
         }
 
         var accessToken = await jwtProvider.GenerateAccessTokenAsync(user);

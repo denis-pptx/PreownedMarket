@@ -1,3 +1,19 @@
-﻿namespace Identity.Application.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
 
-public class UnauthorizedException : ApplicationException;
+namespace Identity.Application.Exceptions;
+
+public class UnauthorizedException : BaseApiException
+{
+    public UnauthorizedException(string message) 
+        : base(StatusCodes.Status401Unauthorized, message)
+    {
+
+    }
+
+    public UnauthorizedException() 
+        : base(StatusCodes.Status401Unauthorized) 
+    { 
+    
+    }
+
+}

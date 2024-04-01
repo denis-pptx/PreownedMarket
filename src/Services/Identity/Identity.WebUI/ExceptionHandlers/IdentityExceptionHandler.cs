@@ -9,12 +9,11 @@ public class IdentityExceptionHandler : IExceptionHandler
     {
         if (exception is IdentityException identityException)
         {
-            int statusCode = StatusCodes.Status401Unauthorized;
-
             var problemDetails = new ProblemDetails
             {
-                Status = statusCode,
-                Title = ReasonPhrases.GetReasonPhrase(statusCode),
+                Status = identityException.StatusCode,
+                Title = ReasonPhrases.GetReasonPhrase(identityException.StatusCode),
+                Detail = identityException.Message,
                 Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1",
                 Extensions = { ["errors"] = ConvertErrors(identityException.Errors) }
             };
