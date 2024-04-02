@@ -1,7 +1,9 @@
+using Identity.Application.Behaviours;
 using Identity.Application.Mappings;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Data.Seed;
 using Identity.WebUI.Extensions;
+using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -30,7 +32,7 @@ builder.Services.ConfigureAuthentication();
 
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(UserMappingProfile)));
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(LoginUserHandler)));
+builder.Services.ConfigureMediatR();
 
 builder.Services.AddExcepitonHandlers();
 

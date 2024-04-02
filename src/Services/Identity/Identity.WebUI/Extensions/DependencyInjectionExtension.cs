@@ -7,7 +7,7 @@ public static class DependencyInjectionExtension
 {
     public static void RegisterDI(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IJwtProvider, JwtProvider>();
     }
 }
