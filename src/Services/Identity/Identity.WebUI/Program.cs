@@ -17,16 +17,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//var connection = builder.Configuration.GetConnectionString("MySQL");
-//builder.Services.AddDbContext<ApplicationDbContext>(
-//    options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
-
-var connection = builder.Configuration.GetConnectionString("SQLite");
+var connection = builder.Configuration.GetConnectionString("MySQL");
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlite(connection));
+    options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
 
-builder.Host.UseSerilog((context, loggerConfig) =>
-    loggerConfig.ReadFrom.Configuration(context.Configuration));
+//var connection = builder.Configuration.GetConnectionString("SQLite");
+//builder.Services.AddDbContext<ApplicationDbContext>(
+//    options => options.UseSqlite(connection));
+
+builder.Host.UseLogging();
 
 builder.Services.AddApplication();
 
