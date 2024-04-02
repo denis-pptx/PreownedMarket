@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Identity.Application.Behaviours;
 
-public class LoggingBehaviour<TRequest>(ILogger<TRequest> _logger, ICurrentUserService _currentUserService) 
+public class LoggingPreProcessorBehaviour<TRequest>(ILogger<TRequest> _logger, ICurrentUserService _currentUserService) 
     : IRequestPreProcessor<TRequest> where TRequest : notnull
 {
     public async Task Process(TRequest request, CancellationToken cancellationToken)
