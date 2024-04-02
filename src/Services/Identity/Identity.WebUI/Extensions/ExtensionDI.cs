@@ -3,9 +3,9 @@ using Identity.Infrastructure.Services;
 
 namespace Identity.WebUI.Extensions;
 
-public static  class ExtensionDI
+public static class DependencyInjectionExtension
 {
-    public static void AddDI(this IServiceCollection services)
+    public static void RegisterDI(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IJwtProvider, JwtProvider>();

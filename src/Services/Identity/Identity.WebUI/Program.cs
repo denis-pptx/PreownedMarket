@@ -24,7 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 builder.Services.AddIdentity();
 
-builder.Services.AddDI();
+builder.Services.RegisterDI();
 
 builder.Services.ConfigureAuthentication();
 
