@@ -5,6 +5,7 @@ using Identity.Infrastructure.Data.Seed;
 using Identity.WebUI.Extensions;
 using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,17 +25,12 @@ var connection = builder.Configuration.GetConnectionString("SQLite");
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlite(connection));
 
-builder.Services.AddIdentity();
+builder.Host.UseSerilog((context, loggerConfig) =>
+    loggerConfig.ReadFrom.Configuration(context.Configuration));
 
-builder.Services.RegisterDI();
-
-builder.Services.ConfigureAuthentication();
+builder.Services.AddApplication();
 
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(UserMappingProfile)));
-
-builder.Services.ConfigureMediatR();
-
-builder.Services.AddExcepitonHandlers();
 
 builder.Services.AddProblemDetails();
 
@@ -54,11 +50,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseSerilogRequestLogging();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.AddMiddleware();
 
 await DataInitializer.Seed(app.Services);
 
