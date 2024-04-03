@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Product.BLL\Product.BusinessLogic.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Data\Configurations\" />
     <Folder Include="Models\" />
     <Folder Include="Repositories\Interfaces\" />
