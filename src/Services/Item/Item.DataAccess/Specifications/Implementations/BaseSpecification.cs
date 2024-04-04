@@ -1,7 +1,8 @@
 ﻿using Item.DataAccess.Models;
+using Item.DataAccess.Specifications.Abstractions;
 using System.Linq.Expressions;
 
-namespace Item.DataAccess.Specifications.Abstractions;
+namespace Item.DataAccess.Specifications.Implementations;
 
 public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
     where TEntity : BaseEntity

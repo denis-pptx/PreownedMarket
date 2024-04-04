@@ -1,7 +1,7 @@
 ﻿using Item.DataAccess.Models;
 using System.Linq.Expressions;
 
-namespace Item.DataAccess.Specifications.Abstractions;
+namespace Item.DataAccess.Specifications.Interfaces;
 
 public interface ISpecification<TEntity>
     where TEntity : BaseEntity
