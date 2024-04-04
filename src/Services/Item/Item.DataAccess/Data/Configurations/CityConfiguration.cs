@@ -12,5 +12,9 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
 
         builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
         builder.HasIndex(x => x.Name).IsUnique();
+
+        builder.HasOne(x => x.Region)
+            .WithMany(x => x.Cities)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
