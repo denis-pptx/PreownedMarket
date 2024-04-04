@@ -3,7 +3,7 @@ using Item.DataAccess.Models;
 
 namespace Item.BusinessLogic.Services.Interfaces;
 
-public interface ICategoryService 
+public interface IRegionService 
     : IBaseService<Region, RegionDto>
 {
 }

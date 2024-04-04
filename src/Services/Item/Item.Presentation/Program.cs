@@ -28,10 +28,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
 builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IRegionService, RegionService>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(CategoryMappingProfile)));
+builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(CategoryProfile)));
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();

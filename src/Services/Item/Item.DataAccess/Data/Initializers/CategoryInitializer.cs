@@ -7,7 +7,7 @@ public static class CategoryInitializer
 {
     public static void SeedCategoris(this ModelBuilder modelBuilder)
     {
-        List<Category> categories = [
+        List<Region> categories = [
             new() { Name = "Real Estate" },
             new() { Name = "Cars and Parts" },
             new() { Name = "Appliances" },
@@ -30,6 +30,6 @@ public static class CategoryInitializer
             new() { Name = "Other" }
         ];
 
-        modelBuilder.Entity<Category>().HasData(categories);
+        modelBuilder.Entity<Region>().HasData(categories);
     }
 }
