@@ -8,6 +8,8 @@ using Item.DataAccess.Data.Initializers;
 using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.Presentation.ExceptionHandlers;
+using Item.Presentation.OptionsSetup;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
@@ -24,6 +26,8 @@ x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
+
 var connection = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlite(connection));
@@ -35,6 +39,8 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
@@ -42,6 +48,11 @@ builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(CategoryProfile)));
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 var app = builder.Build();
 
