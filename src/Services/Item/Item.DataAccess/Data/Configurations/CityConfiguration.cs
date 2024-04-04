@@ -15,6 +15,7 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
 
         builder.HasOne(x => x.Region)
             .WithMany(x => x.Cities)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
     }
 }
