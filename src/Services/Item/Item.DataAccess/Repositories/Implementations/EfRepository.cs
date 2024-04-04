@@ -1,6 +1,8 @@
 ﻿using Item.DataAccess.Data;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
+using Item.DataAccess.Specifications.Common;
+using Item.DataAccess.Specifications.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -32,6 +34,13 @@ public class EfRepository<TEntity>(ApplicationDbContext dbContext)
         return await _entities.FirstOrDefaultAsync(filter, token);
     }
 
+    public async Task<TEntity?> FirstOrDefaultAsync(ISpecification<TEntity> specification, CancellationToken token = default)
+    {
+        return await _entities.AsQueryable()
+            .ApplySpecification(specification)
+            .FirstOrDefaultAsync(token);
+    }
+
     public async Task<IEnumerable<TEntity>> GetAsync(CancellationToken token = default)
     {
         return await _entities.ToListAsync(token);
@@ -40,6 +49,13 @@ public class EfRepository<TEntity>(ApplicationDbContext dbContext)
     public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, CancellationToken token = default)
     {
         return await _entities.Where(filter).ToListAsync(token);
+    }
+
+    public async Task<IEnumerable<TEntity>> GetAsync(ISpecification<TEntity> specification, CancellationToken token = default)
+    {
+        return await _entities.AsQueryable()
+            .ApplySpecification(specification)
+            .ToListAsync(token);
     }
 
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken token = default)

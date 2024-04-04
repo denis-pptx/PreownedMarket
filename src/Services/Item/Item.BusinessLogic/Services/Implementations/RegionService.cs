@@ -4,6 +4,7 @@ using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
+using Item.DataAccess.Specifications.Implementations;
 using Library.BLL.Services.Implementations;
 
 namespace Item.BusinessLogic.Services.Implementations;
@@ -41,5 +42,26 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
         var result = await _entityRepository.UpdateAsync(region, token);
 
         return result;
+    }
+
+    public async override Task<IEnumerable<Region>> GetAsync(CancellationToken token)
+    {
+        var specification = new RegionWithCitiesSpecification();
+        var entities = await _entityRepository.GetAsync(specification, token);
+
+        return entities;
+    }
+
+    public async override Task<Region> GetByIdAsync(Guid id, CancellationToken token)
+    {
+        var specification = new RegionWithCitiesSpecification(id);
+        var entity = await _entityRepository.FirstOrDefaultAsync(specification, token);
+
+        if (entity is null)
+        {
+            throw new NotFoundException($"Region is not found");
+        }
+
+        return entity;
     }
 }
