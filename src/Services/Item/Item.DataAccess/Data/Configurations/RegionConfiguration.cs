@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Item.DataAccess.Data.Configurations;
 
-public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+public class RegionConfiguration : IEntityTypeConfiguration<Region>
 {
-    public void Configure(EntityTypeBuilder<Category> builder)
+    public void Configure(EntityTypeBuilder<Region> builder)
     {
         builder.HasKey(x => x.Id);
 

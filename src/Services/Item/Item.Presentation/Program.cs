@@ -4,6 +4,7 @@ using Item.BusinessLogic.Models.Validators;
 using Item.BusinessLogic.Services.Implementations;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Data;
+using Item.DataAccess.Data.Initializers;
 using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.Presentation.ExceptionHandlers;
@@ -29,6 +30,7 @@ builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
+builder.Services.AddScoped<ICityService, CityService>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
@@ -53,5 +55,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await DataInitializer.Seed(app.Services);
 
 app.Run();

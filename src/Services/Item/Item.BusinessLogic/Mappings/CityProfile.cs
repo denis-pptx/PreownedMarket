@@ -4,11 +4,11 @@ using Item.DataAccess.Models;
 
 namespace Item.BusinessLogic.Mappings;
 
-public class CategoryProfile : Profile
+public class CityProfile : Profile
 {
-    public CategoryProfile()
+    public CityProfile()
     {
-        CreateMap<CategoryDto, Category>()
+        CreateMap<CityDto, City>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ReverseMap();
     }

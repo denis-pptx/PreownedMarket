@@ -23,8 +23,8 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
             throw new ConflictException("The name of the region must be unique");
         }
 
-        var category = _mapper.Map<RegionDto, Region>(regionDto);
-        var result = await _entityRepository.AddAsync(category, token);
+        var region = _mapper.Map<RegionDto, Region>(regionDto);
+        var result = await _entityRepository.AddAsync(region, token);
 
         return result;
     }
