@@ -94,9 +94,8 @@ public static class LocationInitializer
 
                 dbRegion.Cities.AddRange(citiesToAdd);
             }
+
+            await dbContext.SaveChangesAsync();
         }
-
-
-        await dbContext.SaveChangesAsync();
     }
 }

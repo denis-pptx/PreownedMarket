@@ -31,6 +31,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 

@@ -60,7 +60,7 @@ public class EfRepository<TEntity>(ApplicationDbContext dbContext)
 
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken token = default)
     {
-        return await _entities.SingleAsync(e => e.Id.Equals(id), token);
+        return await _entities.FirstOrDefaultAsync(e => e.Id.Equals(id), token);
     }
 
     public async Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> filter, CancellationToken token = default)
