@@ -1,6 +1,6 @@
 ﻿namespace Item.DataAccess.Models;
 
-public abstract class Entity
+public abstract class BaseEntity
 {
     public Guid Id { get; set; }
 }

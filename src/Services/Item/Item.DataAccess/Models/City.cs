@@ -1,6 +1,6 @@
 ﻿namespace Item.DataAccess.Models;
 
-public class City : Entity
+public class City : BaseEntity
 {
     public string Name { get; set; } = string.Empty;
 }

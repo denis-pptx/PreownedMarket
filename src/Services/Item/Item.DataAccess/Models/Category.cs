@@ -1,6 +1,6 @@
 ﻿namespace Item.DataAccess.Models;
 
-public class Category : Entity
+public class Category : BaseEntity
 {
     public string Name { get; set; } = string.Empty;
 }
