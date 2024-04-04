@@ -1,5 +1,5 @@
 ﻿using Item.DataAccess.Models;
-using Item.DataAccess.Specifications.Abstractions;
+using Item.DataAccess.Specifications.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Item.DataAccess.Specifications.Common;

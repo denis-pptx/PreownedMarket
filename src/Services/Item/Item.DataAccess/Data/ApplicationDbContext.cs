@@ -1,5 +1,7 @@
-﻿using Item.DataAccess.Models;
+﻿using Item.DataAccess.Data.Initializers;
+using Item.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Item.DataAccess.Data;
 
@@ -16,6 +18,12 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
+        //Database.EnsureCreated();
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.Seed();
     }
 }

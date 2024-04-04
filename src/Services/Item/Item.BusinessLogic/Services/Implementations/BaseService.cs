@@ -6,11 +6,18 @@ using Item.DataAccess.Repositories.Interfaces;
 
 namespace Library.BLL.Services.Implementations;
 
-public abstract class BaseService<TEntity, TEntityDto>(
-    IRepository<TEntity> _entityRepository, IMapper _mapper)
-    : IBaseService<TEntity, TEntityDto>
+public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, TEntityDto>
     where TEntity : BaseEntity
 {
+    protected readonly IRepository<TEntity> _entityRepository;
+    protected readonly IMapper _mapper;
+
+    public BaseService(IRepository<TEntity> entityRepository, IMapper mapper)
+    {
+        _entityRepository = entityRepository;
+        _mapper = mapper;
+    }
+
     public async virtual Task<TEntity> CreateAsync(TEntityDto entityDto, CancellationToken token)
     {
         var entity = _mapper.Map<TEntityDto, TEntity>(entityDto);

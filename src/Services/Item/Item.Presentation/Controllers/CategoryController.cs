@@ -1,0 +1,56 @@
+﻿using Item.BusinessLogic.Models.DTOs;
+using Item.BusinessLogic.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Item.Presentation.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CategoryController(ICategoryService _categoryService) 
+    : ControllerBase
+{
+    // GET: api/<CategoryController>
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var result = await _categoryService.GetAsync(cancellationToken);
+
+        return Ok(result);
+    }
+
+    // GET: api/<CategoryController>/<id>
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _categoryService.GetByIdAsync(id, cancellationToken);
+
+        return Ok(result);
+    }
+
+    // POST: api/<CategoryController>
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
+    {
+        var result = await _categoryService.CreateAsync(categoryDto, cancellationToken);
+
+        return Ok(result);
+    }
+
+    // PUT api/<CategoryController>/<id>
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
+    {
+        var result = await _categoryService.UpdateAsync(id, categoryDto, cancellationToken);
+
+        return Ok(result);
+    }
+
+    // DELETE api/<CategoryController>/<id>
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _categoryService.DeleteByIdAsync(id, cancellationToken);
+
+        return Ok(result);
+    }
+}
