@@ -1,7 +1,4 @@
-﻿using Identity.Application.Exceptions.ErrorMessages;
-using Microsoft.AspNetCore.Http;
-
-namespace Identity.Application.Exceptions;
+﻿namespace Identity.Application.Exceptions;
 
 public class NotFoundException : BaseApiException
 {

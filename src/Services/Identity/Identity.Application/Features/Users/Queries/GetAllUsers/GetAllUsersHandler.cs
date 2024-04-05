@@ -1,7 +1,4 @@
-﻿using Identity.Application.Features.Users.Queries.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace Identity.Application.Features.Users.Queries.GetAllUsers;
+﻿namespace Identity.Application.Features.Users.Queries.GetAllUsers;
 
 public class GetAllUsersHandler(UserManager<User> _userManager, IMapper _mapper)
     : IQueryHandler<GetAllUsersQuery, IEnumerable<UserVm>>

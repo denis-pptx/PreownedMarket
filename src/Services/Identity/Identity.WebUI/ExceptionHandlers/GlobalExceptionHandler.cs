@@ -1,8 +1,4 @@
-﻿
-using Identity.Application.Exceptions;
-using System.Threading;
-
-namespace Identity.WebUI.ExceptionHandlers;
+﻿namespace Identity.WebUI.ExceptionHandlers;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {

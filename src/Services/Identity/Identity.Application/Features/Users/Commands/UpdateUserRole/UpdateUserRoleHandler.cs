@@ -1,7 +1,4 @@
-﻿
-using Identity.Application.Exceptions.ErrorMessages;
-
-namespace Identity.Application.Features.Users.Commands.UpdateUserRole;
+﻿namespace Identity.Application.Features.Users.Commands.UpdateUserRole;
 
 public class UpdateUserRoleHandler(
     UserManager<User> _userManager, 
@@ -12,12 +9,14 @@ public class UpdateUserRoleHandler(
     public async Task<Unit> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
     {
         var userActorId = _userSerivce.UserId;
+
         if (userActorId == request.UserId.ToString())
         {
             throw new ConflictException(RoleErrorMessages.UpdateYourself);
         }
 
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+
         if (user is null)
         {
             throw new NotFoundException(UserErrorMessages.NotFound);

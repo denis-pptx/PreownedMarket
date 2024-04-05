@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-
-namespace Identity.Infrastructure.Services;
+﻿namespace Identity.Infrastructure.Services;
 
 public class CurrentUserService(IHttpContextAccessor _httpContextAccessor) 
     : ICurrentUserService

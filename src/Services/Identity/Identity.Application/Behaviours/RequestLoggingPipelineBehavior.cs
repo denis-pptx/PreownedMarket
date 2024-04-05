@@ -1,12 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Serilog.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Identity.Application.Behaviours;
+﻿namespace Identity.Application.Behaviours;
 
 public class RequestLoggingPipelineBehavior<TRequest, TResponse>(
     ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> _logger)

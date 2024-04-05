@@ -1,8 +1,4 @@
-﻿using Identity.Application.Exceptions.ErrorMessages;
-using Identity.Application.Features.Users.Queries.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace Identity.Application.Features.Users.Queries.GetUserById;
+﻿namespace Identity.Application.Features.Users.Queries.GetUserById;
 
 public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper) 
     : IQueryHandler<GetUserByIdQuery, UserVm>

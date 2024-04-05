@@ -1,8 +1,5 @@
-﻿using Elasticsearch.Net;
-using Microsoft.Extensions.Configuration;
-using Serilog;
+﻿using Serilog;
 using Serilog.Sinks.Elasticsearch;
-using System;
 using System.Reflection;
 
 namespace Identity.WebUI.Extensions;

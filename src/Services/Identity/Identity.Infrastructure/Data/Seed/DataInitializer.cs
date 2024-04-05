@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Identity.Domain.Enums;
-
-namespace Identity.Infrastructure.Data.Seed;
+﻿namespace Identity.Infrastructure.Data.Seed;
 
 public static class DataInitializer
 {

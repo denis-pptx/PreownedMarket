@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
-
-namespace Identity.Application.Features.Identity.Commands.RefreshToken;
+﻿namespace Identity.Application.Features.Identity.Commands.RefreshToken;
 
 public class RefreshTokenHandler(IJwtProvider _jwtProvider, UserManager<User> _userManager)
     : ICommandHandler<RefreshTokenCommand, RefreshTokenVm>
@@ -11,12 +8,14 @@ public class RefreshTokenHandler(IJwtProvider _jwtProvider, UserManager<User> _u
         var principal = _jwtProvider.GetPrincipalFromAccessToken(request.AccessToken);
 
         var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         if (userId is null)
         {
             throw new UnauthorizedException();
         }
 
         var user = await _userManager.FindByIdAsync(userId);
+
         if (user is null || 
             user.RefreshToken != request.RefreshToken || 
             user.RefreshExpiryTime < DateTime.Now)

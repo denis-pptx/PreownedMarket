@@ -13,4 +13,3 @@ public static class UserErrorMessages
         "User.DeleteYourself",
         "It is impossible to delete yourself");
 }
-

@@ -1,9 +1,7 @@
-using Identity.Application.Behaviours;
 using Identity.Application.Mappings;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Data.Seed;
 using Identity.WebUI.Extensions;
-using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Reflection;

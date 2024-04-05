@@ -1,8 +1,4 @@
-﻿using Identity.Application.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.JsonWebTokens;
-
-namespace Identity.Infrastructure.Authentication;
+﻿namespace Identity.Infrastructure.Authentication;
 
 public class JwtProvider(
     IOptions<JwtOptions> _jwtOptions,
