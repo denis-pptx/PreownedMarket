@@ -1,4 +1,5 @@
-﻿using Identity.Application.Features.Users.Queries.Models;
+﻿using Identity.Application.Exceptions.ErrorMessages;
+using Identity.Application.Features.Users.Queries.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Application.Features.Users.Queries.GetUserById;
@@ -13,7 +14,7 @@ public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper)
         
         if (user is null)
         {
-            throw new NotFoundException("User not found");
+            throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
         string? role = (await _userManager.GetRolesAsync(user)).SingleOrDefault();

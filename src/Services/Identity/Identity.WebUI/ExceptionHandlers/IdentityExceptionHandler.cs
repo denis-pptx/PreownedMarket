@@ -13,7 +13,7 @@ public class IdentityExceptionHandler : IExceptionHandler
             {
                 Status = identityException.StatusCode,
                 Title = ReasonPhrases.GetReasonPhrase(identityException.StatusCode),
-                Detail = identityException.Message,
+                Detail = identityException.ErrorMessage?.Description ?? string.Empty,
                 Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1",
                 Extensions = { ["errors"] = ConvertErrors(identityException.Errors) }
             };

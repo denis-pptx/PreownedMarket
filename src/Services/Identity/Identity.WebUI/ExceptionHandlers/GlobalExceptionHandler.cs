@@ -17,7 +17,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             {
                 Status = baseException.StatusCode,
                 Title = ReasonPhrases.GetReasonPhrase(baseException.StatusCode),
-                Detail = baseException.Message,
+                Detail = baseException.ErrorMessage?.Description ?? string.Empty,
                 Type = baseException.Type,
             };
 

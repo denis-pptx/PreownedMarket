@@ -1,4 +1,6 @@
-﻿namespace Identity.Application.Features.Users.Commands.DeleteUser;
+﻿using Identity.Application.Exceptions.ErrorMessages;
+
+namespace Identity.Application.Features.Users.Commands.DeleteUser;
 
 public class DeleteUserByIdHandler(UserManager<User> _userManager, ICurrentUserService _userService) 
     : ICommandHandler<DeleteUserByIdCommand, Unit>
@@ -8,13 +10,13 @@ public class DeleteUserByIdHandler(UserManager<User> _userManager, ICurrentUserS
         var userIdentity = await _userManager.FindByIdAsync(request.Id.ToString());
         if (userIdentity == null)
         {
-            throw new NotFoundException("User not found");
+            throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
         var userActorId = _userService.UserId;
         if (userActorId == userIdentity.Id) 
         {
-            throw new ConflictException("It is impossible to delete yourself");
+            throw new ConflictException(UserErrorMessages.DeleteYourself);
         }
 
         await _userManager.DeleteAsync(userIdentity);

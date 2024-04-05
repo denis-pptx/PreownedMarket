@@ -1,4 +1,6 @@
 ﻿
+using Identity.Application.Exceptions.ErrorMessages;
+
 namespace Identity.Application.Features.Users.Commands.UpdateUserRole;
 
 public class UpdateUserRoleHandler(
@@ -12,13 +14,13 @@ public class UpdateUserRoleHandler(
         var userActorId = _userSerivce.UserId;
         if (userActorId == request.UserId.ToString())
         {
-            throw new ConflictException("It is not possible to update the role for yourself");
+            throw new ConflictException(RoleErrorMessages.UpdateYourself);
         }
 
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         if (user is null)
         {
-            throw new NotFoundException("User not found");
+            throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
         string? currentRole = (await _userManager.GetRolesAsync(user)).SingleOrDefault();
@@ -26,7 +28,7 @@ public class UpdateUserRoleHandler(
 
         if (newRole is null)
         {
-            throw new NotFoundException("Role not found");
+            throw new NotFoundException(RoleErrorMessages.NotFound);
         } 
         else
         {
