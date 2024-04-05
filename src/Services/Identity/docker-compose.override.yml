@@ -12,3 +12,43 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - my-network
+
+  identity.db:
+    environment:
+      MYSQL_DATABASE: 'identity_db'
+      MYSQL_USER: 'dbuser'  
+      MYSQL_PASSWORD: 'dbpassword' 
+      MYSQL_ROOT_PASSWORD: 'dbrootpassword' 
+    ports:
+      - "3307:3306"  
+    volumes:
+      - identity.db-data:/var/lib/mysql 
+    networks:
+      - my-network
+  
+  elasticsearch:
+    ports:
+      - 9200:9200
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    networks:
+      - my-network
+  
+  kibana:
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - my-network
+
+volumes:
+  identity.db-data:
+  elasticsearch-data:
+networks:
+  my-network:  
