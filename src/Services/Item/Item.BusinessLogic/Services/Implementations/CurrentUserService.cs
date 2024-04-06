@@ -4,8 +4,10 @@ using System.Security.Claims;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-public class CurrentUserService(IHttpContextAccessor _httpContextAccessor) 
+public class CurrentUserService(IHttpContextAccessor httpContextAccessor) 
     : ICurrentUserService
 {
-    public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    private readonly HttpContext _httpContext = httpContextAccessor.HttpContext!;
+    public string? UserId => _httpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? Role => _httpContext.User?.FindFirstValue(ClaimTypes.Role);
 }
