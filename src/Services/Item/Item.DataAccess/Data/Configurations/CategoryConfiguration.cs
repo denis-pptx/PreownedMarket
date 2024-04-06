@@ -12,5 +12,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
         builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
         builder.HasIndex(x => x.Name).IsUnique();
+
+        builder.Property(x => x.NormalizedName).HasMaxLength(50).IsRequired();
+        builder.HasIndex(x => x.NormalizedName).IsUnique();
     }
 }

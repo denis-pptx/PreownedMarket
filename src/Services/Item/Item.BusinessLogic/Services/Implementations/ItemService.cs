@@ -3,6 +3,7 @@ using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.Data.Initializers.Values;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
 using Library.BLL.Services.Implementations;
@@ -60,7 +61,9 @@ public class ItemService(
 
         _mapper.Map(itemDto, item);
 
-        var status = await _statusRepository.SingleOrDefaultAsync(x => x.NormalizedName == "under-review", token);
+        var status = await _statusRepository.SingleOrDefaultAsync(
+            x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
+
         item.StatusId = status!.Id;
 
         var result = await _entityRepository.UpdateAsync(item, token);

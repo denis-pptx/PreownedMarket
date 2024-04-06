@@ -1,22 +1,28 @@
-﻿using Item.DataAccess.Models;
+﻿using Item.DataAccess.Data.Initializers.Values;
+using Item.DataAccess.Models;
+using System.Reflection;
 
 namespace Item.DataAccess.Data.Initializers;
 
 public class StatusInitializer
 {
-    private static List<Status> _statuses => [
-        new() { Name = "Under Review", NormalizedName = "under-review" },
-        new() { Name = "Active", NormalizedName = "active" },
-        new() { Name = "Rejected", NormalizedName = "rejected" },
-        new() { Name = "Pending Payment", NormalizedName = "pending-payment" },
-        new() { Name = "Inactive", NormalizedName = "inactive" }
-   ];
+    private static IEnumerable<Status> GetAllStatuses()
+    {
+        Type type = typeof(StatusValues);
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
+
+        foreach (var property in properties)
+        {
+            yield return (property.GetValue(obj: null) as Status)!;
+        }
+    }
 
     public static async Task SeedAsync(ApplicationDbContext dbContext)
     {
         var existingStatusNames = dbContext.Statuses.Select(c => c.NormalizedName);
 
-        var statusedToAdd = _statuses.Where(status => !existingStatusNames.Contains(status.NormalizedName));
+        var allStatuses = GetAllStatuses();
+        var statusedToAdd = allStatuses.Where(status => !existingStatusNames.Contains(status.NormalizedName));
 
         dbContext.Statuses.AddRange(statusedToAdd);
 

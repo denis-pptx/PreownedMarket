@@ -11,5 +11,10 @@ public class CategoryValidator : AbstractValidator<CategoryDto>
             .NotEmpty()
             .MinimumLength(3)
             .MaximumLength(50);
+
+        RuleFor(c => c.NormalizedName)
+            .NotEmpty()
+            .MinimumLength(3)
+            .MaximumLength(50);
     }
 }

@@ -10,6 +10,7 @@ public class CategoryProfile : Profile
     {
         CreateMap<CategoryDto, Category>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.NormalizedName, opt => opt.MapFrom(src => src.NormalizedName))
             .ReverseMap();
     }
 }
