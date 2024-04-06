@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Item.BusinessLogic.Exceptions;
+using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models;
@@ -21,7 +22,7 @@ public class CategoryService : BaseService<Category, CategoryDto>, ICategoryServ
         var existingCategory = await _entityRepository.FirstOrDefaultAsync(x => x.Name == categoryDto.Name);
         if (existingCategory is not null)
         {
-            throw new ConflictException("The name of the category must be unique");
+            throw new ConflictException(CategoryErrorMessages.UniqueName);
         }
 
         var category = _mapper.Map<CategoryDto, Category>(categoryDto);
@@ -35,7 +36,7 @@ public class CategoryService : BaseService<Category, CategoryDto>, ICategoryServ
         var category = await _entityRepository.GetByIdAsync(id, token);
         if (category is null)
         {
-            throw new NotFoundException($"Category is not found");
+            throw new NotFoundException(GenericErrorMessages<Category>.NotFound);
         }
 
         _mapper.Map(categoryDto, category);

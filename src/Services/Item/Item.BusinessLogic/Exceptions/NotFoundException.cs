@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Item.BusinessLogic.Exceptions.ErrorMessages;
+using Microsoft.AspNetCore.Http;
 
 namespace Item.BusinessLogic.Exceptions;
 
 public class NotFoundException : BaseApiException
 {
-    public NotFoundException(string message) 
-        : base(StatusCodes.Status404NotFound, message)
+    public NotFoundException(ErrorMessage? errorMessage = default) 
+        : base(StatusCodes.Status404NotFound, errorMessage)
     {
 
-    }
-
-    public NotFoundException() 
-        : base(StatusCodes.Status404NotFound)
-    {
-        
     }
 }

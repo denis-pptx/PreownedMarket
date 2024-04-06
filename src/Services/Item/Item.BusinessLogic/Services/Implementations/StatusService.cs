@@ -1,4 +1,5 @@
 ﻿using Item.BusinessLogic.Exceptions;
+using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
@@ -17,7 +18,7 @@ public class StatusService(IRepository<Status> _repository) : IStatusService
         var entity = await _repository.GetByIdAsync(id, token);
         if (entity is null)
         {
-            throw new NotFoundException($"Status is not found");
+            throw new NotFoundException(GenericErrorMessages<Status>.NotFound);
         }
 
         return entity;

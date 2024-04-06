@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Item.BusinessLogic.Exceptions;
+using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
@@ -31,7 +32,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
         var entity = await _entityRepository.GetByIdAsync(id, token);
         if (entity is null)
         {
-            throw new NotFoundException($"{typeof(TEntity).Name} is not found");
+            throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
         }
 
         await _entityRepository.DeleteAsync(entity, token);
@@ -51,7 +52,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
         var entity = await _entityRepository.GetByIdAsync(id, token);
         if (entity is null)
         {
-            throw new NotFoundException($"{typeof(TEntity).Name} is not found");
+            throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
         }
 
         return entity;
@@ -62,7 +63,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
         var entity = await _entityRepository.GetByIdAsync(id, token);
         if (entity is null)
         {
-            throw new NotFoundException($"{typeof(TEntity).Name} is not found");
+            throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
         }
 
         _mapper.Map(entityDto, entity);
