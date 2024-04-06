@@ -1,5 +1,7 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Item.Presentation.Controllers;
@@ -29,6 +31,7 @@ public class CategoryController(ICategoryService _categoryService)
 
     // POST: api/<CategoryController>
     [HttpPost]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Post([FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
     {
         var result = await _categoryService.CreateAsync(categoryDto, cancellationToken);
@@ -38,6 +41,7 @@ public class CategoryController(ICategoryService _categoryService)
 
     // PUT api/<CategoryController>/<id>
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
     {
         var result = await _categoryService.UpdateAsync(id, categoryDto, cancellationToken);
@@ -47,6 +51,7 @@ public class CategoryController(ICategoryService _categoryService)
 
     // DELETE api/<CategoryController>/<id>
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _categoryService.DeleteByIdAsync(id, cancellationToken);

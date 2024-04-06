@@ -1,5 +1,7 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Item.Presentation.Controllers;
@@ -29,6 +31,7 @@ public class RegionController(IRegionService _regionService)
 
     // POST: api/<RegionController>
     [HttpPost]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Post([FromBody] RegionDto categoryDto, CancellationToken cancellationToken)
     {
         var result = await _regionService.CreateAsync(categoryDto, cancellationToken);
@@ -38,6 +41,7 @@ public class RegionController(IRegionService _regionService)
 
     // PUT api/<RegionController>/<id>
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] RegionDto categoryDto, CancellationToken cancellationToken)
     {
         var result = await _regionService.UpdateAsync(id, categoryDto, cancellationToken);
@@ -47,6 +51,7 @@ public class RegionController(IRegionService _regionService)
 
     // DELETE api/<RegionController>/<id>
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _regionService.DeleteByIdAsync(id, cancellationToken);

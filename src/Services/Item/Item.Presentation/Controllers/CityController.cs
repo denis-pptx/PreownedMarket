@@ -1,5 +1,7 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Item.Presentation.Controllers;
@@ -29,6 +31,7 @@ public class CityController(ICityService _cityService)
 
     // POST: api/<CityController>
     [HttpPost]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Post([FromBody] CityDto cityDto, CancellationToken cancellationToken)
     {
         var result = await _cityService.CreateAsync(cityDto, cancellationToken);
@@ -38,6 +41,7 @@ public class CityController(ICityService _cityService)
 
     // PUT api/<CityController>/<id>
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] CityDto cityDto, CancellationToken cancellationToken)
     {
         var result = await _cityService.UpdateAsync(id, cityDto, cancellationToken);
@@ -47,6 +51,7 @@ public class CityController(ICityService _cityService)
 
     // DELETE api/<CityController>/<id>
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _cityService.DeleteByIdAsync(id, cancellationToken);
