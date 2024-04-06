@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Item.BusinessLogic.Exceptions;
+using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models;
@@ -21,7 +22,7 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
         var existingRegion = await _entityRepository.FirstOrDefaultAsync(x => x.Name == regionDto.Name);
         if (existingRegion is not null)
         {
-            throw new ConflictException("The name of the region must be unique");
+            throw new ConflictException(RegionErrorMessages.UniqueName);
         }
 
         var region = _mapper.Map<RegionDto, Region>(regionDto);
@@ -35,7 +36,7 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
         var region = await _entityRepository.GetByIdAsync(id, token);
         if (region is null)
         {
-            throw new NotFoundException($"Region is not found");
+            throw new NotFoundException(GenericErrorMessages<Region>.NotFound);
         }
 
         _mapper.Map(regionDto, region);
@@ -59,7 +60,7 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
 
         if (entity is null)
         {
-            throw new NotFoundException($"Region is not found");
+            throw new NotFoundException(GenericErrorMessages<Region>.NotFound);
         }
 
         return entity;

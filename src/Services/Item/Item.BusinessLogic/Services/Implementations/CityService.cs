@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Item.BusinessLogic.Exceptions;
+using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models;
@@ -20,7 +21,7 @@ public class CityService : BaseService<City, CityDto>, ICityService
         var existingCity = await _entityRepository.FirstOrDefaultAsync(x => x.Name == cityDto.Name);
         if (existingCity is not null)
         {
-            throw new ConflictException("The name of the city must be unique");
+            throw new ConflictException(CityErrorMessages.UniqueName);
         }
 
         var city = _mapper.Map<CityDto, City>(cityDto);
@@ -34,7 +35,7 @@ public class CityService : BaseService<City, CityDto>, ICityService
         var city = await _entityRepository.GetByIdAsync(id, token);
         if (city is null)
         {
-            throw new NotFoundException($"City is not found");
+            throw new NotFoundException(GenericErrorMessages<City>.NotFound);
         }
 
         _mapper.Map(cityDto, city);

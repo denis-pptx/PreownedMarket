@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Item.BusinessLogic.Exceptions.ErrorMessages;
+using Microsoft.AspNetCore.Http;
 
 namespace Item.BusinessLogic.Exceptions;
 
 public class ConflictException : BaseApiException
 {
-    public ConflictException(string message) 
-        : base(StatusCodes.Status409Conflict, message)
+    public ConflictException(ErrorMessage? errorMessage = default) 
+        : base(StatusCodes.Status409Conflict, errorMessage)
     {
 
-    }
-
-    public ConflictException() 
-        : base(StatusCodes.Status409Conflict)
-    {
-        
     }
 }
