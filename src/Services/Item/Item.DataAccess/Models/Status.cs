@@ -1,6 +1,6 @@
 ﻿namespace Item.DataAccess.Models;
 
-public class Status : BaseEntity
+public class Status : BaseEntity, IEquatable<Status>
 {
     public string Name { get; set; } = string.Empty;
     public string NormalizedName {  get; set; } = string.Empty;
@@ -14,5 +14,15 @@ public class Status : BaseEntity
     public Status()
     {
         
+    }
+
+    public bool Equals(Status? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        return NormalizedName == other.NormalizedName;
     }
 }

@@ -36,6 +36,15 @@ public class ItemController(IItemService _itemService)
         return Ok(result);
     }
 
+    // PUT: api/<ItemController>/status/<id>
+    [HttpPut("status/{id:guid}")]
+    public async Task<IActionResult> ChangeItemStatus(Guid id, [FromBody] UpdateStatusDto updateStatusDto, CancellationToken cancellationToken)
+    {
+        var result = await _itemService.ChangeStatus(id, updateStatusDto, cancellationToken);
+
+        return Ok(result);
+    }
+
     // PUT api/<ItemController>/<id>
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] ItemDto itemDto, CancellationToken cancellationToken)

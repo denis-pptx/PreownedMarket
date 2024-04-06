@@ -7,6 +7,7 @@ using Item.DataAccess.Data.Initializers.Values;
 using Item.DataAccess.Enums;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
+using Item.DataAccess.Specifications.Implementations;
 using Library.BLL.Services.Implementations;
 
 namespace Item.BusinessLogic.Services.Implementations;
@@ -29,7 +30,7 @@ public class ItemService(
         item.StatusId = status!.Id;
 
         var currentUserId = currentUserService.UserId ?? throw new UnauthorizedException();
-        item.UserId = Guid.Parse(currentUserId);
+        item.UserId = currentUserId;
 
         var result = await _entityRepository.AddAsync(item, token);
 
@@ -41,13 +42,13 @@ public class ItemService(
         var item = await _entityRepository.GetByIdAsync(id, token) ?? 
             throw new NotFoundException(GenericErrorMessages<DataAccess.Models.Item>.NotFound);
 
-        string currentUserId = currentUserService.UserId ?? 
+        var currentUserId = currentUserService.UserId ?? 
             throw new UnauthorizedException();
 
-        string currentRole = currentUserService.Role ?? 
+        var currentRole = currentUserService.Role ?? 
             throw new UnauthorizedException();
 
-        if (Guid.Parse(currentUserId) == item.UserId ||
+        if (currentUserId == item.UserId ||
             currentRole == nameof(Role.Administrator) ||
             currentRole == nameof(Role.Moderator))
         {
@@ -73,13 +74,13 @@ public class ItemService(
         var item = await _entityRepository.GetByIdAsync(id, token) ?? 
             throw new NotFoundException(GenericErrorMessages<DataAccess.Models.Item>.NotFound);
 
-        string currentUserId = currentUserService.UserId ??
+        var currentUserId = currentUserService.UserId ??
             throw new UnauthorizedException();
 
-        string currentRole = currentUserService.Role ??
+        var currentRole = currentUserService.Role ??
             throw new UnauthorizedException();
 
-        if (Guid.Parse(currentUserId) == item.UserId ||
+        if (currentUserId == item.UserId ||
             currentRole == nameof(Role.Administrator) ||
             currentRole == nameof(Role.Moderator))
         {
@@ -91,5 +92,47 @@ public class ItemService(
         {
             throw new ForbiddenException();
         }
+    }
+
+    public async Task<DataAccess.Models.Item> ChangeStatus(Guid id, UpdateStatusDto updateStatusDto, CancellationToken token = default)
+    {
+        var specification = new ItemWithStatusSpecification(id);
+        var item = await _entityRepository.FirstOrDefaultAsync(specification, token) ??
+            throw new NotFoundException(GenericErrorMessages<DataAccess.Models.Item>.NotFound);
+
+        Status currentStatus = item.Status!;
+
+        Status newStatus = await _statusRepository.FirstOrDefaultAsync(x => x.NormalizedName == updateStatusDto.NormalizedName, token) ??
+            throw new NotFoundException(GenericErrorMessages<Status>.NotFound);
+
+        var currentUserId = currentUserService.UserId ?? 
+            throw new UnauthorizedException();
+
+        var currentRole = currentUserService.Role ?? 
+            throw new UnauthorizedException();
+
+        if (currentUserId == item.UserId)
+        {
+            if ((currentStatus.Equals(StatusValues.Active) && newStatus.Equals(StatusValues.Inactive)) ||
+                (currentStatus.Equals(StatusValues.Inactive) && newStatus.Equals(StatusValues.Active)))
+            {
+                item.Status = newStatus;
+            }
+            else
+            {
+                throw new ConflictException(ItemErrorMessages.StatusFailure);
+            }
+        }
+        else if (currentRole == nameof(Role.Administrator) || 
+            currentRole == nameof(Role.Moderator))
+        {
+            item.Status = newStatus;
+        }
+        else
+        {
+            throw new ForbiddenException();
+        }
+
+        return await _entityRepository.UpdateAsync(item, token);
     }
 }
