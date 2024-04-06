@@ -16,6 +16,7 @@ public class StatusService(IRepository<Status> _repository) : IStatusService
     public async Task<Status> GetByIdAsync(Guid id, CancellationToken token = default)
     {
         var entity = await _repository.GetByIdAsync(id, token);
+
         if (entity is null)
         {
             throw new NotFoundException(GenericErrorMessages<Status>.NotFound);

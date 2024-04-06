@@ -1,17 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Item.BusinessLogic.Exceptions.ErrorMessages;
+using Microsoft.AspNetCore.Http;
 
 namespace Item.BusinessLogic.Exceptions;
 
 public class ForbiddenException : BaseApiException
 {
-    public ForbiddenException(string message)
-        : base(StatusCodes.Status403Forbidden, message)
-    {
-
-    }
-
-    public ForbiddenException()
-        : base(StatusCodes.Status403Forbidden)
+    public ForbiddenException(ErrorMessage? errorMessage = default)
+        : base(StatusCodes.Status403Forbidden, errorMessage)
     {
 
     }

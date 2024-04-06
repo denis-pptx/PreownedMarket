@@ -1,18 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Item.BusinessLogic.Exceptions.ErrorMessages;
+using Microsoft.AspNetCore.Http;
 
 namespace Item.BusinessLogic.Exceptions;
 
-public class BadRequestException : BaseApiException
+public class BadRequestException(ErrorMessage? errorMessage = default)
+    : BaseApiException(StatusCodes.Status403Forbidden, errorMessage)
 {
-    public BadRequestException(string message)
-        : base(StatusCodes.Status400BadRequest, message)
-    {
-
-    }
-
-    public BadRequestException()
-        : base(StatusCodes.Status400BadRequest)
-    {
-
-    }
 }

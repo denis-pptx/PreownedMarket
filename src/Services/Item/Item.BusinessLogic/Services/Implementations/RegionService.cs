@@ -20,6 +20,7 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
     public async override Task<Region> CreateAsync(RegionDto regionDto, CancellationToken token)
     {
         var existingRegion = await _entityRepository.FirstOrDefaultAsync(x => x.Name == regionDto.Name);
+
         if (existingRegion is not null)
         {
             throw new ConflictException(RegionErrorMessages.UniqueName);
@@ -34,6 +35,7 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
     public async override Task<Region> UpdateAsync(Guid id, RegionDto regionDto, CancellationToken token)
     {
         var region = await _entityRepository.GetByIdAsync(id, token);
+
         if (region is null)
         {
             throw new NotFoundException(GenericErrorMessages<Region>.NotFound);

@@ -30,6 +30,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
     public async virtual Task<TEntity> DeleteByIdAsync(Guid id, CancellationToken token)
     {
         var entity = await _entityRepository.GetByIdAsync(id, token);
+
         if (entity is null)
         {
             throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
@@ -50,6 +51,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
     public async virtual Task<TEntity> GetByIdAsync(Guid id, CancellationToken token)
     {
         var entity = await _entityRepository.GetByIdAsync(id, token);
+
         if (entity is null)
         {
             throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
@@ -61,6 +63,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
     public async virtual Task<TEntity> UpdateAsync(Guid id, TEntityDto entityDto, CancellationToken token)
     {
         var entity = await _entityRepository.GetByIdAsync(id, token);
+
         if (entity is null)
         {
             throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);

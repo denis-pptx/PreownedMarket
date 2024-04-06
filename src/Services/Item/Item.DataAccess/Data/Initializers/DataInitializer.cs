@@ -1,8 +1,4 @@
-﻿using Item.DataAccess.Models;
-using Item.DataAccess.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Item.DataAccess.Data.Initializers;
 

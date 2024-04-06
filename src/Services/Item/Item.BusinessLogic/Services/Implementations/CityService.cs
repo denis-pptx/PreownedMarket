@@ -19,6 +19,7 @@ public class CityService : BaseService<City, CityDto>, ICityService
     public async override Task<City> CreateAsync(CityDto cityDto, CancellationToken token)
     {
         var existingCity = await _entityRepository.FirstOrDefaultAsync(x => x.Name == cityDto.Name);
+
         if (existingCity is not null)
         {
             throw new ConflictException(CityErrorMessages.UniqueName);
@@ -33,6 +34,7 @@ public class CityService : BaseService<City, CityDto>, ICityService
     public async override Task<City> UpdateAsync(Guid id, CityDto cityDto, CancellationToken token)
     {
         var city = await _entityRepository.GetByIdAsync(id, token);
+
         if (city is null)
         {
             throw new NotFoundException(GenericErrorMessages<City>.NotFound);

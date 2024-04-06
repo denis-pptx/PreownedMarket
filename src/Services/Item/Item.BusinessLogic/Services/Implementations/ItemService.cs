@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Item.BusinessLogic.Exceptions;
+using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models;
@@ -18,17 +19,18 @@ public class ItemService(
     public async override Task<DataAccess.Models.Item> CreateAsync(ItemDto itemDto, CancellationToken token)
     {
         var item = _mapper.Map<ItemDto, DataAccess.Models.Item>(itemDto);
-
         item.CreatedAt = DateTime.UtcNow;
 
         var status = await _statusRepository.SingleOrDefaultAsync(x => x.NormalizedName == "under-review", token);
         item.StatusId = status!.Id;
 
         var currentUserId = currentUserService.UserId;
+
         if (currentUserId is null)
         {
             throw new UnauthorizedException();
         }
+
         item.UserId = Guid.Parse(currentUserId);
 
         var result = await _entityRepository.AddAsync(item, token);
@@ -39,12 +41,14 @@ public class ItemService(
     public async override Task<DataAccess.Models.Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
     {
         var item = await _entityRepository.GetByIdAsync(id, token);
+
         if (item is null)
         {
-            throw new NotFoundException($"Item is not found");
+            throw new NotFoundException(GenericErrorMessages<DataAccess.Models.Item>.NotFound);
         }
 
         var currentUserId = currentUserService.UserId;
+
         if (currentUserId is null)
         {
             throw new UnauthorizedException();

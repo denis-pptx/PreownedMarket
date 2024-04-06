@@ -1,5 +1,4 @@
-﻿using Item.DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Item.DataAccess.Data.Configurations;
@@ -43,6 +42,4 @@ public class ItemConfiguration : IEntityTypeConfiguration<Models.Item>
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
     }
-
-
 }

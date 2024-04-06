@@ -5,7 +5,7 @@ namespace Item.BusinessLogic.Exceptions;
 
 public class UnauthorizedException : BaseApiException
 {
-    public UnauthorizedException(ErrorMessage? errorMessage) 
+    public UnauthorizedException(ErrorMessage? errorMessage = default) 
         : base(StatusCodes.Status401Unauthorized, errorMessage)
     {
 

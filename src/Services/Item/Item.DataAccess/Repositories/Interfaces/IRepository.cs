@@ -3,7 +3,6 @@ using Item.DataAccess.Specifications.Interfaces;
 using System.Linq.Expressions;
 
 namespace Item.DataAccess.Repositories.Interfaces;
-
 public interface IRepository<TEntity>
     where TEntity : BaseEntity
 {

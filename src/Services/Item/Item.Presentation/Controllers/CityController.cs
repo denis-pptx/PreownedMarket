@@ -1,7 +1,5 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
-using Item.BusinessLogic.Services.Implementations;
 using Item.BusinessLogic.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Item.Presentation.Controllers;
@@ -56,4 +54,3 @@ public class CityController(ICityService _cityService)
         return Ok(result);
     }
 }
-
