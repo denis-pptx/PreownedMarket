@@ -16,7 +16,9 @@ public static class DependencyInjection
         services.AddScoped<IStatusService, StatusService>();
         services.AddScoped<IItemService, ItemService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ILikeService, LikeService>();
         
+        services.AddScoped<ILikeRepository, LikeRepository>();  
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
         services.ConfigureOptions<JwtOptionsSetup>();
