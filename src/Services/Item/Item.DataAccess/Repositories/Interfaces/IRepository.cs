@@ -17,4 +17,6 @@ public interface IRepository<TEntity>
 
     Task<TEntity?> FirstOrDefaultAsync(ISpecification<TEntity> specification, CancellationToken token = default);
     Task<IEnumerable<TEntity>> GetAsync(ISpecification<TEntity> specification, CancellationToken token = default);
+    IQueryable<TEntity> GetQueryable();
+    IQueryable<TEntity> GetQueryable(ISpecification<TEntity> specification);
 }

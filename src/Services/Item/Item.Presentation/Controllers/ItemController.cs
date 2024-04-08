@@ -11,9 +11,29 @@ public class ItemController(IItemService _itemService)
 {
     // GET: api/<ItemController>
     [HttpGet]
-    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    public async Task<IActionResult> Get(
+        [FromQuery] string? searchTerm,
+        [FromQuery] Guid? cityId,
+        [FromQuery] string? categoryNormalizedName,
+        [FromQuery] string? statusNormalizedName,
+        [FromQuery] Guid? userId,
+        [FromQuery] string? sortColumn,
+        [FromQuery] string? sortOrder,
+        [FromQuery] int page,
+        [FromQuery] int pageSize, 
+        CancellationToken cancellationToken)
     {
-        var result = await _itemService.GetAsync(cancellationToken);
+        var result = await _itemService.GetAsync(
+            searchTerm, 
+            cityId,
+            categoryNormalizedName, 
+            statusNormalizedName, 
+            userId, 
+            sortColumn, 
+            sortOrder, 
+            page, 
+            pageSize, 
+            cancellationToken);
 
         return Ok(result);
     }

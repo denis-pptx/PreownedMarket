@@ -63,6 +63,16 @@ public class EfRepository<TEntity>(ApplicationDbContext dbContext)
         return await _entities.FirstOrDefaultAsync(e => e.Id.Equals(id), token);
     }
 
+    public IQueryable<TEntity> GetQueryable()
+    {
+        return _entities.AsQueryable();
+    }
+
+    public IQueryable<TEntity> GetQueryable(ISpecification<TEntity> specification)
+    {
+        return _entities.AsQueryable().ApplySpecification(specification);
+    }
+
     public async Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> filter, CancellationToken token = default)
     {
         return await _entities.SingleOrDefaultAsync(filter, token);

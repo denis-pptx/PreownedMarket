@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
+using Item.BusinessLogic.Models.Common;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Data.Initializers.Values;
@@ -8,20 +9,22 @@ using Item.DataAccess.Enums;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Implementations;
-using Library.BLL.Services.Implementations;
+using System.Linq.Expressions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
+using Item = DataAccess.Models.Item;
+
 public class ItemService(
-    IRepository<DataAccess.Models.Item> entityRepository, 
+    IRepository<Item> _itemRepository, 
     IRepository<Status> _statusRepository,
-    ICurrentUserService currentUserService,
-    IMapper mapper) 
-    : BaseService<DataAccess.Models.Item, ItemDto>(entityRepository, mapper), IItemService
+    ICurrentUserService _currentUserService,
+    IMapper _mapper) 
+    : IItemService
 {
-    public async override Task<DataAccess.Models.Item> CreateAsync(ItemDto itemDto, CancellationToken token)
+    public async Task<Item> CreateAsync(ItemDto itemDto, CancellationToken token)
     {
-        var item = _mapper.Map<ItemDto, DataAccess.Models.Item>(itemDto);
+        var item = _mapper.Map<ItemDto, Item>(itemDto);
 
         item.CreatedAt = DateTime.UtcNow;
 
@@ -29,23 +32,23 @@ public class ItemService(
             x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
         item.StatusId = status!.Id;
 
-        var currentUserId = currentUserService.UserId ?? throw new UnauthorizedException();
+        var currentUserId = _currentUserService.UserId ?? throw new UnauthorizedException();
         item.UserId = currentUserId;
 
-        var result = await _entityRepository.AddAsync(item, token);
+        var result = await _itemRepository.AddAsync(item, token);
 
         return result;
     }
 
-    public async override Task<DataAccess.Models.Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
+    public async Task<Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
     {
-        var item = await _entityRepository.GetByIdAsync(id, token) ?? 
-            throw new NotFoundException(GenericErrorMessages<DataAccess.Models.Item>.NotFound);
+        var item = await _itemRepository.GetByIdAsync(id, token) ?? 
+            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
 
-        var currentUserId = currentUserService.UserId ?? 
+        var currentUserId = _currentUserService.UserId ?? 
             throw new UnauthorizedException();
 
-        var currentRole = currentUserService.Role ?? 
+        var currentRole = _currentUserService.Role ?? 
             throw new UnauthorizedException();
 
         if (currentUserId == item.UserId ||
@@ -59,7 +62,7 @@ public class ItemService(
 
             item.StatusId = status!.Id;
 
-            var result = await _entityRepository.UpdateAsync(item, token);
+            var result = await _itemRepository.UpdateAsync(item, token);
 
             return result;
         }
@@ -69,22 +72,22 @@ public class ItemService(
         }
     }
 
-    public async override Task<DataAccess.Models.Item> DeleteByIdAsync(Guid id, CancellationToken token)
+    public async Task<Item> DeleteByIdAsync(Guid id, CancellationToken token)
     {
-        var item = await _entityRepository.GetByIdAsync(id, token) ?? 
-            throw new NotFoundException(GenericErrorMessages<DataAccess.Models.Item>.NotFound);
+        var item = await _itemRepository.GetByIdAsync(id, token) ?? 
+            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
 
-        var currentUserId = currentUserService.UserId ??
+        var currentUserId = _currentUserService.UserId ??
             throw new UnauthorizedException();
 
-        var currentRole = currentUserService.Role ??
+        var currentRole = _currentUserService.Role ??
             throw new UnauthorizedException();
 
         if (currentUserId == item.UserId ||
             currentRole == nameof(Role.Administrator) ||
             currentRole == nameof(Role.Moderator))
         {
-            await _entityRepository.DeleteAsync(item, token);
+            await _itemRepository.DeleteAsync(item, token);
 
             return item;
         }
@@ -94,21 +97,21 @@ public class ItemService(
         }
     }
 
-    public async Task<DataAccess.Models.Item> ChangeStatus(Guid id, UpdateStatusDto updateStatusDto, CancellationToken token = default)
+    public async Task<Item> ChangeStatus(Guid id, UpdateStatusDto updateStatusDto, CancellationToken token = default)
     {
         var specification = new ItemWithStatusSpecification(id);
-        var item = await _entityRepository.FirstOrDefaultAsync(specification, token) ??
-            throw new NotFoundException(GenericErrorMessages<DataAccess.Models.Item>.NotFound);
+        var item = await _itemRepository.FirstOrDefaultAsync(specification, token) ??
+            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
 
         Status currentStatus = item.Status!;
 
         Status newStatus = await _statusRepository.FirstOrDefaultAsync(x => x.NormalizedName == updateStatusDto.NormalizedName, token) ??
             throw new NotFoundException(GenericErrorMessages<Status>.NotFound);
 
-        var currentUserId = currentUserService.UserId ?? 
+        var currentUserId = _currentUserService.UserId ?? 
             throw new UnauthorizedException();
 
-        var currentRole = currentUserService.Role ?? 
+        var currentRole = _currentUserService.Role ?? 
             throw new UnauthorizedException();
 
         if (currentUserId == item.UserId)
@@ -133,6 +136,74 @@ public class ItemService(
             throw new ForbiddenException();
         }
 
-        return await _entityRepository.UpdateAsync(item, token);
+        return await _itemRepository.UpdateAsync(item, token);
+    }
+
+    public async Task<Item> GetByIdAsync(Guid id, CancellationToken token)
+    {
+        var specification = new ItemWithAllSpecification(id);
+        var item = await _itemRepository.FirstOrDefaultAsync(specification, token);
+
+        if (item is null)
+        {
+            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+        }
+
+        return item;
+    }
+
+    public async Task<PagedList<Item>> GetAsync(
+        string? searchTerm, 
+        Guid? cityId,
+        string? categoryNormalizedName,
+        string? statusNormalizedName,
+        Guid? userId,
+        string? sortColumn, 
+        string? sortOrder, 
+        int page, 
+        int pageSize, 
+        CancellationToken token = default)
+    {
+        var specification = new ItemWithAllSpecification();
+        var itemQuery = _itemRepository.GetQueryable(specification);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+            itemQuery = itemQuery.Where(x => x.Title.Contains(searchTerm));
+
+        if (cityId is not null)
+            itemQuery = itemQuery.Where(x => x.CityId == cityId);
+
+        if (categoryNormalizedName is not null)
+            itemQuery = itemQuery.Where(x => x.Category!.NormalizedName == categoryNormalizedName);
+
+        if (statusNormalizedName is not null)
+            itemQuery = itemQuery.Where(x => x.Status!.NormalizedName == statusNormalizedName);
+
+        if (userId is not null)
+            itemQuery = itemQuery.Where(x => x.UserId == userId);
+
+        if (string.Equals(sortOrder, nameof(SortOrder.Descending), StringComparison.OrdinalIgnoreCase))
+        {
+            itemQuery = itemQuery.OrderByDescending(GetSortProperty(sortColumn));
+        }
+        else
+        {
+            itemQuery = itemQuery.OrderBy(GetSortProperty(sortColumn));
+        }
+
+        var items = await PagedList<Item>.CreateAsync(itemQuery, page, pageSize);
+
+        return items;
+    }
+
+    private static Expression<Func<Item, object>> GetSortProperty(string? sortColumn)
+    {
+        if (string.Equals(sortColumn, nameof(Item.Title), StringComparison.OrdinalIgnoreCase))
+            return item => item.Title;
+
+        if (string.Equals(sortColumn, nameof(Item.Price), StringComparison.OrdinalIgnoreCase))
+            return item => item.Price;
+
+        return item => item.Id;
     }
 }
