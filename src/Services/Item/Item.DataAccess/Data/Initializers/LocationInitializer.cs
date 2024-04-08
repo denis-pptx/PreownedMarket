@@ -1,5 +1,4 @@
 ﻿using Item.DataAccess.Models;
-using Item.DataAccess.Repositories.Interfaces;
 
 namespace Item.DataAccess.Data.Initializers;
 

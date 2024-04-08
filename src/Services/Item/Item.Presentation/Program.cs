@@ -1,14 +1,10 @@
 using FluentValidation;
 using Item.BusinessLogic.Mappings;
 using Item.BusinessLogic.Models.Validators;
-using Item.BusinessLogic.Services.Implementations;
-using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Data;
 using Item.DataAccess.Data.Initializers;
-using Item.DataAccess.Repositories.Implementations;
-using Item.DataAccess.Repositories.Interfaces;
 using Item.Presentation.ExceptionHandlers;
-using Item.Presentation.OptionsSetup;
+using Item.Presentation.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
@@ -35,14 +31,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
 builder.Services.AddFluentValidationAutoValidation();
 
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IRegionService, RegionService>();
-builder.Services.AddScoped<ICityService, CityService>();
-builder.Services.AddScoped<IStatusService, StatusService>();
-builder.Services.AddScoped<IItemService, ItemService>();
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
-builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+builder.Services.AddApplication();
 
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(CategoryProfile)));
 
@@ -51,8 +40,6 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
-builder.Services.ConfigureOptions<JwtOptionsSetup>();
-builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 var app = builder.Build();
 

@@ -3,6 +3,7 @@ using Item.DataAccess.Specifications.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Item.DataAccess.Specifications.Common;
+
 public static class SpecificationQueryBuilder
 {
     public static IQueryable<TEntity> ApplySpecification<TEntity>(

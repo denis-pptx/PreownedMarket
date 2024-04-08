@@ -1,0 +1,27 @@
+﻿using Item.BusinessLogic.Services.Implementations;
+using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.Repositories.Implementations;
+using Item.DataAccess.Repositories.Interfaces;
+using Item.Presentation.OptionsSetup;
+
+namespace Item.Presentation.Extensions;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IRegionService, RegionService>();
+        services.AddScoped<ICityService, CityService>();
+        services.AddScoped<IStatusService, StatusService>();
+        services.AddScoped<IItemService, ItemService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        
+        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+
+        services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+        return services;
+    }
+}

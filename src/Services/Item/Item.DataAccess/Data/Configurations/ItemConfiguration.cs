@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Item.DataAccess.Data.Configurations;
 
-public class ItemConfiguration : IEntityTypeConfiguration<Models.Item>
+using Item = Models.Item;
+
+public class ItemConfiguration : IEntityTypeConfiguration<Item>
 {
-    public void Configure(EntityTypeBuilder<Models.Item> builder)
+    public void Configure(EntityTypeBuilder<Item> builder)
     {
         builder.HasKey(x => x.Id);
 
