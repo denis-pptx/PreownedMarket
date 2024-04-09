@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddScoped<IItemService, ItemService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<ILikeService, LikeService>();
+        services.AddScoped<IFileService, FileService>();
         
         services.AddScoped<ILikeRepository, LikeRepository>();  
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
