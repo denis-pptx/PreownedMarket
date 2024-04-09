@@ -1,4 +1,6 @@
-﻿namespace Item.BusinessLogic.Models.DTOs;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Item.BusinessLogic.Models.DTOs;
 
 public class ItemDto
 {
@@ -7,4 +9,5 @@ public class ItemDto
     public double Price { get; set; }
     public Guid? CityId { get; set; }
     public Guid CategoryId { get; set; }
+    public IEnumerable<IFormFile> AttachedImages { get; set; } = [];
 }

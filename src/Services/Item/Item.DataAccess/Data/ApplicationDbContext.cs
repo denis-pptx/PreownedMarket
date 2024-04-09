@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Status> Statuses { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Like> Likes { get; set; }
+    public DbSet<ItemImage> ItemImages { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
