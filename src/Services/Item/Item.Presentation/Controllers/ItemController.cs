@@ -1,5 +1,6 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Item.Presentation.Controllers;
@@ -49,6 +50,7 @@ public class ItemController(IItemService _itemService)
 
     // POST: api/<ItemController>
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Post([FromForm] ItemDto itemDto, CancellationToken cancellationToken)
     {
         var result = await _itemService.CreateAsync(itemDto, cancellationToken);
@@ -58,6 +60,7 @@ public class ItemController(IItemService _itemService)
 
     // PUT: api/<ItemController>/status/<id>
     [HttpPut("status/{id:guid}")]
+    [Authorize]
     public async Task<IActionResult> ChangeItemStatus(Guid id, [FromBody] UpdateStatusDto updateStatusDto, CancellationToken cancellationToken)
     {
         var result = await _itemService.ChangeStatus(id, updateStatusDto, cancellationToken);
@@ -67,6 +70,7 @@ public class ItemController(IItemService _itemService)
 
     // PUT api/<ItemController>/<id>
     [HttpPut("{id:guid}")]
+    [Authorize]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromForm] ItemDto itemDto, CancellationToken cancellationToken)
     {
         var result = await _itemService.UpdateAsync(id, itemDto, cancellationToken);
@@ -76,6 +80,7 @@ public class ItemController(IItemService _itemService)
 
     // DELETE api/<ItemController>/<id>
     [HttpDelete("{id:guid}")]
+    [Authorize]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _itemService.DeleteByIdAsync(id, cancellationToken);

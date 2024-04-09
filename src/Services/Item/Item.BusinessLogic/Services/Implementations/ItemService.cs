@@ -4,6 +4,7 @@ using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.Common;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.Data;
 using Item.DataAccess.Data.Initializers.Values;
 using Item.DataAccess.Enums;
 using Item.DataAccess.Models;
@@ -20,27 +21,41 @@ public class ItemService(
     IRepository<Status> _statusRepository,
     ICurrentUserService _currentUserService,
     IItemImageService _imageService,
-    IMapper _mapper) 
+    IMapper _mapper,
+    ApplicationDbContext _dbContext) 
     : IItemService
 {
     public async Task<Item> CreateAsync(ItemDto itemDto, CancellationToken token)
     {
-        var item = _mapper.Map<ItemDto, Item>(itemDto);
+        using var transaction = await _dbContext.Database.BeginTransactionAsync(token);
 
-        item.CreatedAt = DateTime.UtcNow;
+        try
+        {
+            var item = _mapper.Map<ItemDto, Item>(itemDto);
 
-        var status = await _statusRepository
-            .SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
-        item.StatusId = status!.Id;
+            item.CreatedAt = DateTime.UtcNow;
 
-        item.UserId = _currentUserService.UserId ?? 
-            throw new UnauthorizedException();
+            var status = await _statusRepository
+                .SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
+            item.StatusId = status!.Id;
 
-        var createdItem = await _itemRepository.AddAsync(item, token);
+            item.UserId = _currentUserService.UserId ??
+                throw new UnauthorizedException();
 
-        await _imageService.SaveAttachedImagesAsync(createdItem.Id, itemDto.AttachedImages, token);
+            var createdItem = await _itemRepository.AddAsync(item, token);
 
-        return createdItem;
+            await _imageService.SaveAttachedImagesAsync(createdItem.Id, itemDto.AttachedImages, token);
+
+            await transaction.CommitAsync(token);
+
+            return createdItem;
+        }
+        catch 
+        {
+            await transaction.RollbackAsync(token);
+
+            throw;
+        }
     }
 
     public async Task<Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
