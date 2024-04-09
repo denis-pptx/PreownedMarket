@@ -58,6 +58,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseStaticFiles();
+
 await DataInitializer.Seed(app.Services);
 
 app.Run();

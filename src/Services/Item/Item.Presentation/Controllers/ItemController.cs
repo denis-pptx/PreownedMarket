@@ -49,7 +49,7 @@ public class ItemController(IItemService _itemService)
 
     // POST: api/<ItemController>
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] ItemDto itemDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> Post([FromForm] ItemDto itemDto, CancellationToken cancellationToken)
     {
         var result = await _itemService.CreateAsync(itemDto, cancellationToken);
 
@@ -67,7 +67,7 @@ public class ItemController(IItemService _itemService)
 
     // PUT api/<ItemController>/<id>
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] ItemDto itemDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> Put([FromRoute] Guid id, [FromForm] ItemDto itemDto, CancellationToken cancellationToken)
     {
         var result = await _itemService.UpdateAsync(id, itemDto, cancellationToken);
 

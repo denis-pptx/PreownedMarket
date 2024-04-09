@@ -8,7 +8,7 @@ using Item.DataAccess.Data.Initializers.Values;
 using Item.DataAccess.Enums;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Specifications.Implementations;
+using Item.DataAccess.Specifications.Implementations.Item;
 using System.Linq.Expressions;
 
 namespace Item.BusinessLogic.Services.Implementations;
@@ -19,6 +19,7 @@ public class ItemService(
     IRepository<Item> _itemRepository, 
     IRepository<Status> _statusRepository,
     ICurrentUserService _currentUserService,
+    IItemImageService _imageService,
     IMapper _mapper) 
     : IItemService
 {
@@ -28,16 +29,18 @@ public class ItemService(
 
         item.CreatedAt = DateTime.UtcNow;
 
-        var status = await _statusRepository.SingleOrDefaultAsync(
-            x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
+        var status = await _statusRepository
+            .SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
         item.StatusId = status!.Id;
 
-        var currentUserId = _currentUserService.UserId ?? throw new UnauthorizedException();
-        item.UserId = currentUserId;
+        item.UserId = _currentUserService.UserId ?? 
+            throw new UnauthorizedException();
 
-        var result = await _itemRepository.AddAsync(item, token);
+        var createdItem = await _itemRepository.AddAsync(item, token);
 
-        return result;
+        await _imageService.SaveAttachedImagesAsync(createdItem.Id, itemDto.AttachedImages, token);
+
+        return createdItem;
     }
 
     public async Task<Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
@@ -59,10 +62,12 @@ public class ItemService(
 
             var status = await _statusRepository.SingleOrDefaultAsync(
                 x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
-
             item.StatusId = status!.Id;
 
             var result = await _itemRepository.UpdateAsync(item, token);
+
+            await _imageService.DeleteAttachedImagesAsync(item.Id, token);
+            await _imageService.SaveAttachedImagesAsync(item.Id, itemDto.AttachedImages, token);
 
             return result;
         }
@@ -87,6 +92,7 @@ public class ItemService(
             currentRole == nameof(Role.Administrator) ||
             currentRole == nameof(Role.Moderator))
         {
+            await _imageService.DeleteAttachedImagesAsync(item.Id, token);
             await _itemRepository.DeleteAsync(item, token);
 
             return item;
