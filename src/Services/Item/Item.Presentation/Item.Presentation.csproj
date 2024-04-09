@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Item.BusinessLogic\Item.BusinessLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

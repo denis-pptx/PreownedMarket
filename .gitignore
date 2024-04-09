@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 **/Migrations
 *.db*
+**/wwwroot/uploads

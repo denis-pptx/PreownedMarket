@@ -1,4 +1,4 @@
-﻿namespace Item.DataAccess.Specifications.Implementations;
+﻿namespace Item.DataAccess.Specifications.Implementations.Item;
 
 public class ItemWithStatusSpecification : BaseSpecification<Models.Item>
 {
