@@ -32,17 +32,32 @@ public class ItemImageService(
         }
     }
 
-    public async Task DeleteAttachedImagesAsync(Guid itemId, CancellationToken token = default)
+    public async Task DeleteAllAttachedImagesAsync(Guid itemId, CancellationToken token = default)
     {
         var specification = new ItemWithImagesSpecification(itemId);
 
         var item = await _itemRepository.FirstOrDefaultAsync(specification, token) ??
             throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
 
-        foreach (var image in item.Images.ToList())
+        await DeleteAttachedImagesAsync(item.Images, token);
+    }
+
+    public async Task DeleteAttachedImagesAsync(IEnumerable<ItemImage> images, CancellationToken token = default)
+    {
+        foreach (var image in images.ToList())
         {
             _fileService.DeleteFile(image.FilePath);
             await _imageRepository.DeleteAsync(image, token);
         }
+    }
+
+    public async Task<IEnumerable<ItemImage>> GetItemImagesAsync(Guid itemId, CancellationToken token = default)
+    {
+        var item = await _itemRepository.GetByIdAsync(itemId, token) ??
+            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+
+        var images = await _imageRepository.GetAsync(x => x.ItemId == itemId, token);
+
+        return images;
     }
 }

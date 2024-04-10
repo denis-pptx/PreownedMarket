@@ -11,7 +11,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Item> Items { get; set; }
-    public DbSet<Photo> Photos { get; set; }
     public DbSet<Region> Regions { get; set; }
     public DbSet<Status> Statuses { get; set; }
     public DbSet<User> Users { get; set; }

@@ -27,35 +27,31 @@ public class ItemService(
 {
     public async Task<Item> CreateAsync(ItemDto itemDto, CancellationToken token)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(token);
+        var item = _mapper.Map<ItemDto, Item>(itemDto);
+
+        item.CreatedAt = DateTime.UtcNow;
+
+        var status = await _statusRepository
+            .SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
+        item.StatusId = status!.Id;
+
+        item.UserId = _currentUserService.UserId ??
+            throw new UnauthorizedException();
+
+        var createdItem = await _itemRepository.AddAsync(item, token);
 
         try
         {
-            var item = _mapper.Map<ItemDto, Item>(itemDto);
-
-            item.CreatedAt = DateTime.UtcNow;
-
-            var status = await _statusRepository
-                .SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
-            item.StatusId = status!.Id;
-
-            item.UserId = _currentUserService.UserId ??
-                throw new UnauthorizedException();
-
-            var createdItem = await _itemRepository.AddAsync(item, token);
-
             await _imageService.SaveAttachedImagesAsync(createdItem.Id, itemDto.AttachedImages, token);
-
-            await transaction.CommitAsync(token);
-
-            return createdItem;
         }
-        catch 
+        catch
         {
-            await transaction.RollbackAsync(token);
+            await DeleteByIdAsync(createdItem.Id, token);
 
             throw;
         }
+
+        return createdItem;
     }
 
     public async Task<Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
@@ -69,26 +65,42 @@ public class ItemService(
         var currentRole = _currentUserService.Role ?? 
             throw new UnauthorizedException();
 
-        if (currentUserId == item.UserId ||
-            currentRole == nameof(Role.Administrator) ||
-            currentRole == nameof(Role.Moderator))
+        if (!(currentUserId == item.UserId || currentRole == nameof(Role.Administrator) || currentRole == nameof(Role.Moderator)))
         {
-            _mapper.Map(itemDto, item);
+            throw new ForbiddenException();
+        }
 
-            var status = await _statusRepository.SingleOrDefaultAsync(
-                x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
-            item.StatusId = status!.Id;
+        using var transaction = await _dbContext.Database.BeginTransactionAsync(token);
 
-            var result = await _itemRepository.UpdateAsync(item, token);
+        _mapper.Map(itemDto, item);
 
-            await _imageService.DeleteAttachedImagesAsync(item.Id, token);
+        item.Status = await _statusRepository.SingleOrDefaultAsync(
+            x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
+
+        var result = await _itemRepository.UpdateAsync(item, token);
+
+        var oldImages = await _imageService.GetItemImagesAsync(item.Id, token);
+
+        try
+        {
             await _imageService.SaveAttachedImagesAsync(item.Id, itemDto.AttachedImages, token);
+
+            await _imageService.DeleteAttachedImagesAsync(oldImages, token);
+
+            await transaction.CommitAsync(token);
 
             return result;
         }
-        else
+        catch
         {
-            throw new ForbiddenException();
+            var allImages = await _imageService.GetItemImagesAsync(item.Id, token);
+            var imagesToDelete = allImages.ExceptBy(oldImages.Select(x => x.Id), x => x.Id);
+
+            await _imageService.DeleteAttachedImagesAsync(imagesToDelete, token);
+
+            await transaction.RollbackAsync(token);
+
+            throw;
         }
     }
 
@@ -107,7 +119,7 @@ public class ItemService(
             currentRole == nameof(Role.Administrator) ||
             currentRole == nameof(Role.Moderator))
         {
-            await _imageService.DeleteAttachedImagesAsync(item.Id, token);
+            await _imageService.DeleteAllAttachedImagesAsync(item.Id, token);
             await _itemRepository.DeleteAsync(item, token);
 
             return item;
