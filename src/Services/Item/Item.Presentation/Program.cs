@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(x => 
-x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,9 +24,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
 
-var connection = builder.Configuration.GetConnectionString("Default");
+//var connection = builder.Configuration.GetConnectionString("SQLite");
+//builder.Services.AddDbContext<ApplicationDbContext>(
+//    options => options.UseSqlite(connection));
+
+var connection = builder.Configuration.GetConnectionString("MySQL");
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlite(connection));
+    options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
 
 builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
 builder.Services.AddFluentValidationAutoValidation();

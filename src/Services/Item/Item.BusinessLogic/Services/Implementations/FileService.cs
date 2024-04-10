@@ -9,7 +9,7 @@ namespace Item.BusinessLogic.Services.Implementations;
 public class FileService(IWebHostEnvironment _webHostEnvironment) 
     : IFileService
 {
-    public const string ImagesDirectory = @"uploads\images";
+    public static string ImagesDirectory => Path.Combine("uploads", "images");
 
     public void DeleteFile(string relativePath)
     {
