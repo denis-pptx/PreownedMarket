@@ -1,7 +1,7 @@
 ﻿using Chat.Domain.Entities;
 using MongoDB.Driver;
 
-namespace Chat.Infrastructure.Data.Contexts;
+namespace Chat.Application.Data;
 
 public interface IApplicationDbContext
 {
@@ -9,4 +9,5 @@ public interface IApplicationDbContext
     IMongoCollection<Message> Messages { get; }
     IMongoCollection<User> Users { get; }
     IMongoCollection<Item> Items { get; }
+    IMongoCollection<T> Collection<T>();
 }

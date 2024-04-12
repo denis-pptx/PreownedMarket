@@ -1,4 +1,5 @@
-﻿using Chat.Domain.Entities;
+﻿using Chat.Application.Data;
+using Chat.Domain.Entities;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -18,9 +19,11 @@ public class ApplicationDbContext
     public ApplicationDbContext(IOptions<MongoDbOptions> dbOptions) 
         : base(dbOptions)
     {
-        Conversations = _mongoDatabase.GetCollection<Conversation>(nameof(Conversations));
-        Messages = _mongoDatabase.GetCollection<Message>(nameof(Messages));
-        Users = _mongoDatabase.GetCollection<User>(nameof(Users));
-        Items = _mongoDatabase.GetCollection<Item>(nameof(Items));
+        Conversations = Collection<Conversation>();
+        Messages = Collection<Message>();
+        Users = Collection<User>();
+        Items = Collection<Item>();
     }
+
+    public IMongoCollection<T> Collection<T>() => _mongoDatabase.GetCollection<T>(nameof(T));
 }
