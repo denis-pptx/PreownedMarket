@@ -1,0 +1,3 @@
+**/Migrations
+*.db*
+**/wwwroot/uploads
