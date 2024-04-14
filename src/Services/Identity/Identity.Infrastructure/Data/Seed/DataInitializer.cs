@@ -1,19 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Identity.Domain.Enums;
 
 namespace Identity.Infrastructure.Data.Seed;
 
 public static class DataInitializer
 {
-    public static async Task Seed(IServiceProvider serviceProvider)
+    public static async Task SeedDataAsync(this IApplicationBuilder app)
     {
-        using var scope = serviceProvider.CreateScope();
+        using var scope = app.ApplicationServices.CreateScope();
 
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        await roleManager.SeedAsync();
 
-        await SeedRoles.Seed(roleManager);
-        await SeedUsers.Seed(userManager);
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        await userManager.SeedAsync();
     }
 }

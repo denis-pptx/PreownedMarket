@@ -14,13 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//var connection = builder.Configuration.GetConnectionString("MySQL");
-//builder.Services.AddDbContext<ApplicationDbContext>(
-//    options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
-
-var connection = builder.Configuration.GetConnectionString("SQLite");
+var connection = builder.Configuration.GetConnectionString("MySQL");
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlite(connection));
+    options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
 
 builder.Services.AddIdentity();
 
@@ -37,7 +33,6 @@ builder.Services.AddExcepitonHandlers();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddHttpContextAccessor();
-
 
 var app = builder.Build();
 
@@ -58,6 +53,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await DataInitializer.Seed(app.Services);
+await app.SeedDataAsync();
 
 app.Run();
