@@ -1,8 +1,4 @@
-﻿
-using Identity.Application.Exceptions;
-using System.Threading;
-
-namespace Identity.WebUI.ExceptionHandlers;
+﻿namespace Identity.WebUI.ExceptionHandlers;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
@@ -17,7 +13,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             {
                 Status = baseException.StatusCode,
                 Title = ReasonPhrases.GetReasonPhrase(baseException.StatusCode),
-                Detail = baseException.Message,
+                Detail = baseException.ErrorMessage?.Description ?? string.Empty,
                 Type = baseException.Type,
             };
 

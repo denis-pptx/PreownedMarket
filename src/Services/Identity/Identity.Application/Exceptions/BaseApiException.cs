@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Identity.Application.Exceptions;
+﻿namespace Identity.Application.Exceptions;
 
 public abstract class BaseApiException : ApplicationException
 {
     public int StatusCode { get; }
     public string Type { get; }
+    public ErrorMessage? ErrorMessage { get; }
 
-    public BaseApiException(int statusCode, string message) 
-        : base(message)
+    public BaseApiException(int statusCode, ErrorMessage? errorMessage) 
     {
         StatusCode = statusCode;
 
@@ -19,11 +17,7 @@ public abstract class BaseApiException : ApplicationException
             StatusCodes.Status409Conflict => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.8",
             _ => string.Empty
         };
-    }
 
-    public BaseApiException(int statusCode) 
-        : this(statusCode, string.Empty) 
-    {
-        
+        ErrorMessage = errorMessage;
     }
 }

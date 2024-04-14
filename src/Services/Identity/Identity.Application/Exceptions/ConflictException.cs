@@ -1,18 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Identity.Application.Exceptions;
+﻿namespace Identity.Application.Exceptions;
 
 public class ConflictException : BaseApiException
 {
-    public ConflictException(string message) 
-        : base(StatusCodes.Status409Conflict, message)
+    public ConflictException(ErrorMessage? errorMessage = null) 
+        : base(StatusCodes.Status409Conflict, errorMessage)
     {
 
-    }
-
-    public ConflictException() 
-        : base(StatusCodes.Status409Conflict)
-    {
-        
     }
 }

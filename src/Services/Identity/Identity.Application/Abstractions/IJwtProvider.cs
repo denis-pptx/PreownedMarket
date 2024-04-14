@@ -1,6 +1,4 @@
-﻿using Identity.Application.Models;
-
-namespace Identity.Application.Abstractions;
+﻿namespace Identity.Application.Abstractions;
 
 public interface IJwtProvider
 {

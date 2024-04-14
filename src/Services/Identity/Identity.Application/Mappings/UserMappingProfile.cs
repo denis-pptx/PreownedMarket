@@ -1,6 +1,4 @@
-﻿using Identity.Application.Features.Users.Queries.Models;
-
-namespace Identity.Application.Mappings;
+﻿namespace Identity.Application.Mappings;
 
 public class UserMappingProfile : Profile
 {

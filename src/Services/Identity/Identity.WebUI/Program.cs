@@ -3,6 +3,7 @@ using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Data.Seed;
 using Identity.WebUI.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,17 +19,15 @@ var connection = builder.Configuration.GetConnectionString("MySQL");
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
 
-builder.Services.AddIdentity();
+//var connection = builder.Configuration.GetConnectionString("SQLite");
+//builder.Services.AddDbContext<ApplicationDbContext>(
+//    options => options.UseSqlite(connection));
 
-builder.Services.AddDI();
+builder.Host.UseLogging();
 
-builder.Services.ConfigureAuthentication();
+builder.Services.AddApplication();
 
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(UserMappingProfile)));
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(LoginUserHandler)));
-
-builder.Services.AddExcepitonHandlers();
 
 builder.Services.AddProblemDetails();
 
@@ -47,11 +46,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseSerilogRequestLogging();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.AddMiddleware();
 
 await app.SeedDataAsync();
 

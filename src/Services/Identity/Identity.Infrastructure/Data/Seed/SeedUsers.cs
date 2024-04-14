@@ -1,7 +1,4 @@
-﻿using Identity.Domain.Enums;
-using Microsoft.AspNetCore.Identity;
-
-namespace Identity.Infrastructure.Data.Seed;
+﻿namespace Identity.Infrastructure.Data.Seed;
 
 public static class SeedUsers
 {
