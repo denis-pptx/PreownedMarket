@@ -40,10 +40,10 @@ public class ItemImageService(
 
         NotFoundException.ThrowIfNull(item);
             
-        await DeleteItemImagesAsync(item.Images, token);
+        await DeleteAttachedImagesAsync(item.Images, token);
     }
 
-    public async Task DeleteItemImagesAsync(IEnumerable<ItemImage> images, CancellationToken token = default)
+    public async Task DeleteAttachedImagesAsync(IEnumerable<ItemImage> images, CancellationToken token = default)
     {
         foreach (var image in images.ToList())
         {

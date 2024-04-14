@@ -2,6 +2,8 @@
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
+using Item.DataAccess.Transactions.Implementations;
+using Item.DataAccess.Transactions.Interfaces;
 using Item.Presentation.OptionsSetup;
 
 namespace Item.Presentation.Extensions;
@@ -19,6 +21,8 @@ public static class DependencyInjection
         services.AddScoped<ILikeService, LikeService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IItemImageService, ItemImageService>();
+
+        services.AddScoped<ITransactionManager, EfTransactionManager>();
 
         services.AddScoped<ILikeRepository, LikeRepository>();  
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));

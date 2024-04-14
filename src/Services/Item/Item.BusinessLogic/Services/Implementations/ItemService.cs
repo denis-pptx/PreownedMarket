@@ -11,6 +11,7 @@ using Item.DataAccess.Enums;
 using Item.DataAccess.Models;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Implementations.Item;
+using Item.DataAccess.Transactions.Interfaces;
 using System.Linq.Expressions;
 
 namespace Item.BusinessLogic.Services.Implementations;
@@ -22,8 +23,8 @@ public class ItemService(
     IRepository<Status> _statusRepository,
     ICurrentUserService _currentUserService,
     IItemImageService _imageService,
-    IMapper _mapper,
-    ApplicationDbContext _dbContext) 
+    ITransactionManager _transactionManager,
+    IMapper _mapper) 
     : IItemService
 {
     public async Task<Item> CreateAsync(ItemDto itemDto, CancellationToken token)
@@ -67,7 +68,7 @@ public class ItemService(
             throw new ForbiddenException();
         }
 
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(token);
+        using var transaction = await _transactionManager.BeginTransactionAsync(token);
 
         _mapper.Map(itemDto, item);
 
@@ -81,7 +82,7 @@ public class ItemService(
         {
             await _imageService.SaveAttachedImagesAsync(item.Id, itemDto.AttachedImages, token);
 
-            await _imageService.DeleteItemImagesAsync(oldImages, token);
+            await _imageService.DeleteAttachedImagesAsync(oldImages, token);
 
             await transaction.CommitAsync(token);
 
@@ -92,7 +93,7 @@ public class ItemService(
             var allImages = await _imageService.GetItemImagesAsync(item.Id, token);
             var imagesToDelete = allImages.ExceptBy(oldImages.Select(x => x.Id), x => x.Id);
 
-            await _imageService.DeleteItemImagesAsync(imagesToDelete, token);
+            await _imageService.DeleteAttachedImagesAsync(imagesToDelete, token);
 
             await transaction.RollbackAsync(token);
 
