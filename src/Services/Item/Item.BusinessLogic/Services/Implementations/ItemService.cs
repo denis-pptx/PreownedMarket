@@ -3,6 +3,7 @@ using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.Common;
 using Item.BusinessLogic.Models.DTOs;
+using Item.BusinessLogic.Models.DTOs.Filter;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Data;
 using Item.DataAccess.Data.Initializers.Values;
@@ -174,56 +175,46 @@ public class ItemService(
         return item;
     }
 
-    public async Task<PagedList<Item>> GetAsync(
-        string? searchTerm, 
-        Guid? cityId,
-        string? categoryNormalizedName,
-        string? statusNormalizedName,
-        Guid? userId,
-        string? sortColumn, 
-        string? sortOrder, 
-        int page, 
-        int pageSize, 
-        CancellationToken token = default)
+    public async Task<PagedList<Item>> GetAsync(ItemFilterQuery filterQuery, CancellationToken token = default)
     {
         var specification = new ItemWithAllSpecification();
         var itemQuery = _itemRepository.GetQueryable(specification);
 
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        if (!string.IsNullOrWhiteSpace(filterQuery.SearchTerm))
         {
-            itemQuery = itemQuery.Where(x => x.Title.Contains(searchTerm));
+            itemQuery = itemQuery.Where(x => x.Title.Contains(filterQuery.SearchTerm));
         }
 
-        if (cityId is not null)
+        if (filterQuery.CityId is not null)
         {
-            itemQuery = itemQuery.Where(x => x.CityId == cityId);
+            itemQuery = itemQuery.Where(x => x.CityId == filterQuery.CityId);
         }
 
-        if (categoryNormalizedName is not null)
+        if (filterQuery.CategoryNormalizedName is not null)
         {
-            itemQuery = itemQuery.Where(x => x.Category!.NormalizedName == categoryNormalizedName);
+            itemQuery = itemQuery.Where(x => x.Category!.NormalizedName == filterQuery.CategoryNormalizedName);
         }
 
-        if (statusNormalizedName is not null)
+        if (filterQuery.StatusNormalizedName is not null)
         {
-            itemQuery = itemQuery.Where(x => x.Status!.NormalizedName == statusNormalizedName);
+            itemQuery = itemQuery.Where(x => x.Status!.NormalizedName == filterQuery.StatusNormalizedName);
         }
 
-        if (userId is not null)
+        if (filterQuery.UserId is not null)
         {
-            itemQuery = itemQuery.Where(x => x.UserId == userId);
+            itemQuery = itemQuery.Where(x => x.UserId == filterQuery.UserId);
         }
 
-        if (string.Equals(sortOrder, nameof(SortOrder.Descending), StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(filterQuery.SortColumn, nameof(SortOrder.Descending), StringComparison.OrdinalIgnoreCase))
         {
-            itemQuery = itemQuery.OrderByDescending(GetSortProperty(sortColumn));
+            itemQuery = itemQuery.OrderByDescending(GetSortProperty(filterQuery.SortColumn));
         }
         else
         {
-            itemQuery = itemQuery.OrderBy(GetSortProperty(sortColumn));
+            itemQuery = itemQuery.OrderBy(GetSortProperty(filterQuery.SortColumn));
         }
 
-        var items = await PagedList<Item>.CreateAsync(itemQuery, page, pageSize);
+        var items = await PagedList<Item>.CreateAsync(itemQuery, filterQuery.Page, filterQuery.PageSize);
 
         return items;
     }

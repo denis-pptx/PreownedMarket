@@ -1,4 +1,5 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
+using Item.BusinessLogic.Models.DTOs.Filter;
 using Item.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,29 +13,9 @@ public class ItemController(IItemService _itemService)
 {
     // GET: api/<ItemController>
     [HttpGet]
-    public async Task<IActionResult> Get(
-        [FromQuery] string? searchTerm,
-        [FromQuery] Guid? cityId,
-        [FromQuery] string? categoryNormalizedName,
-        [FromQuery] string? statusNormalizedName,
-        [FromQuery] Guid? userId,
-        [FromQuery] string? sortColumn,
-        [FromQuery] string? sortOrder,
-        [FromQuery] int page,
-        [FromQuery] int pageSize, 
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromQuery] ItemFilterQuery filterQuery, CancellationToken cancellationToken)
     {
-        var result = await _itemService.GetAsync(
-            searchTerm, 
-            cityId,
-            categoryNormalizedName, 
-            statusNormalizedName, 
-            userId, 
-            sortColumn, 
-            sortOrder, 
-            page, 
-            pageSize, 
-            cancellationToken);
+        var result = await _itemService.GetAsync(filterQuery, cancellationToken);
 
         return Ok(result);
     }

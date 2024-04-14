@@ -11,7 +11,7 @@ public static class MigrationExtension
     {
         using var scope = app.ApplicationServices.CreateScope();
 
-        var dbContext = scope.ServiceProvider.GetService<DbContext>();
+        var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
         dbContext?.Database.Migrate();
     }
 }
