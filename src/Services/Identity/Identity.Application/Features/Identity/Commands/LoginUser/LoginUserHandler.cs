@@ -24,6 +24,7 @@ public class LoginUserHandler(UserManager<User> _userManager, IJwtProvider _jwtP
 
         user.RefreshToken = refreshTokenModel.Token;
         user.RefreshExpiryTime = refreshTokenModel.ExpiryTime;
+
         await _userManager.UpdateAsync(user);
 
         return new LoginUserVm(accessToken, refreshTokenModel.Token);

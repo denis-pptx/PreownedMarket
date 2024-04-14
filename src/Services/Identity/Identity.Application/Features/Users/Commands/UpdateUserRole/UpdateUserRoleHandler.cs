@@ -22,8 +22,8 @@ public class UpdateUserRoleHandler(
             throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
-        string? currentRole = (await _userManager.GetRolesAsync(user)).SingleOrDefault();
-        string? newRole = (await _roleManager.FindByNameAsync(request.NewRole))?.Name;
+        var currentRole = (await _userManager.GetRolesAsync(user)).SingleOrDefault();
+        var newRole = (await _roleManager.FindByNameAsync(request.NewRole))?.Name;
 
         if (newRole is null)
         {

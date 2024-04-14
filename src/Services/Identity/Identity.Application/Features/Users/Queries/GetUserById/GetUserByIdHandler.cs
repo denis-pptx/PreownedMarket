@@ -13,10 +13,10 @@ public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper)
             throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
-        string? role = (await _userManager.GetRolesAsync(user)).SingleOrDefault();
+        string? role = (await _userManager.GetRolesAsync(user)).Single();
 
         var userVm = _mapper.Map<User, UserVm>(user);
-        userVm.Role = role ?? string.Empty;
+        userVm.Role = role;
 
         return userVm;
     }

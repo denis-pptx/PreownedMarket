@@ -10,10 +10,10 @@ public class GetAllUsersHandler(UserManager<User> _userManager, IMapper _mapper)
 
         foreach (var user in users)
         {
-            string? role = (await _userManager.GetRolesAsync(user)).SingleOrDefault();
+            string? role = (await _userManager.GetRolesAsync(user)).Single();
 
             var userVm = _mapper.Map<UserVm>(user);
-            userVm.Role = role ?? string.Empty;
+            userVm.Role = role;
 
             userVms.Add(userVm);
         }
