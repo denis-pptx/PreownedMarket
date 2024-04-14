@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Abstractions;
+using Identity.Application.Authentication;
 using Identity.Application.Behaviours;
 using Identity.Domain.Models;
 using Identity.Infrastructure.Data;

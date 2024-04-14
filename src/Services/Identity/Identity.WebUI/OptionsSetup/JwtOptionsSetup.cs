@@ -1,4 +1,6 @@
-﻿namespace Identity.WebUI.OptionsSetup;
+﻿using Identity.Application.Authentication;
+
+namespace Identity.WebUI.OptionsSetup;
 
 public class JwtOptionsSetup(IConfiguration _configuration) 
     : IConfigureOptions<JwtOptions>

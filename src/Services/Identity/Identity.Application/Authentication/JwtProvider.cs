@@ -1,4 +1,11 @@
-﻿namespace Identity.Infrastructure.Authentication;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace Identity.Application.Authentication;
 
 public class JwtProvider(
     IOptions<JwtOptions> _jwtOptions,
