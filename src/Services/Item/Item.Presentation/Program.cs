@@ -24,10 +24,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
 
-//var connection = builder.Configuration.GetConnectionString("SQLite");
-//builder.Services.AddDbContext<ApplicationDbContext>(
-//    options => options.UseSqlite(connection));
-
 var connection = builder.Configuration.GetConnectionString("MySQL");
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
@@ -64,6 +60,8 @@ app.MapControllers();
 
 app.UseStaticFiles();
 
-await DataInitializer.Seed(app.Services);
+app.ApplyMigrations<ApplicationDbContext>();
+
+await app.SeedData();
 
 app.Run();

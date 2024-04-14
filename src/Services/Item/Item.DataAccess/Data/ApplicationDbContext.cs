@@ -6,7 +6,8 @@ namespace Item.DataAccess.Data;
 
 using Item = Models.Item;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+    : DbContext(options)
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<City> Cities { get; set; }
@@ -16,12 +17,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<ItemImage> ItemImages { get; set; }
-
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-        Database.EnsureCreated();
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

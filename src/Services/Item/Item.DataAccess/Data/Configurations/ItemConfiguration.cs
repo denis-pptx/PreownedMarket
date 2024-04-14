@@ -39,7 +39,7 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
             .IsRequired();
 
         builder.HasOne(x => x.User)
-            .WithMany()
+            .WithMany(x => x.Items)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();

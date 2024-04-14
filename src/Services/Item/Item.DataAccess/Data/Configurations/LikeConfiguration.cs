@@ -10,9 +10,11 @@ public class LikeConfiguration : IEntityTypeConfiguration<Like>
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasIndex(x => new { x.UserId, x.ItemId }).IsUnique();
+        builder.HasIndex(x => new { x.UserId, x.ItemId })
+            .IsUnique();
 
-        builder.Property(x => x.CreatedOn).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        builder.Property(x => x.CreatedOn)
+            .HasDefaultValue(DateTime.UtcNow);
 
         builder.HasOne(x => x.User)
             .WithMany()

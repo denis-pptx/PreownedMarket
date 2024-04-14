@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Item.DataAccess.Data.Initializers;
 
 public static class DataInitializer
 {
-    public static async Task Seed(IServiceProvider serviceProvider)
+    public static async Task SeedData(this IApplicationBuilder app)
     {
-        using var scope = serviceProvider.CreateScope();
+        using var scope = app.ApplicationServices.CreateScope();
 
         var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>()!;
 
