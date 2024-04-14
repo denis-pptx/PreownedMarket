@@ -31,11 +31,8 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
     {
         var entity = await _entityRepository.GetByIdAsync(id, token);
 
-        if (entity is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
-        }
-
+        NotFoundException.ThrowIfNull(entity);
+        
         await _entityRepository.DeleteAsync(entity, token);
 
         return entity;
@@ -52,10 +49,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
     {
         var entity = await _entityRepository.GetByIdAsync(id, token);
 
-        if (entity is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
-        }
+        NotFoundException.ThrowIfNull(entity);
 
         return entity;
     }
@@ -64,10 +58,7 @@ public abstract class BaseService<TEntity, TEntityDto> : IBaseService<TEntity, T
     {
         var entity = await _entityRepository.GetByIdAsync(id, token);
 
-        if (entity is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<TEntity>.NotFound);
-        }
+        NotFoundException.ThrowIfNull(entity);
 
         _mapper.Map(entityDto, entity);
 

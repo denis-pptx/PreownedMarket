@@ -27,6 +27,7 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
         }
 
         var region = _mapper.Map<RegionDto, Region>(regionDto);
+
         var result = await _entityRepository.AddAsync(region, token);
 
         return result;
@@ -36,12 +37,10 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
     {
         var region = await _entityRepository.GetByIdAsync(id, token);
 
-        if (region is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<Region>.NotFound);
-        }
+        NotFoundException.ThrowIfNull(region);
 
         _mapper.Map(regionDto, region);
+
         var result = await _entityRepository.UpdateAsync(region, token);
 
         return result;
@@ -50,6 +49,7 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
     public async override Task<IEnumerable<Region>> GetAsync(CancellationToken token)
     {
         var specification = new RegionWithCitiesSpecification();
+
         var entities = await _entityRepository.GetAsync(specification, token);
 
         return entities;
@@ -58,12 +58,10 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
     public async override Task<Region> GetByIdAsync(Guid id, CancellationToken token)
     {
         var specification = new RegionWithCitiesSpecification(id);
+
         var entity = await _entityRepository.FirstOrDefaultAsync(specification, token);
 
-        if (entity is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<Region>.NotFound);
-        }
+        NotFoundException.ThrowIfNull(entity);
 
         return entity;
     }

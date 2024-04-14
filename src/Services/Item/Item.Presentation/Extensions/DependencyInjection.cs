@@ -3,7 +3,6 @@ using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.Presentation.OptionsSetup;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Item.Presentation.Extensions;
 

@@ -29,14 +29,9 @@ public class ItemService(
     {
         var item = _mapper.Map<ItemDto, Item>(itemDto);
 
-        item.CreatedAt = DateTime.UtcNow;
+        item.Status = await _statusRepository.SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
 
-        var status = await _statusRepository
-            .SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
-        item.StatusId = status!.Id;
-
-        item.UserId = _currentUserService.UserId ??
-            throw new UnauthorizedException();
+        item.UserId = _currentUserService.UserId!.Value;
 
         var createdItem = await _itemRepository.AddAsync(item, token);
 
@@ -56,16 +51,17 @@ public class ItemService(
 
     public async Task<Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
     {
-        var item = await _itemRepository.GetByIdAsync(id, token) ?? 
-            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+        var item = await _itemRepository.GetByIdAsync(id, token);
 
-        var currentUserId = _currentUserService.UserId ?? 
-            throw new UnauthorizedException();
+        NotFoundException.ThrowIfNull(item);
 
-        var currentRole = _currentUserService.Role ?? 
-            throw new UnauthorizedException();
+        var currentUserId = _currentUserService.UserId;
 
-        if (!(currentUserId == item.UserId || currentRole == nameof(Role.Administrator) || currentRole == nameof(Role.Moderator)))
+        var currentRole = _currentUserService.Role;
+
+        if (!(currentUserId == item.UserId || 
+            currentRole == nameof(Role.Administrator) || 
+            currentRole == nameof(Role.Moderator)))
         {
             throw new ForbiddenException();
         }
@@ -74,10 +70,9 @@ public class ItemService(
 
         _mapper.Map(itemDto, item);
 
-        item.Status = await _statusRepository.SingleOrDefaultAsync(
-            x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
+        item.Status = await _statusRepository.SingleOrDefaultAsync(x => x.Equals(StatusValues.UnderReview), token);
 
-        var result = await _itemRepository.UpdateAsync(item, token);
+        var updatedImage = await _itemRepository.UpdateAsync(item, token);
 
         var oldImages = await _imageService.GetItemImagesAsync(item.Id, token);
 
@@ -85,18 +80,18 @@ public class ItemService(
         {
             await _imageService.SaveAttachedImagesAsync(item.Id, itemDto.AttachedImages, token);
 
-            await _imageService.DeleteAttachedImagesAsync(oldImages, token);
+            await _imageService.DeleteItemImagesAsync(oldImages, token);
 
             await transaction.CommitAsync(token);
 
-            return result;
+            return updatedImage;
         }
         catch
         {
             var allImages = await _imageService.GetItemImagesAsync(item.Id, token);
             var imagesToDelete = allImages.ExceptBy(oldImages.Select(x => x.Id), x => x.Id);
 
-            await _imageService.DeleteAttachedImagesAsync(imagesToDelete, token);
+            await _imageService.DeleteItemImagesAsync(imagesToDelete, token);
 
             await transaction.RollbackAsync(token);
 
@@ -106,20 +101,20 @@ public class ItemService(
 
     public async Task<Item> DeleteByIdAsync(Guid id, CancellationToken token)
     {
-        var item = await _itemRepository.GetByIdAsync(id, token) ?? 
-            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+        var item = await _itemRepository.GetByIdAsync(id, token);
 
-        var currentUserId = _currentUserService.UserId ??
-            throw new UnauthorizedException();
+        NotFoundException.ThrowIfNull(item);
 
-        var currentRole = _currentUserService.Role ??
-            throw new UnauthorizedException();
+        var currentUserId = _currentUserService.UserId;
+
+        var currentRole = _currentUserService.Role;
 
         if (currentUserId == item.UserId ||
             currentRole == nameof(Role.Administrator) ||
             currentRole == nameof(Role.Moderator))
         {
             await _imageService.DeleteAllAttachedImagesAsync(item.Id, token);
+
             await _itemRepository.DeleteAsync(item, token);
 
             return item;
@@ -133,21 +128,19 @@ public class ItemService(
     public async Task<Item> ChangeStatus(Guid id, UpdateStatusDto updateStatusDto, CancellationToken token = default)
     {
         var specification = new ItemWithStatusSpecification(id);
-        var item = await _itemRepository.FirstOrDefaultAsync(specification, token) ??
-            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+        var item = await _itemRepository.FirstOrDefaultAsync(specification, token);
 
-        Status currentStatus = item.Status!;
+        NotFoundException.ThrowIfNull(item);
 
-        Status newStatus = await _statusRepository.FirstOrDefaultAsync(x => x.NormalizedName == updateStatusDto.NormalizedName, token) ??
-            throw new NotFoundException(GenericErrorMessages<Status>.NotFound);
+        var currentStatus = item.Status!;
 
-        var currentUserId = _currentUserService.UserId ?? 
-            throw new UnauthorizedException();
+        var newStatus = await _statusRepository.FirstOrDefaultAsync(x => x.NormalizedName == updateStatusDto.NormalizedName, token);
 
-        var currentRole = _currentUserService.Role ?? 
-            throw new UnauthorizedException();
+        NotFoundException.ThrowIfNull(newStatus);
 
-        if (currentUserId == item.UserId)
+        var currentRole = _currentUserService.Role;
+
+        if (_currentUserService.UserId == item.UserId)
         {
             if ((currentStatus.Equals(StatusValues.Active) && newStatus.Equals(StatusValues.Inactive)) ||
                 (currentStatus.Equals(StatusValues.Inactive) && newStatus.Equals(StatusValues.Active)))
@@ -159,8 +152,7 @@ public class ItemService(
                 throw new ConflictException(ItemErrorMessages.StatusFailure);
             }
         }
-        else if (currentRole == nameof(Role.Administrator) || 
-            currentRole == nameof(Role.Moderator))
+        else if (currentRole == nameof(Role.Administrator) || currentRole == nameof(Role.Moderator))
         {
             item.Status = newStatus;
         }
@@ -177,10 +169,7 @@ public class ItemService(
         var specification = new ItemWithAllSpecification(id);
         var item = await _itemRepository.FirstOrDefaultAsync(specification, token);
 
-        if (item is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
-        }
+        NotFoundException.ThrowIfNull(item);
 
         return item;
     }
@@ -201,19 +190,29 @@ public class ItemService(
         var itemQuery = _itemRepository.GetQueryable(specification);
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
             itemQuery = itemQuery.Where(x => x.Title.Contains(searchTerm));
+        }
 
         if (cityId is not null)
+        {
             itemQuery = itemQuery.Where(x => x.CityId == cityId);
+        }
 
         if (categoryNormalizedName is not null)
+        {
             itemQuery = itemQuery.Where(x => x.Category!.NormalizedName == categoryNormalizedName);
+        }
 
         if (statusNormalizedName is not null)
+        {
             itemQuery = itemQuery.Where(x => x.Status!.NormalizedName == statusNormalizedName);
+        }
 
         if (userId is not null)
+        {
             itemQuery = itemQuery.Where(x => x.UserId == userId);
+        }
 
         if (string.Equals(sortOrder, nameof(SortOrder.Descending), StringComparison.OrdinalIgnoreCase))
         {
@@ -232,10 +231,14 @@ public class ItemService(
     private static Expression<Func<Item, object>> GetSortProperty(string? sortColumn)
     {
         if (string.Equals(sortColumn, nameof(Item.Title), StringComparison.OrdinalIgnoreCase))
+        {
             return item => item.Title;
+        }
 
         if (string.Equals(sortColumn, nameof(Item.Price), StringComparison.OrdinalIgnoreCase))
+        {
             return item => item.Price;
+        }
 
         return item => item.Id;
     }

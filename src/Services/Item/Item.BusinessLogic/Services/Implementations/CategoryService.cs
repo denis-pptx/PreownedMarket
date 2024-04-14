@@ -19,7 +19,7 @@ public class CategoryService : BaseService<Category, CategoryDto>, ICategoryServ
 
     public async override Task<Category> CreateAsync(CategoryDto categoryDto, CancellationToken token)
     {
-        var existingCategory = await _entityRepository.FirstOrDefaultAsync(x => x.Name == categoryDto.Name);
+        var existingCategory = await _entityRepository.FirstOrDefaultAsync(x => x.Name == categoryDto.Name, token);
 
         if (existingCategory is not null)
         {
@@ -27,6 +27,7 @@ public class CategoryService : BaseService<Category, CategoryDto>, ICategoryServ
         }
 
         var category = _mapper.Map<CategoryDto, Category>(categoryDto);
+
         var result = await _entityRepository.AddAsync(category, token);
 
         return result;
@@ -36,12 +37,10 @@ public class CategoryService : BaseService<Category, CategoryDto>, ICategoryServ
     {
         var category = await _entityRepository.GetByIdAsync(id, token);
 
-        if (category is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<Category>.NotFound);
-        }
+        NotFoundException.ThrowIfNull(category);
 
         _mapper.Map(categoryDto, category);
+
         var result = await _entityRepository.UpdateAsync(category, token);
 
         return result;

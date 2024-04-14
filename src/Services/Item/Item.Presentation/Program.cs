@@ -40,7 +40,6 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
-
 var app = builder.Build();
 
 app.UseExceptionHandler();

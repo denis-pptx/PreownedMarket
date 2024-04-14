@@ -36,25 +36,28 @@ public class ItemImageService(
     {
         var specification = new ItemWithImagesSpecification(itemId);
 
-        var item = await _itemRepository.FirstOrDefaultAsync(specification, token) ??
-            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+        var item = await _itemRepository.FirstOrDefaultAsync(specification, token);
 
-        await DeleteAttachedImagesAsync(item.Images, token);
+        NotFoundException.ThrowIfNull(item);
+            
+        await DeleteItemImagesAsync(item.Images, token);
     }
 
-    public async Task DeleteAttachedImagesAsync(IEnumerable<ItemImage> images, CancellationToken token = default)
+    public async Task DeleteItemImagesAsync(IEnumerable<ItemImage> images, CancellationToken token = default)
     {
         foreach (var image in images.ToList())
         {
             _fileService.DeleteFile(image.FilePath);
+
             await _imageRepository.DeleteAsync(image, token);
         }
     }
 
     public async Task<IEnumerable<ItemImage>> GetItemImagesAsync(Guid itemId, CancellationToken token = default)
     {
-        var item = await _itemRepository.GetByIdAsync(itemId, token) ??
-            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+        var item = await _itemRepository.GetByIdAsync(itemId, token);
+
+        NotFoundException.ThrowIfNull(item);
 
         var images = await _imageRepository.GetAsync(x => x.ItemId == itemId, token);
 

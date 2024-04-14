@@ -18,7 +18,7 @@ public class EfRepository<TEntity>(ApplicationDbContext dbContext)
     public async Task<TEntity> AddAsync(TEntity entity, CancellationToken token = default)
     {
         await _entities.AddAsync(entity, token);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
 
         return entity;
     }
@@ -26,7 +26,7 @@ public class EfRepository<TEntity>(ApplicationDbContext dbContext)
     public async Task DeleteAsync(TEntity entity, CancellationToken token = default)
     {
         _entities.Remove(entity);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 
     public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter, CancellationToken token = default)

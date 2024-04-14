@@ -13,9 +13,9 @@ public class LikeRepository(ApplicationDbContext dbContext) :
     EfRepository<Like>(dbContext), ILikeRepository
 {
     public async Task<IEnumerable<Item>> GetByUserIdAsync(
-    Guid userId,
-    ISpecification<Item> itemSpecification,
-    CancellationToken token = default)
+        Guid userId,
+        ISpecification<Item> itemSpecification,
+        CancellationToken token = default)
     {
         var likedItems = from like in _dbContext.Likes
                          join item in _dbContext.Items on like.ItemId equals item.Id

@@ -18,7 +18,7 @@ public class CityService : BaseService<City, CityDto>, ICityService
 
     public async override Task<City> CreateAsync(CityDto cityDto, CancellationToken token)
     {
-        var existingCity = await _entityRepository.FirstOrDefaultAsync(x => x.Name == cityDto.Name);
+        var existingCity = await _entityRepository.FirstOrDefaultAsync(x => x.Name == cityDto.Name, token);
 
         if (existingCity is not null)
         {
@@ -26,6 +26,7 @@ public class CityService : BaseService<City, CityDto>, ICityService
         }
 
         var city = _mapper.Map<CityDto, City>(cityDto);
+
         var result = await _entityRepository.AddAsync(city, token);
 
         return result;
@@ -35,12 +36,10 @@ public class CityService : BaseService<City, CityDto>, ICityService
     {
         var city = await _entityRepository.GetByIdAsync(id, token);
 
-        if (city is null)
-        {
-            throw new NotFoundException(GenericErrorMessages<City>.NotFound);
-        }
+        NotFoundException.ThrowIfNull(city);
 
         _mapper.Map(cityDto, city);
+
         var result = await _entityRepository.UpdateAsync(city, token);
 
         return result;

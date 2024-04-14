@@ -17,32 +17,30 @@ public class LikeService(
 {
     public async Task<IEnumerable<Item>> GetLikedItemsAsync(CancellationToken token = default)
     {
-        var currentUserId = _currentUserService.UserId ?? 
-            throw new UnauthorizedException();
+        var currentUserId = _currentUserService.UserId!.Value;
 
-        var itemSpecification = new ItemWithAllSpecification();
+        var specification = new ItemWithAllSpecification();
 
-        var likedItems = await _likeRepository.GetByUserIdAsync(currentUserId, itemSpecification, token);
+        var likedItems = await _likeRepository.GetByUserIdAsync(currentUserId, specification, token);
 
         return likedItems;
     }
 
     public async Task LikeItemAsync(Guid itemId, CancellationToken token = default)
     {
-        var currentUserId = _currentUserService.UserId ?? 
-            throw new UnauthorizedException();
+        var item = await _itemRepository.SingleOrDefaultAsync(x => x.Id == itemId, token);
 
-        var item = await _itemRepository.SingleOrDefaultAsync(x => x.Id == itemId, token) ?? 
-            throw new NotFoundException(GenericErrorMessages<Item>.NotFound);
+        NotFoundException.ThrowIfNull(item);
+
+        var currentUserId = _currentUserService.UserId!.Value;
 
         if (item.UserId == currentUserId)
         {
             throw new ConflictException(LikeErrorMessages.LikeYourItem);
         }
 
-        var existingLike = await _likeRepository.FirstOrDefaultAsync(
-            x => x.ItemId.Equals(itemId) && x.UserId.Equals(currentUserId), 
-            token);
+        var existingLike = await _likeRepository.SingleOrDefaultAsync(
+            x => x.ItemId.Equals(itemId) && x.UserId.Equals(currentUserId), token);
 
         if (existingLike is not null)
         {
@@ -60,12 +58,10 @@ public class LikeService(
 
     public async Task UnlikeItemAsync(Guid itemId, CancellationToken token = default)
     {
-        var currentUserId = _currentUserService.UserId ??
-            throw new UnauthorizedException();
+        var currentUserId = _currentUserService.UserId!.Value;
 
-        var existingLike = await _likeRepository.FirstOrDefaultAsync(
-           x => x.ItemId.Equals(itemId) && x.UserId.Equals(currentUserId),
-           token);
+        var existingLike = await _likeRepository.SingleOrDefaultAsync(
+            x => x.ItemId.Equals(itemId) && x.UserId.Equals(currentUserId), token);
 
         if (existingLike is null)
         {

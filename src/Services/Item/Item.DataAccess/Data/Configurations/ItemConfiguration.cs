@@ -21,6 +21,10 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
         builder.Property(x => x.Price) 
             .IsRequired();
 
+        builder.Property(x => x.CreatedAt)
+            .HasDefaultValue(DateTime.UtcNow)
+            .IsRequired();
+
         builder.HasOne(x => x.City)
             .WithMany()
             .HasForeignKey(x => x.CityId)
