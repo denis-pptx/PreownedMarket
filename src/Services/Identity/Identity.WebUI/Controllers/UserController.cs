@@ -1,4 +1,7 @@
-﻿namespace Identity.WebUI.Controllers;
+﻿using Identity.Application.Features.Users.Commands.UpdateUserRole;
+using Identity.Application.Models.DataTransferObjects.Users.Requests;
+
+namespace Identity.WebUI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -9,7 +12,8 @@ public class UserController(IMediator _mediator) : Controller
     [HttpGet]
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
-        var users = await _mediator.Send(new GetAllUsersQuery(), cancellationToken);
+        var query = new GetAllUsersQuery();
+        var users = await _mediator.Send(query, cancellationToken);
 
         return Ok(users);
     }
@@ -25,11 +29,12 @@ public class UserController(IMediator _mediator) : Controller
         return Ok(user);
     }
 
-    // DELETE api/<UserController>
+    // DELETE api/<UserController>/<id>
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpDelete]
-    public async Task<IActionResult> DeleteUserById([FromBody] DeleteUserByIdCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteUserById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
+        var command = new DeleteUserByIdCommand(id);    
         await _mediator.Send(command, cancellationToken);
 
         return Ok();
@@ -38,8 +43,9 @@ public class UserController(IMediator _mediator) : Controller
     // PUT api/<UserController>/role
     [Authorize(Roles = nameof(Role.Administrator))]
     [HttpPut("role")]
-    public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleRequest request, CancellationToken cancellationToken)
     {
+        var command = new UpdateUserRoleCommand(request);
         await _mediator.Send(command, cancellationToken);
 
         return Ok();

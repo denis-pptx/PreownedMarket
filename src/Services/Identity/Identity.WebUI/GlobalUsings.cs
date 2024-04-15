@@ -13,7 +13,6 @@ global using Identity.Application.Features.Identity.Commands.LoginUser;
 global using Identity.Application.Features.Identity.Commands.RefreshToken;
 global using Identity.Application.Features.Identity.Commands.RegisterUser;
 global using Identity.Application.Features.Users.Commands.DeleteUser;
-global using Identity.Application.Features.Users.Commands.UpdateUserRole;
 global using Identity.Application.Features.Users.Queries.GetAllUsers;
 global using Identity.Application.Features.Users.Queries.GetUserById;
 global using Identity.Application.Exceptions;

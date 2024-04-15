@@ -1,4 +1,4 @@
 ﻿namespace Identity.Application.Features.Identity.Commands.RefreshToken;
 
-public record RefreshTokenCommand(string AccessToken, string RefreshToken) 
-    : ICommand<RefreshTokenVm>;
+public record RefreshTokenCommand(RefreshTokenRequest Request) 
+    : ICommand<RefreshTokenResponse>;

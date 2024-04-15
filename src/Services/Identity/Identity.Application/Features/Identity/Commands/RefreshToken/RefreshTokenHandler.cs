@@ -1,10 +1,12 @@
 ﻿namespace Identity.Application.Features.Identity.Commands.RefreshToken;
 
 public class RefreshTokenHandler(IJwtProvider _jwtProvider, UserManager<User> _userManager)
-    : ICommandHandler<RefreshTokenCommand, RefreshTokenVm>
+    : ICommandHandler<RefreshTokenCommand, RefreshTokenResponse>
 {
-    public async Task<RefreshTokenVm> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<RefreshTokenResponse> Handle(RefreshTokenCommand command, CancellationToken cancellationToken)
     {
+        var request = command.Request;
+
         var principal = _jwtProvider.GetPrincipalFromAccessToken(request.AccessToken);
 
         var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -30,6 +32,6 @@ public class RefreshTokenHandler(IJwtProvider _jwtProvider, UserManager<User> _u
         user.RefreshExpiryTime = refreshTokenModel.ExpiryTime;
         await _userManager.UpdateAsync(user);
 
-        return new RefreshTokenVm(accessToken, refreshTokenModel.Token);
+        return new RefreshTokenResponse(accessToken, refreshTokenModel.Token);
     }
 }

@@ -1,4 +1,4 @@
 ﻿namespace Identity.Application.Features.Users.Commands.UpdateUserRole;
 
-public record UpdateUserRoleCommand(Guid UserId, string NewRole) 
+public record UpdateUserRoleCommand(UpdateUserRoleRequest Request) 
     : ICommand<Unit>;

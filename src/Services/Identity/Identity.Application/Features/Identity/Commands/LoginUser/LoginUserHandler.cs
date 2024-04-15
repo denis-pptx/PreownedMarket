@@ -1,10 +1,12 @@
 ﻿namespace Identity.Application.Features.Identity.Commands.LoginUser;
 
 public class LoginUserHandler(UserManager<User> _userManager, IJwtProvider _jwtProvider)
-    : ICommandHandler<LoginUserCommand, LoginUserVm>
+    : ICommandHandler<LoginUserCommand, LoginUserResponse>
 {
-    public async Task<LoginUserVm> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<LoginUserResponse> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
+        var request = command.Request;
+
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
@@ -27,6 +29,6 @@ public class LoginUserHandler(UserManager<User> _userManager, IJwtProvider _jwtP
 
         await _userManager.UpdateAsync(user);
 
-        return new LoginUserVm(accessToken, refreshTokenModel.Token);
+        return new LoginUserResponse(accessToken, refreshTokenModel.Token);
     }
 }

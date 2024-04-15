@@ -1,3 +1,3 @@
 ﻿namespace Identity.Application.Features.Users.Queries.GetAllUsers;
 
-public record GetAllUsersQuery() : IQuery<IEnumerable<UserVm>>;
+public record GetAllUsersQuery() : IQuery<IEnumerable<GetUserResponse>>;

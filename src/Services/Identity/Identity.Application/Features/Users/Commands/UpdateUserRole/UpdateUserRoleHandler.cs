@@ -6,8 +6,10 @@ public class UpdateUserRoleHandler(
     ICurrentUserService _userSerivce) 
     : ICommandHandler<UpdateUserRoleCommand, Unit>
 {
-    public async Task<Unit> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateUserRoleCommand command, CancellationToken cancellationToken)
     {
+        var request = command.Request;
+
         var userActorId = _userSerivce.UserId;
 
         if (userActorId == request.UserId.ToString())

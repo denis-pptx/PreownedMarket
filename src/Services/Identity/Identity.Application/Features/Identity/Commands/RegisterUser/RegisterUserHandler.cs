@@ -3,9 +3,11 @@
 public class RegisterUserHandler(UserManager<User> _userManager, IMapper _mapper)
     : ICommandHandler<RegisterUserCommand, Unit>
 {
-    public async Task<Unit> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        User user = _mapper.Map<RegisterUserCommand, User>(request);
+        var request = command.Request;
+
+        User user = _mapper.Map<RegisterUserRequest, User>(request);
 
         var result = await _userManager.CreateAsync(user, request.Password);
 

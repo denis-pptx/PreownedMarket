@@ -1,9 +1,11 @@
-﻿namespace Identity.Application.Features.Users.Queries.GetUserById;
+﻿using Identity.Application.Models.DataTransferObjects.Users.Responses;
+
+namespace Identity.Application.Features.Users.Queries.GetUserById;
 
 public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper) 
-    : IQueryHandler<GetUserByIdQuery, UserVm>
+    : IQueryHandler<GetUserByIdQuery, GetUserResponse>
 {
-    public async Task<UserVm> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GetUserResponse> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
             .FirstOrDefaultAsync(x => x.Id == request.Id.ToString(), cancellationToken);
@@ -15,9 +17,9 @@ public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper)
 
         string? role = (await _userManager.GetRolesAsync(user)).Single();
 
-        var userVm = _mapper.Map<User, UserVm>(user);
-        userVm.Role = role;
+        var userResponse = _mapper.Map<User, GetUserResponse>(user);
+        userResponse.Role = role;
 
-        return userVm;
+        return userResponse;
     }
 }

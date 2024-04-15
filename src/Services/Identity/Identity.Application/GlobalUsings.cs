@@ -3,10 +3,13 @@ global using Identity.Application.Abstractions;
 global using Identity.Application.Exceptions;
 global using Identity.Application.Exceptions.ErrorMessages;
 global using Identity.Application.Features.Identity.Commands.RegisterUser;
-global using Identity.Application.Features.Users.Queries.Models;
 global using Identity.Application.Models;
 global using Identity.Domain.Models;
 global using Identity.Domain.Enums;
+global using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+global using Identity.Application.Models.DataTransferObjects.Identity.Responses;
+global using Identity.Application.Models.DataTransferObjects.Users.Requests;
+global using Identity.Application.Models.DataTransferObjects.Users.Responses;
 
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Http;

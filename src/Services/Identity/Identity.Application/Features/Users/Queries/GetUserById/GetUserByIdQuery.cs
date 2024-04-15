@@ -1,3 +1,5 @@
-﻿namespace Identity.Application.Features.Users.Queries.GetUserById;
+﻿using Identity.Application.Models.DataTransferObjects.Users.Responses;
 
-public record GetUserByIdQuery(Guid Id) : IQuery<UserVm>;
+namespace Identity.Application.Features.Users.Queries.GetUserById;
+
+public record GetUserByIdQuery(Guid Id) : IQuery<GetUserResponse>;
