@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Data;
+using Chat.Application.OptionsSetup;
 using Chat.Infrastructure.Data;
 using Chat.Infrastructure.Data.Contexts;
 using Microsoft.Extensions.Configuration;
@@ -9,11 +10,9 @@ namespace Chat.Infrastructure;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddInfrastructureServices(
-        this IServiceCollection services, 
-        IConfiguration configuration)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        services.Configure<MongoDbOptions>(configuration.GetSection(nameof(MongoDbOptions)));
+        services.ConfigureOptions<MongoDbOptions>();
 
         services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();   
 
