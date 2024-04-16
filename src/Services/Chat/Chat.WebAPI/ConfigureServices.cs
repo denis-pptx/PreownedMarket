@@ -13,5 +13,7 @@ public static class ConfigureServices
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
+
+        services.AddHttpContextAccessor();
     }
 }
