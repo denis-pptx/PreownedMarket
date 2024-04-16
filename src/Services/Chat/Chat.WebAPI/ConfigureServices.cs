@@ -1,4 +1,6 @@
-﻿namespace Chat.WebAPI;
+﻿using Item.Presentation.ExceptionHandlers;
+
+namespace Chat.WebAPI;
 
 public static class ConfigureServices
 {
@@ -8,5 +10,8 @@ public static class ConfigureServices
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
     }
 }
