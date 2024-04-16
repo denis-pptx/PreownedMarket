@@ -1,10 +1,9 @@
-﻿using Chat.Application.Data;
-using Chat.Application.OptionsSetup;
+﻿using Chat.Application.Abstractions;
+using Chat.Application.Data;
 using Chat.Infrastructure.Data;
 using Chat.Infrastructure.Data.Contexts;
-using Microsoft.Extensions.Configuration;
+using Chat.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 
 namespace Chat.Infrastructure;
 
@@ -14,7 +13,9 @@ public static class ConfigureServices
     {
         services.ConfigureOptions<MongoDbOptions>();
 
-        services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();   
+        services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
+
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }
