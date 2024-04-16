@@ -5,16 +5,16 @@ using MongoDB.Driver;
 namespace Chat.Infrastructure.Data.Repositories;
 
 public class MongoRepository<T>(IApplicationDbContext dbContext) 
-    : IMongoRepository<T> where T : Entity
+    where T : Entity
 {
-    private readonly IMongoCollection<T> _collection = dbContext.Collection<T>();
+    protected readonly IMongoCollection<T> _collection = dbContext.Collection<T>();
 
-    public async Task<List<T>> GetAllAsync(CancellationToken token = default)
+    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken token = default)
     {
         return await _collection.Find(_ => true).ToListAsync(token);
     }
 
-    public async Task<T> GetByIdAsync(string id, CancellationToken token = default)
+    public async Task<T?> GetByIdAsync(string id, CancellationToken token = default)
     {
         return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync(token);
     }
@@ -24,9 +24,9 @@ public class MongoRepository<T>(IApplicationDbContext dbContext)
         await _collection.InsertOneAsync(entity, cancellationToken: token);
     }
 
-    public async Task UpdateAsync(string id, T entity, CancellationToken token = default)
+    public async Task UpdateAsync(T entity, CancellationToken token = default)
     {
-        await _collection.ReplaceOneAsync(x => x.Id == id, entity, cancellationToken: token);
+        await _collection.ReplaceOneAsync(x => x.Id == entity.Id, entity, cancellationToken: token);
     }
 
     public async Task DeleteAsync(string id, CancellationToken token = default)

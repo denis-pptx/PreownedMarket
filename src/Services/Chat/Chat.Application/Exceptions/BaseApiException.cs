@@ -1,5 +1,7 @@
 ﻿using Chat.Application.Exceptions.ErrorMessages;
+using Identity.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Chat.Application.Exceptions;
 
