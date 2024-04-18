@@ -12,6 +12,6 @@ public class MessageRepository(IApplicationDbContext dbContext)
     {
         return await _collection
             .Find(message => message.ConversationId == conversationId)
-            .ToListAsync();
+            .ToListAsync(token);
     }
 }
