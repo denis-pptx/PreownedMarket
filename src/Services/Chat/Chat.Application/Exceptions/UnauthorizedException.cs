@@ -5,14 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Chat.Application.Exceptions;
 
-public class UnauthorizedException : BaseApiException
+public class UnauthorizedException(ErrorMessage? errorMessage = null) 
+    : BaseApiException(StatusCodes.Status401Unauthorized, errorMessage)
 {
-    public UnauthorizedException(ErrorMessage? errorMessage = null) 
-        : base(StatusCodes.Status401Unauthorized, errorMessage)
-    {
-
-    }
-
     public static void ThrowIfNull<T>([NotNull] T? obj)
     {
         if (obj is null)

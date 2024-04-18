@@ -5,14 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Identity.Application.Exceptions;
 
-public class NotFoundException : BaseApiException
+public class NotFoundException(ErrorMessage? errorMessage = null) 
+    : BaseApiException(StatusCodes.Status404NotFound, errorMessage)
 {
-    public NotFoundException(ErrorMessage? errorMessage = null) 
-        : base(StatusCodes.Status404NotFound, errorMessage)
-    {
-
-    }
-
     public static void ThrowIfNull<T>([NotNull] T? obj)
     {
         if (obj is null)

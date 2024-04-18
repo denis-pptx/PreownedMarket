@@ -3,11 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Chat.Application.Exceptions;
 
-public class ConflictException : BaseApiException
+public class ConflictException(ErrorMessage? errorMessage = null) 
+    : BaseApiException(StatusCodes.Status409Conflict, errorMessage)
 {
-    public ConflictException(ErrorMessage? errorMessage = null) 
-        : base(StatusCodes.Status409Conflict, errorMessage)
-    {
-
-    }
 }
