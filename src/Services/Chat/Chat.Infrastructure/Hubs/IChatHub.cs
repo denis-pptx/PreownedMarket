@@ -1,6 +1,8 @@
-﻿namespace Chat.Infrastructure.Hubs;
+﻿using Chat.Domain.Entities;
+
+namespace Chat.Infrastructure.Hubs;
 
 public interface IChatHub
 {
-    Task ReceiveMessage(string message);
+    Task ReceiveMessage(Message message);
 }

@@ -8,11 +8,12 @@ using MediatR;
 
 namespace Chat.Application.Features.Conversations.Commands.CreateMessage;
 
-public class CreateMessageHandler(
+public class CreateMessageCommandHandler(
     ICurrentUserService _currentUserService,
     IUserRepository _userRepository,
     IMessageRepository _messageRepository,
-    IConversationRepository _conversationRepository)
+    IConversationRepository _conversationRepository,
+    IMessageService _messageService)
     : ICommandHandler<CreateMessageCommand, Unit>
 {
     public async Task<Unit> Handle(
@@ -39,6 +40,8 @@ public class CreateMessageHandler(
         };
 
         await _messageRepository.AddAsync(message, cancellationToken);
+
+        await _messageService.SendMessageAsync(message);
 
         return Unit.Value;
     }

@@ -8,7 +8,7 @@ using Identity.Application.Exceptions;
 
 namespace Chat.Application.Features.Conversations.Queries.GetConversation;
 
-public class GetConversationHandler(
+public class GetConversationQueryHandler(
     ICurrentUserService _currentUserService,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository,

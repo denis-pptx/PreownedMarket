@@ -7,5 +7,5 @@ public abstract class Entity
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
+    public string Id { get; set; } = default!;
 }

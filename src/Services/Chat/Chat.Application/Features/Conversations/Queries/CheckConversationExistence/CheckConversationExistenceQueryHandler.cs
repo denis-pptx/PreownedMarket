@@ -6,7 +6,7 @@ using Identity.Application.Exceptions;
 
 namespace Chat.Application.Features.Conversations.Queries.CheckConversationExistence;
 
-public class CheckConversationExistenceHandler(
+public class CheckConversationExistenceQueryHandler(
     ICurrentUserService _currentUserService,
     IUserRepository _userRepository,
     IItemRepository _itemRepository,
