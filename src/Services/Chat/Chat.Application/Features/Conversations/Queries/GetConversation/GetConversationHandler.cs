@@ -9,9 +9,10 @@ using Identity.Application.Exceptions;
 namespace Chat.Application.Features.Conversations.Queries.GetConversation;
 
 public class GetConversationHandler(
+    ICurrentUserService _currentUserService,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository,
-    ICurrentUserService _currentUserService)
+    IUserRepository _userRepository)
     : IQueryHandler<GetConversationQuery, GetConversationResponse>
 {
     public async Task<GetConversationResponse> Handle(
@@ -21,10 +22,13 @@ public class GetConversationHandler(
         var conversation = await _conversationRepository.GetByIdAsync(query.ConversationId, cancellationToken);
         NotFoundException.ThrowIfNull(conversation);
 
-        var currentUserId = _currentUserService.UserId;
-        UnauthorizedException.ThrowIfNull(currentUserId);
+        var userId = _currentUserService.UserId;
+        UnauthorizedException.ThrowIfNull(userId);
 
-        if (!conversation.Members.Any(x => x.Id == currentUserId)) 
+        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        NotFoundException.ThrowIfNull(user);
+
+        if (!conversation.Members.Contains(user)) 
         {
             throw new ForbiddenException(ConversationErrorMessages.AlienConversation);
         }

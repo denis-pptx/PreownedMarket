@@ -22,6 +22,7 @@ public static class ConfigureServices
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IConversationRepository, ConversationRepository>();  
         services.AddScoped<IMessageRepository, MessageRepository>();  
+        services.AddScoped<IItemRepository, ItemRepository>();  
 
         return services;
     }

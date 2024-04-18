@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Chat.Domain\Chat.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Conversations\Commands\" />
+  </ItemGroup>
+
 </Project>
