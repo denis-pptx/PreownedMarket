@@ -5,25 +5,14 @@ using MongoDB.Driver;
 
 namespace Chat.Infrastructure.Data.Contexts;
 
-public class ApplicationDbContext 
-    : MongoDbContext, IApplicationDbContext
+public class ApplicationDbContext(IOptions<MongoDbOptions> options) 
+    : MongoDbContext(options), IApplicationDbContext
 {
-    public IMongoCollection<Conversation> Conversations { get; set; }
+    public IMongoCollection<Conversation> Conversations => Collection<Conversation>();
 
-    public IMongoCollection<Message> Messages { get; }
+    public IMongoCollection<Message> Messages => Collection<Message>();
 
-    public IMongoCollection<User> Users { get; }
+    public IMongoCollection<User> Users => Collection<User>();
 
-    public IMongoCollection<Item> Items { get; }
-
-    public ApplicationDbContext(IOptions<MongoDbOptions> dbOptions) 
-        : base(dbOptions)
-    {
-        Conversations = Collection<Conversation>();
-        Messages = Collection<Message>();
-        Users = Collection<User>();
-        Items = Collection<Item>();
-    }
-
-    public IMongoCollection<T> Collection<T>() => _mongoDatabase.GetCollection<T>(nameof(T));
+    public IMongoCollection<Item> Items => Collection<Item>();
 }

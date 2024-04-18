@@ -15,4 +15,6 @@ public abstract class MongoDbContext
         _mongoClient = new MongoClient(options.ConnectionString);
         _mongoDatabase = _mongoClient.GetDatabase(options.DatabaseName);
     }
+
+    public IMongoCollection<T> Collection<T>() => _mongoDatabase.GetCollection<T>(nameof(T));
 }
