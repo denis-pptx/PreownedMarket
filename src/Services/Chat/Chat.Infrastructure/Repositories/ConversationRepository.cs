@@ -3,7 +3,7 @@ using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using MongoDB.Driver;
 
-namespace Chat.Infrastructure.Data.Repositories;
+namespace Chat.Infrastructure.Repositories;
 
 public class ConversationRepository(IApplicationDbContext dbContext)
     : MongoRepository<Conversation>(dbContext), IConversationRepository

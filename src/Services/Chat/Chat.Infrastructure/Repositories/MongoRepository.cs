@@ -2,9 +2,9 @@
 using Chat.Domain.Entities;
 using MongoDB.Driver;
 
-namespace Chat.Infrastructure.Data.Repositories;
+namespace Chat.Infrastructure.Repositories;
 
-public class MongoRepository<T>(IApplicationDbContext dbContext) 
+public class MongoRepository<T>(IApplicationDbContext dbContext)
     where T : Entity
 {
     protected readonly IMongoCollection<T> _collection = dbContext.Collection<T>();

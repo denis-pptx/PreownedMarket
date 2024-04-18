@@ -2,8 +2,8 @@
 using Chat.Application.Data;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Data.Contexts;
-using Chat.Infrastructure.Data.Repositories;
 using Chat.Infrastructure.OptionsSetup;
+using Chat.Infrastructure.Repositories;
 using Chat.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,6 +21,7 @@ public static class ConfigureServices
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IConversationRepository, ConversationRepository>();  
+        services.AddScoped<IMessageRepository, MessageRepository>();  
 
         return services;
     }
