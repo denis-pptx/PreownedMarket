@@ -5,4 +5,5 @@ namespace Chat.Infrastructure.Hubs;
 public interface IChatHub
 {
     Task ReceiveMessage(Message message);
+    Task UpdateMessage(Message message);
 }

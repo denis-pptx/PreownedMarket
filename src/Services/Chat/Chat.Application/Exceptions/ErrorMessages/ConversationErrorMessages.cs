@@ -3,6 +3,6 @@
 public static class ConversationErrorMessages
 {
     public static ErrorMessage AlienConversation => new(
-        "Conversation.AlreadyLiked",
-        "Сan't get someone else's dialogue.");
+        "Conversation.AlienConversation",
+        "Сan't get someone else's conversation.");
 }

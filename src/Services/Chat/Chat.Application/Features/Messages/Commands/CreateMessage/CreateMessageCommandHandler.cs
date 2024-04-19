@@ -6,18 +6,18 @@ using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 using MediatR;
 
-namespace Chat.Application.Features.Conversations.Commands.CreateMessage;
+namespace Chat.Application.Features.Messages.Commands.CreateMessage;
 
 public class CreateMessageCommandHandler(
     ICurrentUserService _currentUserService,
     IUserRepository _userRepository,
     IMessageRepository _messageRepository,
     IConversationRepository _conversationRepository,
-    IMessageService _messageService)
+    IMessageNotificationService _messageService)
     : ICommandHandler<CreateMessageCommand, Unit>
 {
     public async Task<Unit> Handle(
-        CreateMessageCommand command, 
+        CreateMessageCommand command,
         CancellationToken cancellationToken)
     {
         var userId = _currentUserService.UserId;
@@ -27,7 +27,7 @@ public class CreateMessageCommandHandler(
         NotFoundException.ThrowIfNull(sender);
 
         var request = command.Request;
-        
+
         var conversation = await _conversationRepository.GetByIdAsync(request.ConversationId, cancellationToken);
         NotFoundException.ThrowIfNull(conversation);
 

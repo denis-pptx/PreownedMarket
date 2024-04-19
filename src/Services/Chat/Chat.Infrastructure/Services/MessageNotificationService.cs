@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Infrastructure.Services;
 
-public class MessageService(
+public class MessageNotificationService(
     IHubContext<ChatHub, IChatHub> _hubContext,
     IConversationRepository _conversationRepository) 
-    : IMessageService
+    : IMessageNotificationService
 {
     public async Task SendMessageAsync(Message message)
     {
@@ -20,5 +20,15 @@ public class MessageService(
         var userIds = conversation.Members.Select(x => x.Id);
 
         await _hubContext.Clients.Users(userIds).ReceiveMessage(message);
+    }
+
+    public async Task UpdateMessageAsync(Message message)
+    {
+        var conversation = await _conversationRepository.GetByIdAsync(message.ConversationId);
+        NotFoundException.ThrowIfNull(conversation);
+
+        var userIds = conversation.Members.Select(x => x.Id);
+
+        await _hubContext.Clients.Users(userIds).UpdateMessage(message);
     }
 }

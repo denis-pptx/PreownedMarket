@@ -2,7 +2,8 @@
 
 namespace Chat.Application.Abstractions;
 
-public interface IMessageService
+public interface IMessageNotificationService
 {
     Task SendMessageAsync(Message message);
+    Task UpdateMessageAsync(Message message);
 }

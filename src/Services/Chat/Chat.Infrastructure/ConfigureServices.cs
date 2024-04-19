@@ -18,7 +18,7 @@ public static class ConfigureServices
         services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IMessageNotificationService, MessageNotificationService>();
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IConversationRepository, ConversationRepository>();  

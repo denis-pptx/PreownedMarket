@@ -1,4 +1,4 @@
-﻿namespace Chat.Application.Models.DataTransferObjects.Conversations.Requests;
+﻿namespace Chat.Application.Models.DataTransferObjects.Messages.Requests;
 
 public record CreateMessageRequest(
     string Text,
