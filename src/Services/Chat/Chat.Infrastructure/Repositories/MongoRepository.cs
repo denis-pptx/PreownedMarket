@@ -29,8 +29,8 @@ public class MongoRepository<T>(IApplicationDbContext dbContext)
         await _collection.ReplaceOneAsync(x => x.Id == entity.Id, entity, cancellationToken: token);
     }
 
-    public async Task DeleteAsync(string id, CancellationToken token = default)
+    public async Task DeleteAsync(T entity, CancellationToken token = default)
     {
-        await _collection.DeleteOneAsync(x => x.Id == id, token);
+        await _collection.DeleteOneAsync(x => x.Id == entity.Id, token);
     }
 }

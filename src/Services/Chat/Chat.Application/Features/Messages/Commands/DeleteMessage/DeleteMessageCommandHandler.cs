@@ -6,37 +6,32 @@ using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 using MediatR;
 
-namespace Chat.Application.Features.Messages.Commands.UpdateMessage;
+namespace Chat.Application.Features.Messages.Commands.DeleteMessage;
 
-public class UpdateMessageCommandHandler(
+public class DeleteMessageCommandHandler(
     ICurrentUserService _userService,
     IMessageNotificationService _notificationService,
     IMessageRepository _messageRepository) 
-    : ICommandHandler<UpdateMessageCommand, Unit>
+    : ICommandHandler<DeleteMessageCommand, Unit>
 {
     public async Task<Unit> Handle(
-        UpdateMessageCommand command, 
+        DeleteMessageCommand command, 
         CancellationToken cancellationToken)
     {
-        var messageId = command.MessageId;
-        var request = command.Request;
-
-        var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
+        var message = await _messageRepository.GetByIdAsync(command.MessageId, cancellationToken);
         NotFoundException.ThrowIfNull(message);
 
         var userId = _userService.UserId;
         UnauthorizedException.ThrowIfNull(userId);
 
-        if (message.SenderId != userId)
+        if (userId != message.SenderId)
         {
-            throw new ForbiddenException(MessageErrorMessages.UpdateAlienMessage);
+            throw new ForbiddenException(MessageErrorMessages.DeleteAlienMessage);
         }
 
-        message.Text = request.Text;
+        await _messageRepository.DeleteAsync(message, cancellationToken);
 
-        await _messageRepository.UpdateAsync(message, cancellationToken);
-
-        await _notificationService.UpdateMessageAsync(message);
+        await _notificationService.DeleteMessageAsync(message);
 
         return Unit.Value;
     }

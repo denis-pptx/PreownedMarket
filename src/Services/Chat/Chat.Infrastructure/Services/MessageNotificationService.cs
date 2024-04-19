@@ -14,21 +14,32 @@ public class MessageNotificationService(
 {
     public async Task SendMessageAsync(Message message)
     {
-        var conversation = await _conversationRepository.GetByIdAsync(message.ConversationId);
-        NotFoundException.ThrowIfNull(conversation);
-
-        var userIds = conversation.Members.Select(x => x.Id);
+        var userIds = await GetConversationUserIds(message.ConversationId);
 
         await _hubContext.Clients.Users(userIds).ReceiveMessage(message);
     }
 
     public async Task UpdateMessageAsync(Message message)
     {
-        var conversation = await _conversationRepository.GetByIdAsync(message.ConversationId);
+        var userIds = await GetConversationUserIds(message.ConversationId);
+
+        await _hubContext.Clients.Users(userIds).UpdateMessage(message);
+    }
+
+    public async Task DeleteMessageAsync(Message message)
+    {
+        var userIds = await GetConversationUserIds(message.ConversationId);
+
+        await _hubContext.Clients.Users(userIds).DeleteMessage(message);
+    }
+
+    private async Task<IEnumerable<string>> GetConversationUserIds(string conversationId)
+    {
+        var conversation = await _conversationRepository.GetByIdAsync(conversationId);
         NotFoundException.ThrowIfNull(conversation);
 
         var userIds = conversation.Members.Select(x => x.Id);
 
-        await _hubContext.Clients.Users(userIds).UpdateMessage(message);
+        return userIds;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Features.Messages.Commands.CreateMessage;
+using Chat.Application.Features.Messages.Commands.DeleteMessage;
 using Chat.Application.Features.Messages.Commands.UpdateMessage;
 using Chat.Application.Models.DataTransferObjects.Messages.Requests;
 using MediatR;
@@ -26,7 +27,7 @@ public class MessageController(IMediator _mediator)
         return Ok();
     }
 
-    // PUT api/<MessageController>
+    // PUT api/<MessageController>/<id>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -34,6 +35,19 @@ public class MessageController(IMediator _mediator)
     public async Task<IActionResult> Put([FromRoute] string id, [FromBody] UpdateMessageRequest request, CancellationToken token)
     {
         var command = new UpdateMessageCommand(id, request);
+        await _mediator.Send(command, token);
+
+        return Ok();
+    }
+
+    // DELETE api/<MessageController>/<id>
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] string id, CancellationToken token)
+    {
+        var command = new DeleteMessageCommand(id);
         await _mediator.Send(command, token);
 
         return Ok();

@@ -6,4 +6,5 @@ public interface IMessageNotificationService
 {
     Task SendMessageAsync(Message message);
     Task UpdateMessageAsync(Message message);
+    Task DeleteMessageAsync(Message message);
 }

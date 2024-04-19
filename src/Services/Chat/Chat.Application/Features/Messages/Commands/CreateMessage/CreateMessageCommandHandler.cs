@@ -13,7 +13,7 @@ public class CreateMessageCommandHandler(
     IUserRepository _userRepository,
     IMessageRepository _messageRepository,
     IConversationRepository _conversationRepository,
-    IMessageNotificationService _messageService)
+    IMessageNotificationService _notificationService)
     : ICommandHandler<CreateMessageCommand, Unit>
 {
     public async Task<Unit> Handle(
@@ -41,7 +41,7 @@ public class CreateMessageCommandHandler(
 
         await _messageRepository.AddAsync(message, cancellationToken);
 
-        await _messageService.SendMessageAsync(message);
+        await _notificationService.SendMessageAsync(message);
 
         return Unit.Value;
     }
