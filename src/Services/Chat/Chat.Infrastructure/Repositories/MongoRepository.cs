@@ -1,4 +1,4 @@
-﻿using Chat.Application.Data;
+﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Domain.Entities;
 using MongoDB.Driver;
 

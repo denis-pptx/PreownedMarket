@@ -1,13 +1,12 @@
-﻿using Chat.Application.Abstractions;
+﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
-using Chat.Application.Exceptions;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 
 namespace Chat.Application.Features.Conversations.Queries.CheckConversationExistence;
 
 public class CheckConversationExistenceQueryHandler(
-    ICurrentUserService _currentUserService,
+    IUserContext _userContext,
     IUserRepository _userRepository,
     IItemRepository _itemRepository,
     IConversationRepository _conversationRepository)
@@ -19,8 +18,7 @@ public class CheckConversationExistenceQueryHandler(
     {
         var request = query.Request;
 
-        var currentUserId = _currentUserService.UserId;
-        UnauthorizedException.ThrowIfNull(currentUserId);
+        var currentUserId = _userContext.UserId;
 
         var customer = await _userRepository.GetByIdAsync(currentUserId, cancellationToken);
         NotFoundException.ThrowIfNull(customer);

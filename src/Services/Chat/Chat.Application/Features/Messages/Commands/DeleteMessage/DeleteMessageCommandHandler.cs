@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
@@ -9,7 +10,7 @@ using Identity.Application.Exceptions;
 namespace Chat.Application.Features.Messages.Commands.DeleteMessage;
 
 public class DeleteMessageCommandHandler(
-    ICurrentUserService _userService,
+    IUserContext _userContext,
     IMessageNotificationService _notificationService,
     IMessageRepository _messageRepository) 
     : ICommandHandler<DeleteMessageCommand, DeleteMessageResponse>
@@ -21,8 +22,7 @@ public class DeleteMessageCommandHandler(
         var message = await _messageRepository.GetByIdAsync(command.MessageId, cancellationToken);
         NotFoundException.ThrowIfNull(message);
 
-        var userId = _userService.UserId;
-        UnauthorizedException.ThrowIfNull(userId);
+        var userId = _userContext.UserId;
 
         if (userId != message.SenderId)
         {

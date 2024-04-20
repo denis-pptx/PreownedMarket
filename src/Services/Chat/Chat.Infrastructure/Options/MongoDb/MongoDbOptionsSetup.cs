@@ -1,10 +1,9 @@
-﻿using Chat.Infrastructure.Data;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Chat.Infrastructure.OptionsSetup;
+namespace Chat.Infrastructure.Options.MongoDb;
 
-public class MongoDbOptionsSetup(IConfiguration _configuration) 
+public class MongoDbOptionsSetup(IConfiguration _configuration)
     : IConfigureOptions<MongoDbOptions>
 {
     private const string _sectionName = "MongoDB";

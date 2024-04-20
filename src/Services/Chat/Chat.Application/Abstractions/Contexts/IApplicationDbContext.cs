@@ -1,7 +1,7 @@
 ﻿using Chat.Domain.Entities;
 using MongoDB.Driver;
 
-namespace Chat.Application.Data;
+namespace Chat.Application.Abstractions.Contexts;
 
 public interface IApplicationDbContext
 {

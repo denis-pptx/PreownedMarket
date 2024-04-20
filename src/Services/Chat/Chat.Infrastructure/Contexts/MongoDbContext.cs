@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Chat.Infrastructure.Options.MongoDb;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Chat.Infrastructure.Data.Contexts;
+namespace Chat.Infrastructure.Contexts;
 
 public abstract class MongoDbContext
 {

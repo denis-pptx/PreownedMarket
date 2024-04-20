@@ -1,6 +1,5 @@
-﻿using Chat.Application.Abstractions;
+﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
-using Chat.Application.Exceptions;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
@@ -8,7 +7,7 @@ using Identity.Application.Exceptions;
 namespace Chat.Application.Features.Conversations.Queries.GetUserConversations;
 
 public class GetUserConversationsQueryHandler(
-    ICurrentUserService _currentUserService,
+    IUserContext _userContext,
     IUserRepository _userRepository,
     IConversationRepository _conversationRepository) 
     : IQueryHandler<GetUserConversationsQuery, IEnumerable<Conversation>>
@@ -17,8 +16,7 @@ public class GetUserConversationsQueryHandler(
         GetUserConversationsQuery query, 
         CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
-        UnauthorizedException.ThrowIfNull(userId);
+        var userId = _userContext.UserId;
 
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(user);

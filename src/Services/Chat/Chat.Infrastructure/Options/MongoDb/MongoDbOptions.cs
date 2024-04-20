@@ -1,4 +1,4 @@
-﻿namespace Chat.Infrastructure.Data;
+﻿namespace Chat.Infrastructure.Options.MongoDb;
 
 public class MongoDbOptions
 {

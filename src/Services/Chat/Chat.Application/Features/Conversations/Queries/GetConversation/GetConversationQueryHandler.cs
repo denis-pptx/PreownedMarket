@@ -1,4 +1,4 @@
-﻿using Chat.Application.Abstractions;
+﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
@@ -9,7 +9,7 @@ using Identity.Application.Exceptions;
 namespace Chat.Application.Features.Conversations.Queries.GetConversation;
 
 public class GetConversationQueryHandler(
-    ICurrentUserService _currentUserService,
+    IUserContext _userContext,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository,
     IUserRepository _userRepository)
@@ -22,8 +22,7 @@ public class GetConversationQueryHandler(
         var conversation = await _conversationRepository.GetByIdAsync(query.ConversationId, cancellationToken);
         NotFoundException.ThrowIfNull(conversation);
 
-        var userId = _currentUserService.UserId;
-        UnauthorizedException.ThrowIfNull(userId);
+        var userId = _userContext.UserId;
 
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(user);

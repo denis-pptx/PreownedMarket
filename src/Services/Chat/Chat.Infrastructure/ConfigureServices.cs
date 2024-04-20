@@ -1,8 +1,8 @@
 ﻿using Chat.Application.Abstractions;
-using Chat.Application.Data;
+using Chat.Application.Abstractions.Contexts;
 using Chat.Domain.Repositories;
-using Chat.Infrastructure.Data.Contexts;
-using Chat.Infrastructure.OptionsSetup;
+using Chat.Infrastructure.Contexts;
+using Chat.Infrastructure.Options.MongoDb;
 using Chat.Infrastructure.Repositories;
 using Chat.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +16,8 @@ public static class ConfigureServices
         services.ConfigureOptions<MongoDbOptionsSetup>();
 
         services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IUserContext, UserContext>();
 
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IMessageNotificationService, MessageNotificationService>();
 
         services.AddScoped<IUserRepository, UserRepository>();

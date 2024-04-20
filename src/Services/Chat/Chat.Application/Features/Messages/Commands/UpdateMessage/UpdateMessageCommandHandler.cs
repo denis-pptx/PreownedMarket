@@ -1,17 +1,16 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
-using Chat.Application.Models.DataTransferObjects.Messages.Requests;
 using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
-using MediatR;
 
 namespace Chat.Application.Features.Messages.Commands.UpdateMessage;
 
 public class UpdateMessageCommandHandler(
-    ICurrentUserService _userService,
+    IUserContext _userContext,
     IMessageNotificationService _notificationService,
     IMessageRepository _messageRepository) 
     : ICommandHandler<UpdateMessageCommand, UpdateMessageResponse>
@@ -26,10 +25,7 @@ public class UpdateMessageCommandHandler(
         var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
         NotFoundException.ThrowIfNull(message);
 
-        var userId = _userService.UserId;
-        UnauthorizedException.ThrowIfNull(userId);
-
-        if (message.SenderId != userId)
+        if (message.SenderId != _userContext.UserId)
         {
             throw new ForbiddenException(MessageErrorMessages.UpdateAlienMessage);
         }

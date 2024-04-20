@@ -1,16 +1,16 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
-using MediatR;
 
 namespace Chat.Application.Features.Messages.Commands.CreateMessage;
 
 public class CreateMessageCommandHandler(
-    ICurrentUserService _currentUserService,
+    IUserContext _userContext,
     IUserRepository _userRepository,
     IMessageRepository _messageRepository,
     IConversationRepository _conversationRepository,
@@ -21,8 +21,7 @@ public class CreateMessageCommandHandler(
         CreateMessageCommand command,
         CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
-        UnauthorizedException.ThrowIfNull(userId);
+        var userId = _userContext.UserId;
 
         var sender = await _userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(sender);
