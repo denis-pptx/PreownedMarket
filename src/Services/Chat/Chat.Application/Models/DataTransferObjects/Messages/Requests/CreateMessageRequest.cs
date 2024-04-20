@@ -2,4 +2,4 @@
 
 public record CreateMessageRequest(
     string Text,
-    string ConversationId);
+    Guid ConversationId);

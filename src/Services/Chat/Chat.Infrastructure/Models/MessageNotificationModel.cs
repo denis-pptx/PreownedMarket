@@ -1,7 +1,7 @@
 ﻿namespace Chat.Infrastructure.Models;
 
 public record MessageNotificationModel(
-    string MessageId,
+    Guid MessageId,
     DateTime CreatedAt,
-    string SenderId,
-    string ConversationId);
+    Guid SenderId,
+    Guid ConversationId);

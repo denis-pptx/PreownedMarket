@@ -14,7 +14,7 @@ public class MongoRepository<T>(IApplicationDbContext dbContext)
         return await _collection.Find(_ => true).ToListAsync(token);
     }
 
-    public async Task<T?> GetByIdAsync(string id, CancellationToken token = default)
+    public async Task<T?> GetByIdAsync(Guid id, CancellationToken token = default)
     {
         return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync(token);
     }

@@ -7,21 +7,21 @@ using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 
-namespace Chat.Application.Features.Conversations.Commands;
+namespace Chat.Application.Features.Conversations.Commands.CreateConversation;
 
 public class CreateConversationCommandHandler(
-    IUserContext _userContext, 
+    IUserContext _userContext,
     IUserRepository _userRepository,
     IItemRepository _itemRepository,
     IConversationRepository _conversationRepository)
     : ICommandHandler<CreateConversationCommand, CreateConversationResponse>
 {
     public async Task<CreateConversationResponse> Handle(
-        CreateConversationCommand command, 
+        CreateConversationCommand command,
         CancellationToken cancellationToken)
     {
         var request = command.Request;
-        
+
         var userId = _userContext.UserId;
 
         var customer = await _userRepository.GetByIdAsync(userId, cancellationToken);
@@ -43,7 +43,7 @@ public class CreateConversationCommandHandler(
         {
             throw new ConflictException(ConversationErrorMessages.AlreadyExists);
         }
-        
+
         var seller = await _userRepository.GetByIdAsync(item.UserId, cancellationToken);
         NotFoundException.ThrowIfNull(seller);
 
@@ -58,7 +58,7 @@ public class CreateConversationCommandHandler(
         await _conversationRepository.AddAsync(conversation, cancellationToken);
 
         return new CreateConversationResponse(
-            conversation.Id, 
+            conversation.Id,
             item,
             conversationMembers);
     }

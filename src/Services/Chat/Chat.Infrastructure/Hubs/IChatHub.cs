@@ -7,5 +7,5 @@ public interface IChatHub
 {
     Task ReceiveMessage(MessageNotificationModel messageNotification);
     Task UpdateMessage(MessageNotificationModel messageNotification);
-    Task DeleteMessage(string messageId);
+    Task DeleteMessage(Guid messageId);
 }

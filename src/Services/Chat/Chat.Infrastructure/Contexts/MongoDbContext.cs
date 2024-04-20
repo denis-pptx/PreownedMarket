@@ -17,5 +17,5 @@ public abstract class MongoDbContext
         _mongoDatabase = _mongoClient.GetDatabase(options.DatabaseName);
     }
 
-    public IMongoCollection<T> Collection<T>() => _mongoDatabase.GetCollection<T>(nameof(T));
+    public IMongoCollection<T> Collection<T>() => _mongoDatabase.GetCollection<T>(typeof(T).Name);
 }

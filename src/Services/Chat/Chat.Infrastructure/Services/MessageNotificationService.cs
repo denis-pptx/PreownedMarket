@@ -53,6 +53,8 @@ public class MessageNotificationService(
 
         var membersIds = conversation.Members.Select(x => x.Id);
 
-        return membersIds.Where(id => id != message.SenderId);
+        var receiversIds = membersIds.Where(id => id != message.SenderId);
+
+        return receiversIds.Select(x => x.ToString());
     }
 }

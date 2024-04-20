@@ -1,4 +1,4 @@
-﻿using Chat.Application.Features.Conversations.Commands;
+﻿using Chat.Application.Features.Conversations.Commands.CreateConversation;
 using Chat.Application.Features.Conversations.Queries.CheckConversationExistence;
 using Chat.Application.Features.Conversations.Queries.GetConversation;
 using Chat.Application.Features.Conversations.Queries.GetUserConversations;
@@ -8,8 +8,6 @@ using Chat.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-
 
 namespace Chat.WebAPI.Controllers;
 
@@ -37,7 +35,7 @@ public class ConversationController(ISender _sender)
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetConversation([FromRoute] string id, CancellationToken token)
+    public async Task<IActionResult> GetConversation([FromRoute] Guid id, CancellationToken token)
     {
         var query = new GetConversationQuery(id);
         var result = await _sender.Send(query, token);

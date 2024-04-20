@@ -4,5 +4,5 @@ namespace Chat.Domain.Repositories;
 
 public interface IUserRepository
 {
-    Task<User?> GetByIdAsync(string id, CancellationToken token = default);
+    Task<User?> GetByIdAsync(Guid id, CancellationToken token = default);
 }

@@ -3,6 +3,6 @@
 namespace Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 
 public record CreateConversationResponse(
-    string ConversationId, 
+    Guid ConversationId, 
     Item Item, 
     IEnumerable<User> Members);

@@ -6,6 +6,6 @@ namespace Chat.Domain.Entities;
 public abstract class Entity
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = default!;
+    [BsonRepresentation(BsonType.String)]
+    public Guid Id { get; set; } = Guid.NewGuid();
 }

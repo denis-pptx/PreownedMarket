@@ -1,7 +1,7 @@
 ﻿namespace Chat.Application.Models.DataTransferObjects.Messages.Responses;
 
 public record UpdateMessageResponse(
-    string MessageId,
+    Guid MessageId,
     DateTime CreatedAt,
-    string SenderId,
-    string ConversationId);
+    Guid SenderId,
+    Guid ConversationId);

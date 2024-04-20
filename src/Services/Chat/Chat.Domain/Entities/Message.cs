@@ -8,9 +8,9 @@ public class Message : Entity
     public string Text { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
 
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string SenderId { get; set; } = string.Empty;
+    [BsonRepresentation(BsonType.String)]
+    public Guid SenderId { get; set; }
 
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string ConversationId { get; set; } = string.Empty;
+    [BsonRepresentation(BsonType.String)]
+    public Guid ConversationId { get; set; }
 }

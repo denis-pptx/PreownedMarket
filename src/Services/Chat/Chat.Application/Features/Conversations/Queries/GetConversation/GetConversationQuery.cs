@@ -3,5 +3,5 @@ using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 
 namespace Chat.Application.Features.Conversations.Queries.GetConversation;
 
-public record GetConversationQuery(string ConversationId) 
+public record GetConversationQuery(Guid ConversationId) 
     : IQuery<GetConversationResponse>;

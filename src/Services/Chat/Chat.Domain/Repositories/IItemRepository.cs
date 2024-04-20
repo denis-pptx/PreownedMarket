@@ -5,5 +5,5 @@ namespace Chat.Domain.Repositories;
 
 public interface IItemRepository
 {
-    Task<Item?> GetByIdAsync(string id, CancellationToken token = default);
+    Task<Item?> GetByIdAsync(Guid id, CancellationToken token = default);
 }

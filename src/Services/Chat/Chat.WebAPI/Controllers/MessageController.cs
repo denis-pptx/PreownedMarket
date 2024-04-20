@@ -32,7 +32,7 @@ public class MessageController(IMediator _mediator)
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromRoute] string id, [FromBody] UpdateMessageRequest request, CancellationToken token)
+    public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] UpdateMessageRequest request, CancellationToken token)
     {
         var command = new UpdateMessageCommand(id, request);
         var response = await _mediator.Send(command, token);
@@ -45,7 +45,7 @@ public class MessageController(IMediator _mediator)
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] string id, CancellationToken token)
+    public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
     {
         var command = new DeleteMessageCommand(id);
         var response = await _mediator.Send(command, token);

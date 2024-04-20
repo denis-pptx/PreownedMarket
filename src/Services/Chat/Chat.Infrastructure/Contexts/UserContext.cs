@@ -7,7 +7,7 @@ namespace Chat.Infrastructure.Contexts;
 public class UserContext(IHttpContextAccessor httpContextAccessor) 
     : IUserContext
 {
-    public string UserId => 
+    public Guid UserId => 
         httpContextAccessor
             .HttpContext?
             .User

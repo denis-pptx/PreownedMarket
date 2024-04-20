@@ -1,5 +1,6 @@
 ﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
+using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 
@@ -10,9 +11,9 @@ public class CheckConversationExistenceQueryHandler(
     IUserRepository _userRepository,
     IItemRepository _itemRepository,
     IConversationRepository _conversationRepository)
-    : ICommandHandler<CheckConversationExistenceQuery, bool>
+    : ICommandHandler<CheckConversationExistenceQuery, CheckConversationExistenceResponse>
 {
-    public async Task<bool> Handle(
+    public async Task<CheckConversationExistenceResponse> Handle(
         CheckConversationExistenceQuery query,
         CancellationToken cancellationToken)
     {
@@ -30,6 +31,8 @@ public class CheckConversationExistenceQueryHandler(
             conversation => conversation.Item.Id == item.Id && conversation.Members.Contains(customer),
             cancellationToken);
 
-        return conversation != null;
+        bool conversationExists = conversation != null;
+
+        return new CheckConversationExistenceResponse(conversationExists);
     }
 }

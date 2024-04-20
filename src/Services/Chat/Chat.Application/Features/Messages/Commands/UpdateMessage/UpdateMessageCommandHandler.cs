@@ -39,7 +39,7 @@ public class UpdateMessageCommandHandler(
         return new UpdateMessageResponse(
             message.Id, 
             message.CreatedAt, 
-            message.SenderId, message.
-            ConversationId);
+            message.SenderId, 
+            message.ConversationId);
     }
 }

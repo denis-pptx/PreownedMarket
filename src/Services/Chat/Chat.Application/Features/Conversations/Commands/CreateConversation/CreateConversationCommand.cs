@@ -2,7 +2,7 @@
 using Chat.Application.Models.DataTransferObjects.Conversations.Requests;
 using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 
-namespace Chat.Application.Features.Conversations.Commands;
+namespace Chat.Application.Features.Conversations.Commands.CreateConversation;
 
-public record CreateConversationCommand(CreateConversationRequest Request) 
+public record CreateConversationCommand(CreateConversationRequest Request)
     : ICommand<CreateConversationResponse>;
