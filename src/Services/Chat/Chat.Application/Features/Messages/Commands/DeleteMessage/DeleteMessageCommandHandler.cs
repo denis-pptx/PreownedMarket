@@ -2,9 +2,9 @@
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
+using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
-using MediatR;
 
 namespace Chat.Application.Features.Messages.Commands.DeleteMessage;
 
@@ -12,9 +12,9 @@ public class DeleteMessageCommandHandler(
     ICurrentUserService _userService,
     IMessageNotificationService _notificationService,
     IMessageRepository _messageRepository) 
-    : ICommandHandler<DeleteMessageCommand, Unit>
+    : ICommandHandler<DeleteMessageCommand, DeleteMessageResponse>
 {
-    public async Task<Unit> Handle(
+    public async Task<DeleteMessageResponse> Handle(
         DeleteMessageCommand command, 
         CancellationToken cancellationToken)
     {
@@ -31,8 +31,8 @@ public class DeleteMessageCommandHandler(
 
         await _messageRepository.DeleteAsync(message, cancellationToken);
 
-        await _notificationService.DeleteMessageAsync(message);
+        await _notificationService.DeleteMessageAsync(message, cancellationToken);
 
-        return Unit.Value;
+        return new DeleteMessageResponse(message.Id);
     }
 }

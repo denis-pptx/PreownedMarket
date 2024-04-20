@@ -2,6 +2,7 @@
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Hubs;
+using Chat.Infrastructure.Models;
 using Identity.Application.Exceptions;
 using Microsoft.AspNetCore.SignalR;
 
@@ -12,34 +13,46 @@ public class MessageNotificationService(
     IConversationRepository _conversationRepository) 
     : IMessageNotificationService
 {
-    public async Task SendMessageAsync(Message message)
+    public async Task SendMessageAsync(Message message, CancellationToken token = default)
     {
-        var userIds = await GetConversationUserIds(message.ConversationId);
+        var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        await _hubContext.Clients.Users(userIds).ReceiveMessage(message);
+        var messageNotification = new MessageNotificationModel(
+            message.Id, 
+            message.CreatedAt, 
+            message.SenderId, 
+            message.ConversationId);
+
+        await _hubContext.Clients.Users(receiversIds).ReceiveMessage(messageNotification);
     }
 
-    public async Task UpdateMessageAsync(Message message)
+    public async Task UpdateMessageAsync(Message message, CancellationToken token = default)
     {
-        var userIds = await GetConversationUserIds(message.ConversationId);
+        var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        await _hubContext.Clients.Users(userIds).UpdateMessage(message);
+        var messageNotification = new MessageNotificationModel(
+            message.Id,
+            message.CreatedAt,
+            message.SenderId,
+            message.ConversationId);
+
+        await _hubContext.Clients.Users(receiversIds).UpdateMessage(messageNotification);
     }
 
-    public async Task DeleteMessageAsync(Message message)
+    public async Task DeleteMessageAsync(Message message, CancellationToken token = default)
     {
-        var userIds = await GetConversationUserIds(message.ConversationId);
+        var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        await _hubContext.Clients.Users(userIds).DeleteMessage(message);
+        await _hubContext.Clients.Users(receiversIds).DeleteMessage(message.Id);
     }
 
-    private async Task<IEnumerable<string>> GetConversationUserIds(string conversationId)
+    private async Task<IEnumerable<string>> GetReceiversIdsAsync(Message message, CancellationToken token = default)
     {
-        var conversation = await _conversationRepository.GetByIdAsync(conversationId);
+        var conversation = await _conversationRepository.GetByIdAsync(message.ConversationId, token);
         NotFoundException.ThrowIfNull(conversation);
 
-        var userIds = conversation.Members.Select(x => x.Id);
+        var membersIds = conversation.Members.Select(x => x.Id);
 
-        return userIds;
+        return membersIds.Where(id => id != message.SenderId);
     }
 }

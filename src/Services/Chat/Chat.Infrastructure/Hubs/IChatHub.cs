@@ -1,10 +1,11 @@
 ﻿using Chat.Domain.Entities;
+using Chat.Infrastructure.Models;
 
 namespace Chat.Infrastructure.Hubs;
 
 public interface IChatHub
 {
-    Task ReceiveMessage(Message message);
-    Task UpdateMessage(Message message);
-    Task DeleteMessage(Message message);
+    Task ReceiveMessage(MessageNotificationModel messageNotification);
+    Task UpdateMessage(MessageNotificationModel messageNotification);
+    Task DeleteMessage(string messageId);
 }

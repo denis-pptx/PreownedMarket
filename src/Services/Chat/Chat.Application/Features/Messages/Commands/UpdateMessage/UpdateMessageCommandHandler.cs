@@ -2,6 +2,8 @@
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
+using Chat.Application.Models.DataTransferObjects.Messages.Requests;
+using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 using MediatR;
@@ -12,9 +14,9 @@ public class UpdateMessageCommandHandler(
     ICurrentUserService _userService,
     IMessageNotificationService _notificationService,
     IMessageRepository _messageRepository) 
-    : ICommandHandler<UpdateMessageCommand, Unit>
+    : ICommandHandler<UpdateMessageCommand, UpdateMessageResponse>
 {
-    public async Task<Unit> Handle(
+    public async Task<UpdateMessageResponse> Handle(
         UpdateMessageCommand command, 
         CancellationToken cancellationToken)
     {
@@ -36,8 +38,12 @@ public class UpdateMessageCommandHandler(
 
         await _messageRepository.UpdateAsync(message, cancellationToken);
 
-        await _notificationService.UpdateMessageAsync(message);
-
-        return Unit.Value;
+        await _notificationService.UpdateMessageAsync(message, cancellationToken);
+        
+        return new UpdateMessageResponse(
+            message.Id, 
+            message.CreatedAt, 
+            message.SenderId, message.
+            ConversationId);
     }
 }
