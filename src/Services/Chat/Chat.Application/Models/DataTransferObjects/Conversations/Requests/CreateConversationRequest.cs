@@ -1,3 +1,3 @@
 ﻿namespace Chat.Application.Models.DataTransferObjects.Conversations.Requests;
 
-public record CheckConversationExistenceRequest(string ItemId);
+public record CreateConversationRequest(string ItemId);

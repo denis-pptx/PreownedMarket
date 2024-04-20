@@ -18,21 +18,16 @@ public class CheckConversationExistenceQueryHandler(
     {
         var request = query.Request;
 
-        var currentUserId = _userContext.UserId;
+        var userId = _userContext.UserId;
 
-        var customer = await _userRepository.GetByIdAsync(currentUserId, cancellationToken);
+        var customer = await _userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(customer);
-
-        var seller = await _userRepository.GetByIdAsync(request.SellerId, cancellationToken);
-        NotFoundException.ThrowIfNull(seller);
 
         var item = await _itemRepository.GetByIdAsync(request.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
-        var conversation = await _conversationRepository.FirstOrDefaultAsync(x =>
-            x.Item.Id == item.Id &&
-            x.Members.Contains(customer) &&
-            x.Members.Contains(seller),
+        var conversation = await _conversationRepository.FirstOrDefaultAsync(
+            conversation => conversation.Item.Id == item.Id && conversation.Members.Contains(customer),
             cancellationToken);
 
         return conversation != null;
