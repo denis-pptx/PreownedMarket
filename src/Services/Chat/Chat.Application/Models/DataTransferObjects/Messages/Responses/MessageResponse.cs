@@ -1,6 +1,6 @@
 ﻿namespace Chat.Application.Models.DataTransferObjects.Messages.Responses;
 
-public record UpdateMessageResponse(
+public record MessageResponse(
     Guid MessageId,
     string Text,
     DateTime CreatedAt,

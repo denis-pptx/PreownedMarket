@@ -1,4 +1,5 @@
-﻿using Chat.Application.Abstractions;
+﻿using AutoMapper;
+using Chat.Application.Abstractions;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Hubs;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace Chat.Infrastructure.Services;
 
 public class MessageNotificationService(
+    IMapper _mapper,
     IHubContext<ChatHub, IChatHub> _hubContext,
     IConversationRepository _conversationRepository) 
     : IMessageNotificationService
@@ -17,12 +19,7 @@ public class MessageNotificationService(
     {
         var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        var messageNotification = new MessageNotificationModel(
-            message.Id, 
-            message.Text,
-            message.CreatedAt, 
-            message.SenderId, 
-            message.ConversationId);
+        var messageNotification = _mapper.Map<Message, MessageNotificationModel>(message);
 
         await _hubContext.Clients.Users(receiversIds).ReceiveMessage(messageNotification);
     }
@@ -31,12 +28,7 @@ public class MessageNotificationService(
     {
         var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        var messageNotification = new MessageNotificationModel(
-            message.Id,
-            message.Text,
-            message.CreatedAt,
-            message.SenderId,
-            message.ConversationId);
+        var messageNotification = _mapper.Map<Message, MessageNotificationModel>(message);
 
         await _hubContext.Clients.Users(receiversIds).UpdateMessage(messageNotification);
     }
@@ -45,7 +37,9 @@ public class MessageNotificationService(
     {
         var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        await _hubContext.Clients.Users(receiversIds).DeleteMessage(message.Id);
+        var messageNotification = _mapper.Map<Message, MessageNotificationModel>(message);
+
+        await _hubContext.Clients.Users(receiversIds).DeleteMessage(messageNotification);
     }
 
     private async Task<IEnumerable<string>> GetReceiversIdsAsync(Message message, CancellationToken token = default)

@@ -1,4 +1,5 @@
-﻿using Chat.Application.Abstractions;
+﻿using AutoMapper;
+using Chat.Application.Abstractions;
 using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Models.DataTransferObjects.Messages.Responses;
@@ -13,10 +14,11 @@ public class CreateMessageCommandHandler(
     IUserRepository _userRepository,
     IMessageRepository _messageRepository,
     IConversationRepository _conversationRepository,
-    IMessageNotificationService _notificationService)
-    : ICommandHandler<CreateMessageCommand, CreateMessageResponse>
+    IMessageNotificationService _notificationService,
+    IMapper _mapper)
+    : ICommandHandler<CreateMessageCommand, MessageResponse>
 {
-    public async Task<CreateMessageResponse> Handle(
+    public async Task<MessageResponse> Handle(
         CreateMessageCommand command,
         CancellationToken cancellationToken)
     {
@@ -42,11 +44,8 @@ public class CreateMessageCommandHandler(
 
         await _notificationService.SendMessageAsync(message, cancellationToken);
 
-        return new CreateMessageResponse(
-            message.Id,
-            message.Text,
-            message.CreatedAt,
-            message.SenderId,
-            message.ConversationId);
+        var messageResponse = _mapper.Map<Message, MessageResponse>(message);
+
+        return messageResponse;
     }
 }

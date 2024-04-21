@@ -1,21 +1,24 @@
-﻿using Chat.Application.Abstractions;
+﻿using AutoMapper;
+using Chat.Application.Abstractions;
 using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
 using Chat.Application.Models.DataTransferObjects.Messages.Responses;
+using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 
 namespace Chat.Application.Features.Messages.Commands.UpdateMessage;
 
 public class UpdateMessageCommandHandler(
+    IMapper _mapper,
     IUserContext _userContext,
     IMessageNotificationService _notificationService,
     IMessageRepository _messageRepository) 
-    : ICommandHandler<UpdateMessageCommand, UpdateMessageResponse>
+    : ICommandHandler<UpdateMessageCommand, MessageResponse>
 {
-    public async Task<UpdateMessageResponse> Handle(
+    public async Task<MessageResponse> Handle(
         UpdateMessageCommand command, 
         CancellationToken cancellationToken)
     {
@@ -35,12 +38,9 @@ public class UpdateMessageCommandHandler(
         await _messageRepository.UpdateAsync(message, cancellationToken);
 
         await _notificationService.UpdateMessageAsync(message, cancellationToken);
-        
-        return new UpdateMessageResponse(
-            message.Id, 
-            message.Text,
-            message.CreatedAt, 
-            message.SenderId, 
-            message.ConversationId);
+
+        var messageResponse = _mapper.Map<Message, MessageResponse>(message);
+
+        return messageResponse;
     }
 }

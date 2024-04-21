@@ -1,14 +1,18 @@
-﻿using Chat.Application.Abstractions.Contexts;
+﻿using AutoMapper;
+using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
 using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
+using Chat.Application.Models.DataTransferObjects.Messages.Responses;
+using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 
 namespace Chat.Application.Features.Conversations.Queries.GetConversation;
 
 public class GetConversationQueryHandler(
+    IMapper _mapper,
     IUserContext _userContext,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository,
@@ -33,13 +37,14 @@ public class GetConversationQueryHandler(
         }
 
         var messages = await _messageRepository.GetByConversationIdAsync(conversation.Id, cancellationToken);
+        var messagesResponse = _mapper.Map<IEnumerable<Message>, IEnumerable<MessageResponse>>(messages);
 
         var response = new GetConversationResponse
         {
             ConversationId = conversation.Id,
             Item = conversation.Item,
             Members = conversation.Members,
-            Messages = messages
+            Messages = messagesResponse
         };
 
         return response;

@@ -24,6 +24,8 @@ public static class ConfigureServices
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
         return services;
     }
 }

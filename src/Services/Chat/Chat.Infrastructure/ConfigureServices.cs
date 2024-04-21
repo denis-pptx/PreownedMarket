@@ -6,6 +6,7 @@ using Chat.Infrastructure.Options.MongoDb;
 using Chat.Infrastructure.Repositories;
 using Chat.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Chat.Infrastructure;
 
@@ -23,7 +24,9 @@ public static class ConfigureServices
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IConversationRepository, ConversationRepository>();  
         services.AddScoped<IMessageRepository, MessageRepository>();  
-        services.AddScoped<IItemRepository, ItemRepository>();  
+        services.AddScoped<IItemRepository, ItemRepository>();
+
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
     }

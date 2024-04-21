@@ -5,4 +5,4 @@ using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 namespace Chat.Application.Features.Messages.Commands.CreateMessage;
 
 public record class CreateMessageCommand(CreateMessageRequest Request)
-    : ICommand<CreateMessageResponse>;
+    : ICommand<MessageResponse>;
