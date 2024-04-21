@@ -19,6 +19,7 @@ public class MessageNotificationService(
 
         var messageNotification = new MessageNotificationModel(
             message.Id, 
+            message.Text,
             message.CreatedAt, 
             message.SenderId, 
             message.ConversationId);
@@ -32,6 +33,7 @@ public class MessageNotificationService(
 
         var messageNotification = new MessageNotificationModel(
             message.Id,
+            message.Text,
             message.CreatedAt,
             message.SenderId,
             message.ConversationId);
@@ -53,8 +55,6 @@ public class MessageNotificationService(
 
         var membersIds = conversation.Members.Select(x => x.Id);
 
-        var receiversIds = membersIds.Where(id => id != message.SenderId);
-
-        return receiversIds.Select(x => x.ToString());
+        return membersIds.Select(x => x.ToString());
     }
 }
