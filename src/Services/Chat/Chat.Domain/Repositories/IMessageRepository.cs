@@ -9,4 +9,5 @@ public interface IMessageRepository
     Task<Message?> GetByIdAsync(Guid id, CancellationToken token = default);
     Task UpdateAsync(Message message, CancellationToken token = default);
     Task DeleteAsync(Message message, CancellationToken token = default);
+    Task DeleteByConversationIdAsync(Guid conversationId, CancellationToken token = default);
 }

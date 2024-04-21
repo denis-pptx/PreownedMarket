@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Features.Conversations.Commands.CreateConversation;
+using Chat.Application.Features.Conversations.Commands.DeleteConversation;
 using Chat.Application.Features.Conversations.Queries.CheckConversationExistence;
 using Chat.Application.Features.Conversations.Queries.GetConversation;
 using Chat.Application.Features.Conversations.Queries.GetUserConversations;
@@ -18,7 +19,7 @@ public class ConversationController(ISender _sender)
     : ControllerBase
 {
     // GET: api/<ConversationController>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Conversation>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet]
@@ -31,10 +32,10 @@ public class ConversationController(ISender _sender)
     }
 
     // GET: api/<ConversationController>/<id>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetConversationResponse))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetConversation([FromRoute] Guid id, CancellationToken token)
     {
         var query = new GetConversationQuery(id);
@@ -44,7 +45,7 @@ public class ConversationController(ISender _sender)
     }
 
     // GET: api/<ConversationController>/check-existence
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("check-existence")]
@@ -57,6 +58,10 @@ public class ConversationController(ISender _sender)
     }
 
     // POST: api/<ConversationController>
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateConversationRequest request, CancellationToken token)
     {
@@ -64,5 +69,19 @@ public class ConversationController(ISender _sender)
         var result = await _sender.Send(command, token);
 
         return Ok(result);
+    }
+
+    // DELETE: api/<ConversationController>/<id>
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
+    {
+        var command = new DeleteConversationCommand(id);
+        await _sender.Send(command, token);
+
+        return Ok();
     }
 }

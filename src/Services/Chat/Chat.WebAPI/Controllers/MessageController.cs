@@ -32,8 +32,9 @@ public class MessageController(IMediator _mediator)
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] UpdateMessageRequest request, CancellationToken token)
     {
         var command = new UpdateMessageCommand(id, request);
@@ -45,8 +46,9 @@ public class MessageController(IMediator _mediator)
     // DELETE api/<MessageController>/<id>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
     {
         var command = new DeleteMessageCommand(id);

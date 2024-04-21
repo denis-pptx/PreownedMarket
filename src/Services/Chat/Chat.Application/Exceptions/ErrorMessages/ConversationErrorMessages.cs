@@ -13,4 +13,8 @@ public static class ConversationErrorMessages
     public static ErrorMessage AlreadyExists => new(
         "Conversation.AlreadyExists",
         "Such a conversation already exists.");
+
+    public static ErrorMessage DeleteAlienConversation => new(
+        "Message.DeleteAlienMessage",
+        "Сan't delete someone else's conversation.");
 }

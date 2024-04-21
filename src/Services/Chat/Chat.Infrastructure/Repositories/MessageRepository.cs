@@ -8,6 +8,11 @@ namespace Chat.Infrastructure.Repositories;
 public class MessageRepository(IApplicationDbContext dbContext) 
     : MongoRepository<Message>(dbContext), IMessageRepository
 {
+    public async Task DeleteByConversationIdAsync(Guid conversationId, CancellationToken token = default)
+    {
+        await _collection.DeleteManyAsync(message => message.ConversationId == conversationId, token);
+    }
+
     public async Task<IEnumerable<Message>> GetByConversationIdAsync(Guid conversationId, CancellationToken token = default)
     {
         return await _collection
