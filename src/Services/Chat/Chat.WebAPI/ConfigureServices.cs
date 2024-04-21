@@ -1,4 +1,5 @@
-﻿using Item.Presentation.ExceptionHandlers;
+﻿using Chat.WebAPI.ExceptionHandlers;
+using Item.Presentation.ExceptionHandlers;
 
 namespace Chat.WebAPI;
 
@@ -11,7 +12,8 @@ public static class ConfigureServices
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddExceptionHandler<ValidationExceptionHandler>();
+        services.AddExceptionHandler<BaseApiExceptionHandler>();
         services.AddProblemDetails();
 
         services.AddHttpContextAccessor();

@@ -2,6 +2,7 @@
 
 public record UpdateMessageResponse(
     Guid MessageId,
+    string Text,
     DateTime CreatedAt,
     Guid SenderId,
     Guid ConversationId);

@@ -1,7 +1,6 @@
 ﻿using Chat.Application.Abstractions;
 using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
-using Chat.Application.Exceptions;
 using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
@@ -45,6 +44,7 @@ public class CreateMessageCommandHandler(
 
         return new CreateMessageResponse(
             message.Id,
+            message.Text,
             message.CreatedAt,
             message.SenderId,
             message.ConversationId);

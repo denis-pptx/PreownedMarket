@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Item.Presentation.ExceptionHandlers;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class BaseApiExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,

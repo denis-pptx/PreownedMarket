@@ -38,6 +38,7 @@ public class UpdateMessageCommandHandler(
         
         return new UpdateMessageResponse(
             message.Id, 
+            message.Text,
             message.CreatedAt, 
             message.SenderId, 
             message.ConversationId);
