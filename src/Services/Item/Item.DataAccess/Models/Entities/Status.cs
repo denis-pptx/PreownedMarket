@@ -1,9 +1,9 @@
-﻿namespace Item.DataAccess.Models;
+﻿namespace Item.DataAccess.Models.Entities;
 
 public class Status : BaseEntity, IEquatable<Status>
 {
     public string Name { get; set; } = string.Empty;
-    public string NormalizedName {  get; set; } = string.Empty;
+    public string NormalizedName { get; set; } = string.Empty;
 
     public Status(string Name, string NormalizedName)
     {
@@ -13,7 +13,7 @@ public class Status : BaseEntity, IEquatable<Status>
 
     public Status()
     {
-        
+
     }
 
     public bool Equals(Status? other)

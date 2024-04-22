@@ -1,5 +1,5 @@
 ﻿using Item.DataAccess.Data.Initializers.Values;
-using Item.DataAccess.Models;
+using Item.DataAccess.Models.Entities;
 using System.Reflection;
 
 namespace Item.DataAccess.Data.Initializers;

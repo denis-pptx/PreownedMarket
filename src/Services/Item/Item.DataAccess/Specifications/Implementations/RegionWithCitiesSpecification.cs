@@ -1,4 +1,4 @@
-﻿using Item.DataAccess.Models;
+﻿using Item.DataAccess.Models.Entities;
 
 namespace Item.DataAccess.Specifications.Implementations;
 

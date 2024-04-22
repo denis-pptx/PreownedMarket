@@ -1,5 +1,5 @@
 ﻿using Item.DataAccess.Data;
-using Item.DataAccess.Models;
+using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Common;
 using Item.DataAccess.Specifications.Interfaces;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Item.DataAccess.Repositories.Implementations;
 
-using Item = Models.Item;
+using Item = Models.Entities.Item;
 
 public class LikeRepository(ApplicationDbContext dbContext) :
     EfRepository<Like>(dbContext), ILikeRepository

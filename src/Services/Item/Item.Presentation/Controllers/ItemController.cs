@@ -1,6 +1,6 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
-using Item.BusinessLogic.Models.DTOs.Filter;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.Models.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +13,9 @@ public class ItemController(IItemService _itemService)
 {
     // GET: api/<ItemController>
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] ItemFilterQuery filterQuery, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromQuery] ItemFilterRequest filterRequest, CancellationToken cancellationToken)
     {
-        var result = await _itemService.GetAsync(filterQuery, cancellationToken);
+        var result = await _itemService.GetAsync(filterRequest, cancellationToken);
 
         return Ok(result);
     }

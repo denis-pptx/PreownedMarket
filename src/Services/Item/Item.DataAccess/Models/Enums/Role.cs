@@ -1,4 +1,4 @@
-﻿namespace Item.DataAccess.Enums;
+﻿namespace Item.DataAccess.Models.Enums;
 
 public enum Role
 {

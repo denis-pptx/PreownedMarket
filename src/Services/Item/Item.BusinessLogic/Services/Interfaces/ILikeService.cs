@@ -1,7 +1,7 @@
 ﻿namespace Item.BusinessLogic.Services.Interfaces;
 
 using System;
-using Item = DataAccess.Models.Item;
+using Item = DataAccess.Models.Entities.Item;
 
 public interface ILikeService
 {

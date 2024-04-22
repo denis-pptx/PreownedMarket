@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Item.BusinessLogic.Models.Common;
+namespace Item.DataAccess.Models;
 
 public class PagedList<T>
 {

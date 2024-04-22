@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
-using Item.BusinessLogic.Models.Common;
 using Item.BusinessLogic.Models.DTOs;
-using Item.BusinessLogic.Models.DTOs.Filter;
 using Item.BusinessLogic.Services.Interfaces;
-using Item.DataAccess.Data;
 using Item.DataAccess.Data.Initializers.Values;
-using Item.DataAccess.Enums;
 using Item.DataAccess.Models;
+using Item.DataAccess.Models.Entities;
+using Item.DataAccess.Models.Enums;
+using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Implementations.Item;
 using Item.DataAccess.Transactions.Interfaces;
@@ -16,10 +15,10 @@ using System.Linq.Expressions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-using Item = DataAccess.Models.Item;
+using Item = DataAccess.Models.Entities.Item;
 
 public class ItemService(
-    IRepository<Item> _itemRepository, 
+    IItemRepository _itemRepository, 
     IRepository<Status> _statusRepository,
     ICurrentUserService _currentUserService,
     IItemImageService _imageService,
@@ -176,62 +175,12 @@ public class ItemService(
         return item;
     }
 
-    public async Task<PagedList<Item>> GetAsync(ItemFilterQuery filterQuery, CancellationToken token = default)
+    public async Task<PagedList<Item>> GetAsync(ItemFilterRequest filterRequest, CancellationToken token = default)
     {
         var specification = new ItemWithAllSpecification();
-        var itemQuery = _itemRepository.GetQueryable(specification);
 
-        if (!string.IsNullOrWhiteSpace(filterQuery.SearchTerm))
-        {
-            itemQuery = itemQuery.Where(x => x.Title.Contains(filterQuery.SearchTerm));
-        }
-
-        if (filterQuery.CityId is not null)
-        {
-            itemQuery = itemQuery.Where(x => x.CityId == filterQuery.CityId);
-        }
-
-        if (filterQuery.CategoryNormalizedName is not null)
-        {
-            itemQuery = itemQuery.Where(x => x.Category!.NormalizedName == filterQuery.CategoryNormalizedName);
-        }
-
-        if (filterQuery.StatusNormalizedName is not null)
-        {
-            itemQuery = itemQuery.Where(x => x.Status!.NormalizedName == filterQuery.StatusNormalizedName);
-        }
-
-        if (filterQuery.UserId is not null)
-        {
-            itemQuery = itemQuery.Where(x => x.UserId == filterQuery.UserId);
-        }
-
-        if (string.Equals(filterQuery.SortColumn, nameof(SortOrder.Descending), StringComparison.OrdinalIgnoreCase))
-        {
-            itemQuery = itemQuery.OrderByDescending(GetSortProperty(filterQuery.SortColumn));
-        }
-        else
-        {
-            itemQuery = itemQuery.OrderBy(GetSortProperty(filterQuery.SortColumn));
-        }
-
-        var items = await PagedList<Item>.CreateAsync(itemQuery, filterQuery.Page, filterQuery.PageSize);
+        var items = await _itemRepository.GetAsync(filterRequest, specification, token);    
 
         return items;
-    }
-
-    private static Expression<Func<Item, object>> GetSortProperty(string? sortColumn)
-    {
-        if (string.Equals(sortColumn, nameof(Item.Title), StringComparison.OrdinalIgnoreCase))
-        {
-            return item => item.Title;
-        }
-
-        if (string.Equals(sortColumn, nameof(Item.Price), StringComparison.OrdinalIgnoreCase))
-        {
-            return item => item.Price;
-        }
-
-        return item => item.Id;
     }
 }

@@ -1,4 +1,4 @@
-﻿using Item.DataAccess.Models;
+﻿using Item.DataAccess.Models.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace Item.BusinessLogic.Services.Interfaces;

@@ -1,5 +1,5 @@
 ﻿using Item.DataAccess.Data;
-using Item.DataAccess.Models;
+using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Common;
 using Item.DataAccess.Specifications.Interfaces;

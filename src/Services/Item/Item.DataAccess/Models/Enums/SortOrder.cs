@@ -1,4 +1,4 @@
-﻿namespace Item.BusinessLogic.Models.Common;
+﻿namespace Item.DataAccess.Models.Enums;
 
 public enum SortOrder
 {

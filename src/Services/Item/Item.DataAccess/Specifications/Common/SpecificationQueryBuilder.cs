@@ -1,4 +1,4 @@
-﻿using Item.DataAccess.Models;
+﻿using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Specifications.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

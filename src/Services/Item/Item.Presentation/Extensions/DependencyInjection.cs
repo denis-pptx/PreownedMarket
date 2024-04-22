@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<ITransactionManager, EfTransactionManager>();
 
         services.AddScoped<ILikeRepository, LikeRepository>();  
+        services.AddScoped<IItemRepository, ItemRepository>();  
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
         services.ConfigureOptions<JwtOptionsSetup>();

@@ -3,7 +3,7 @@ using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
-using Item.DataAccess.Models;
+using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Implementations;
 using Library.BLL.Services.Implementations;

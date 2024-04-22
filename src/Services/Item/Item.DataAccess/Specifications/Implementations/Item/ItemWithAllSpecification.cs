@@ -1,6 +1,6 @@
 ﻿namespace Item.DataAccess.Specifications.Implementations.Item;
 
-public class ItemWithAllSpecification : BaseSpecification<Models.Item>
+public class ItemWithAllSpecification : BaseSpecification<Models.Entities.Item>
 {
     public ItemWithAllSpecification(Guid id) : base(x => x.Id == id)
     {

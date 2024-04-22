@@ -7,7 +7,7 @@ public class ItemProfile : Profile
 {
     public ItemProfile()
     {
-        CreateMap<ItemDto, DataAccess.Models.Item>()
+        CreateMap<ItemDto, DataAccess.Models.Entities.Item>()
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))

@@ -1,6 +1,6 @@
 ﻿using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
-using Item.DataAccess.Enums;
+using Item.DataAccess.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

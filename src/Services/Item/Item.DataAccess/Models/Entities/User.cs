@@ -1,4 +1,4 @@
-﻿namespace Item.DataAccess.Models;
+﻿namespace Item.DataAccess.Models.Entities;
 
 public class User : BaseEntity
 {

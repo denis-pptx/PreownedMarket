@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Item.DataAccess.Data.Configurations;
 
-using Item = Models.Item;
+using Item = Models.Entities.Item;
 
 public class ItemConfiguration : IEntityTypeConfiguration<Item>
 {

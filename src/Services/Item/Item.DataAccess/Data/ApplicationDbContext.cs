@@ -1,10 +1,10 @@
-﻿using Item.DataAccess.Models;
+﻿using Item.DataAccess.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Item.DataAccess.Data;
 
-using Item = Models.Item;
+using Item = Models.Entities.Item;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
     : DbContext(options)

@@ -1,14 +1,14 @@
 ﻿using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Services.Interfaces;
-using Item.DataAccess.Models;
 using Item.DataAccess.Specifications.Implementations.Item;
 using Microsoft.AspNetCore.Http;
 using Item.DataAccess.Repositories.Interfaces;
+using Item.DataAccess.Models.Entities;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-using Item = DataAccess.Models.Item;
+using Item = DataAccess.Models.Entities.Item;
 
 public class ItemImageService(
     IFileService _fileService,

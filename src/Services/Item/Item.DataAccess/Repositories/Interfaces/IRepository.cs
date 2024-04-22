@@ -1,4 +1,4 @@
-﻿using Item.DataAccess.Models;
+﻿using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Specifications.Interfaces;
 using System.Linq.Expressions;
 
@@ -17,6 +17,4 @@ public interface IRepository<TEntity>
     Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> filter, CancellationToken token = default);
     Task<TEntity?> FirstOrDefaultAsync(ISpecification<TEntity> specification, CancellationToken token = default);
     Task<IEnumerable<TEntity>> GetAsync(ISpecification<TEntity> specification, CancellationToken token = default);
-    IQueryable<TEntity> GetQueryable();
-    IQueryable<TEntity> GetQueryable(ISpecification<TEntity> specification);
 }
