@@ -1,0 +1,10 @@
+﻿namespace Identity.Application.Exceptions;
+
+public class NotFoundException : BaseApiException
+{
+    public NotFoundException(ErrorMessage? errorMessage = null) 
+        : base(StatusCodes.Status404NotFound, errorMessage)
+    {
+
+    }
+}
