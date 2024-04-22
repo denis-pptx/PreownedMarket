@@ -8,22 +8,22 @@ public class LikeConfiguration : IEntityTypeConfiguration<Like>
 {
     public void Configure(EntityTypeBuilder<Like> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(like => like.Id);
 
-        builder.HasIndex(x => new { x.UserId, x.ItemId })
+        builder.HasIndex(like => new { like.UserId, like.ItemId })
             .IsUnique();
 
-        builder.Property(x => x.CreatedOn)
+        builder.Property(like => like.CreatedOn)
             .HasDefaultValue(DateTime.UtcNow);
 
-        builder.HasOne(x => x.User)
+        builder.HasOne(like => like.User)
             .WithMany()
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(like => like.UserId)
             .IsRequired();
 
-        builder.HasOne(x => x.Item)
+        builder.HasOne(like => like.Item)
             .WithMany()
-            .HasForeignKey(x => x.ItemId)
+            .HasForeignKey(like => like.ItemId)
             .IsRequired();
     }
 }

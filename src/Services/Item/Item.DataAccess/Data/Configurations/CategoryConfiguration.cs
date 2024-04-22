@@ -8,12 +8,12 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(category => category.Id);
 
-        builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.Property(category => category.Name).HasMaxLength(50).IsRequired();
+        builder.HasIndex(category => category.Name).IsUnique();
 
-        builder.Property(x => x.NormalizedName).HasMaxLength(50).IsRequired();
-        builder.HasIndex(x => x.NormalizedName).IsUnique();
+        builder.Property(category => category.NormalizedName).HasMaxLength(50).IsRequired();
+        builder.HasIndex(category => category.NormalizedName).IsUnique();
     }
 }

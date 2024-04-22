@@ -8,9 +8,9 @@ public class RegionConfiguration : IEntityTypeConfiguration<Region>
 {
     public void Configure(EntityTypeBuilder<Region> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(region => region.Id);
 
-        builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.Property(region => region.Name).HasMaxLength(50).IsRequired();
+        builder.HasIndex(region => region.Name).IsUnique();
     }
 }

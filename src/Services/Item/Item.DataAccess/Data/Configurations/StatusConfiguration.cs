@@ -8,12 +8,12 @@ public class StatusConfiguration : IEntityTypeConfiguration<Status>
 {
     public void Configure(EntityTypeBuilder<Status> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(status => status.Id);
 
-        builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.Property(status => status.Name).HasMaxLength(50).IsRequired();
+        builder.HasIndex(status => status.Name).IsUnique();
 
-        builder.Property(x => x.NormalizedName).HasMaxLength(50).IsRequired();
-        builder.HasIndex(x => x.NormalizedName).IsUnique();
+        builder.Property(status => status.NormalizedName).HasMaxLength(50).IsRequired();
+        builder.HasIndex(status => status.NormalizedName).IsUnique();
     }
 }

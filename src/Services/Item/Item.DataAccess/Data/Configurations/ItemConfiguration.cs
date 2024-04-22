@@ -9,42 +9,42 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
 {
     public void Configure(EntityTypeBuilder<Item> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(item => item.Id);
 
-        builder.Property(x => x.Title)
+        builder.Property(item => item.Title)
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(x => x.Description)
-            .HasMaxLength(1000);
+        builder.Property(item => item.Description)
+        .HasMaxLength(1000);
 
-        builder.Property(x => x.Price) 
+        builder.Property(item => item.Price) 
             .IsRequired();
 
-        builder.Property(x => x.CreatedAt)
+        builder.Property(item => item.CreatedAt)
             .HasDefaultValue(DateTime.UtcNow)
             .IsRequired();
 
-        builder.HasOne(x => x.City)
+        builder.HasOne(item => item.City)
             .WithMany()
-            .HasForeignKey(x => x.CityId)
+            .HasForeignKey(item => item.CityId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Category)
+        builder.HasOne(item => item.Category)
             .WithMany()
-            .HasForeignKey(x => x.CategoryId)
+            .HasForeignKey(item => item.CategoryId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
-        builder.HasOne(x => x.Status)
+        builder.HasOne(item => item.Status)
             .WithMany()
-            .HasForeignKey(x => x.StatusId)
+            .HasForeignKey(item => item.StatusId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
-        builder.HasOne(x => x.User)
-            .WithMany(x => x.Items)
-            .HasForeignKey(x => x.UserId)
+        builder.HasOne(item => item.User)
+            .WithMany(user => user.Items)
+            .HasForeignKey(item => item.UserId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
     }
