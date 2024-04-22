@@ -7,7 +7,7 @@ public class UpdateStatusValidator : AbstractValidator<UpdateStatusDto>
 {
     public UpdateStatusValidator()
     {
-        RuleFor(c => c.NormalizedName)
+        RuleFor(status => status.NormalizedName)
             .NotEmpty()
             .MinimumLength(3)
             .MaximumLength(50);

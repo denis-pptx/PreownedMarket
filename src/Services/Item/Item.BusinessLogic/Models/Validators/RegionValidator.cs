@@ -7,7 +7,7 @@ public class RegionValidator : AbstractValidator<RegionDto>
 {
     public RegionValidator()
     {
-        RuleFor(c => c.Name)
+        RuleFor(region => region.Name)
             .NotEmpty()
             .MinimumLength(3)
             .MaximumLength(50);

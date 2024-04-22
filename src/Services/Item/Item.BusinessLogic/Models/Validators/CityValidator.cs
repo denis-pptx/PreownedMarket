@@ -7,7 +7,7 @@ public class CityValidator : AbstractValidator<CityDto>
 {
     public CityValidator()
     {
-        RuleFor(c => c.Name)
+        RuleFor(city => city.Name)
             .NotEmpty()
             .MinimumLength(3)
             .MaximumLength(50);

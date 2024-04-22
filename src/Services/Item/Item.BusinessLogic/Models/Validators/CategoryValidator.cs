@@ -7,12 +7,12 @@ public class CategoryValidator : AbstractValidator<CategoryDto>
 {
     public CategoryValidator()
     {
-        RuleFor(c => c.Name)
+        RuleFor(category => category.Name)
             .NotEmpty()
             .MinimumLength(3)
             .MaximumLength(50);
 
-        RuleFor(c => c.NormalizedName)
+        RuleFor(category => category.NormalizedName)
             .NotEmpty()
             .MinimumLength(3)
             .MaximumLength(50);
