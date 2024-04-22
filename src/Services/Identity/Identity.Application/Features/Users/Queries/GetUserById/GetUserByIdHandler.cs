@@ -15,7 +15,7 @@ public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper)
             throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
-        string? role = (await _userManager.GetRolesAsync(user)).Single();
+        var role = (await _userManager.GetRolesAsync(user)).Single();
 
         var userResponse = _mapper.Map<User, GetUserResponse>(user);
         userResponse.Role = role;

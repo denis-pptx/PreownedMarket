@@ -7,7 +7,7 @@ public class DeleteUserByIdHandler(UserManager<User> _userManager, ICurrentUserS
     {
         var userIdentity = await _userManager.FindByIdAsync(request.Id.ToString());
 
-        if (userIdentity == null)
+        if (userIdentity is null)
         {
             throw new NotFoundException(UserErrorMessages.NotFound);
         }
