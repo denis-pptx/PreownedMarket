@@ -3,5 +3,5 @@ using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 
 namespace Chat.Application.Features.Conversations.Queries.GetUserConversations;
 
-public record GetUserConversationsQuery() 
-    : IQuery<IEnumerable<GetUserConversationResponse>>;
+public record GetAllUserConversationsQuery() 
+    : IQuery<IEnumerable<ConversationWithLastMessageResponse>>;

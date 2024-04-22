@@ -10,16 +10,16 @@ using Microsoft.VisualBasic;
 
 namespace Chat.Application.Features.Conversations.Queries.GetUserConversations;
 
-public class GetUserConversationsQueryHandler(
+public class GetAllUserConversationsQueryHandler(
     IMapper _mapper,
     IUserContext _userContext,
     IUserRepository _userRepository,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository) 
-    : IQueryHandler<GetUserConversationsQuery, IEnumerable<GetUserConversationResponse>>
+    : IQueryHandler<GetAllUserConversationsQuery, IEnumerable<ConversationWithLastMessageResponse>>
 {
-    public async Task<IEnumerable<GetUserConversationResponse>> Handle(
-        GetUserConversationsQuery query, 
+    public async Task<IEnumerable<ConversationWithLastMessageResponse>> Handle(
+        GetAllUserConversationsQuery query, 
         CancellationToken cancellationToken)
     {
         var userId = _userContext.UserId;
@@ -33,13 +33,11 @@ public class GetUserConversationsQueryHandler(
         {
             var lastMessage = await _messageRepository.GetLastMessageInConversationAsync(x.Id, cancellationToken);
 
-            var lastMessageResponse = lastMessage switch
-            {
-                null => default,
-                _ => _mapper.Map<Message, MessageResponse>(lastMessage)
-            };
+            var lastMessageResponse = lastMessage == null ? 
+                default : 
+                _mapper.Map<Message, MessageResponse>(lastMessage);
 
-            return new GetUserConversationResponse(
+            return new ConversationWithLastMessageResponse(
                 x.Id, 
                 x.Item, 
                 lastMessageResponse, 

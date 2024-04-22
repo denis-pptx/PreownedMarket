@@ -3,7 +3,7 @@ using Chat.Domain.Entities;
 
 namespace Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 
-public record GetUserConversationResponse(
+public record ConversationWithLastMessageResponse(
     Guid ConversationId, 
     Item Item, 
     MessageResponse? LastMessage,

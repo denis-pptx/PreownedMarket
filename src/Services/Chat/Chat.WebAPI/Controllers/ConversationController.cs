@@ -25,7 +25,7 @@ public class ConversationController(ISender _sender)
     [HttpGet]
     public async Task<IActionResult> GetUserConversations(CancellationToken token)
     {
-        var query = new GetUserConversationsQuery();
+        var query = new GetAllUserConversationsQuery();
         var result = await _sender.Send(query, token);
 
         return Ok(result);
