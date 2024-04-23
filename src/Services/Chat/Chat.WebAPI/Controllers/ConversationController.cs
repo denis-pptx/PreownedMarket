@@ -1,11 +1,9 @@
 ﻿using Chat.Application.Features.Conversations.Commands.CreateConversation;
 using Chat.Application.Features.Conversations.Commands.DeleteConversation;
-using Chat.Application.Features.Conversations.Queries.CheckConversationExistence;
 using Chat.Application.Features.Conversations.Queries.GetConversation;
+using Chat.Application.Features.Conversations.Queries.GetConversatoinByItem;
 using Chat.Application.Features.Conversations.Queries.GetUserConversations;
 using Chat.Application.Models.DataTransferObjects.Conversations.Requests;
-using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
-using Chat.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,14 +42,15 @@ public class ConversationController(ISender _sender)
         return Ok(result);
     }
 
-    // GET: api/<ConversationController>/check-existence
+    // GET: api/<ConversationController>/item/<id>
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet("check-existence")]
-    public async Task<IActionResult> CheckConversationExistence([FromQuery] CheckConversationExistenceRequest request, CancellationToken token)
+    [HttpGet("item/{itemId:guid}")]
+    public async Task<IActionResult> GetConversationByItem([FromRoute] Guid itemId, CancellationToken token)
     {
-        var query = new CheckConversationExistenceQuery(request);
+        var query = new GetConversationByItemQuery(itemId); 
         var result = await _sender.Send(query, token);
 
         return Ok(result);

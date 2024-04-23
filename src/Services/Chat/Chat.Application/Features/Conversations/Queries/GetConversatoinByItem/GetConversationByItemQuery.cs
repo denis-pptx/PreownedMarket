@@ -1,7 +1,7 @@
 ﻿using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 
-namespace Chat.Application.Features.Conversations.Queries.GetConversation;
+namespace Chat.Application.Features.Conversations.Queries.GetConversatoinByItem;
 
-public record GetConversationQuery(Guid ConversationId) 
+public record GetConversationByItemQuery(Guid itemId) 
     : IQuery<ConversationResponse>;

@@ -9,6 +9,7 @@ public abstract class BaseApiException(int statusCode, ErrorMessage? errorMessag
     public int StatusCode { get; } = statusCode;
     public string Type { get; } = statusCode switch
     {
+        StatusCodes.Status400BadRequest => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1",
         StatusCodes.Status401Unauthorized => "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1",
         StatusCodes.Status403Forbidden => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3",
         StatusCodes.Status404NotFound => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4",

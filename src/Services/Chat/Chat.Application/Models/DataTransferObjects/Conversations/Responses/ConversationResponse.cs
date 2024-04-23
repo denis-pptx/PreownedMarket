@@ -3,7 +3,7 @@ using Chat.Domain.Entities;
 
 namespace Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 
-public class GetConversationResponse
+public class ConversationResponse
 {
     public Guid ConversationId { get; set; }
     public Item Item { get; set; } = default!;

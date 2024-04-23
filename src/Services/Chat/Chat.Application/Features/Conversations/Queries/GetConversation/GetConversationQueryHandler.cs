@@ -17,9 +17,9 @@ public class GetConversationQueryHandler(
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository,
     IUserRepository _userRepository)
-    : IQueryHandler<GetConversationQuery, GetConversationResponse>
+    : IQueryHandler<GetConversationQuery, ConversationResponse>
 {
-    public async Task<GetConversationResponse> Handle(
+    public async Task<ConversationResponse> Handle(
         GetConversationQuery query, 
         CancellationToken cancellationToken)
     {
@@ -39,7 +39,7 @@ public class GetConversationQueryHandler(
         var messages = await _messageRepository.GetByConversationIdAsync(conversation.Id, cancellationToken);
         var messagesResponse = _mapper.Map<IEnumerable<Message>, IEnumerable<MessageResponse>>(messages);
 
-        var response = new GetConversationResponse
+        var response = new ConversationResponse
         {
             ConversationId = conversation.Id,
             Item = conversation.Item,
