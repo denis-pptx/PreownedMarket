@@ -16,9 +16,9 @@ public class GetAllUserConversationsQueryHandler(
     IUserRepository _userRepository,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository) 
-    : IQueryHandler<GetAllUserConversationsQuery, IEnumerable<ConversationWithLastMessageResponse>>
+    : IQueryHandler<GetAllUserConversationsQuery, IEnumerable<GetConversationWithLastMessageResponse>>
 {
-    public async Task<IEnumerable<ConversationWithLastMessageResponse>> Handle(
+    public async Task<IEnumerable<GetConversationWithLastMessageResponse>> Handle(
         GetAllUserConversationsQuery query, 
         CancellationToken cancellationToken)
     {
@@ -37,7 +37,7 @@ public class GetAllUserConversationsQueryHandler(
                 default : 
                 _mapper.Map<Message, MessageResponse>(lastMessage);
 
-            return new ConversationWithLastMessageResponse(
+            return new GetConversationWithLastMessageResponse(
                 conversation.Id,
                 conversation.Item, 
                 lastMessageResponse,

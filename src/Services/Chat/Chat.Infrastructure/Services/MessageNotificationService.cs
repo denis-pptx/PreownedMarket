@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Chat.Application.Abstractions;
+using Chat.Application.Abstractions.Notifications;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Hubs;
-using Chat.Infrastructure.Models;
+using Chat.Infrastructure.Models.Messages;
 using Identity.Application.Exceptions;
 using Microsoft.AspNetCore.SignalR;
 
@@ -19,7 +19,7 @@ public class MessageNotificationService(
     {
         var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        var messageNotification = _mapper.Map<Message, MessageNotificationModel>(message);
+        var messageNotification = _mapper.Map<Message, MessageNotification>(message);
 
         await _hubContext.Clients.Users(receiversIds).ReceiveMessage(messageNotification);
     }
@@ -28,7 +28,7 @@ public class MessageNotificationService(
     {
         var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        var messageNotification = _mapper.Map<Message, MessageNotificationModel>(message);
+        var messageNotification = _mapper.Map<Message, MessageNotification>(message);
 
         await _hubContext.Clients.Users(receiversIds).UpdateMessage(messageNotification);
     }
@@ -37,7 +37,7 @@ public class MessageNotificationService(
     {
         var receiversIds = await GetReceiversIdsAsync(message, token);
 
-        var messageNotification = _mapper.Map<Message, MessageNotificationModel>(message);
+        var messageNotification = _mapper.Map<Message, MessageNotification>(message);
 
         await _hubContext.Clients.Users(receiversIds).DeleteMessage(messageNotification);
     }

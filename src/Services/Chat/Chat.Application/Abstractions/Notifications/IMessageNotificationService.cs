@@ -1,6 +1,6 @@
 ﻿using Chat.Domain.Entities;
 
-namespace Chat.Application.Abstractions;
+namespace Chat.Application.Abstractions.Notifications;
 
 public interface IMessageNotificationService
 {

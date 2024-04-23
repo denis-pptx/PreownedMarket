@@ -1,5 +1,6 @@
 ﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
+using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
 using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
@@ -11,6 +12,7 @@ namespace Chat.Application.Features.Conversations.Commands.CreateConversation;
 
 public class CreateConversationCommandHandler(
     IUserContext _userContext,
+    IConversationNotificationService _notificationService,
     IUserRepository _userRepository,
     IItemRepository _itemRepository,
     IConversationRepository _conversationRepository)
@@ -58,6 +60,8 @@ public class CreateConversationCommandHandler(
         };
 
         await _conversationRepository.AddAsync(conversation, cancellationToken);
+
+        await _notificationService.CreateConversationAsync(conversation, cancellationToken);
 
         return new CreateConversationResponse(
             conversation.Id,

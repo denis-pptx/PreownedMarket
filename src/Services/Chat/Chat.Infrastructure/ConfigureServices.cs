@@ -1,5 +1,5 @@
-﻿using Chat.Application.Abstractions;
-using Chat.Application.Abstractions.Contexts;
+﻿using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Notifications;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Contexts;
 using Chat.Infrastructure.Options.MongoDb;
@@ -19,7 +19,8 @@ public static class ConfigureServices
         services.AddSingleton<IApplicationDbContext, ApplicationDbContext>()
             .AddScoped<IUserContext, UserContext>();
 
-        services.AddScoped<IMessageNotificationService, MessageNotificationService>();
+        services.AddScoped<IMessageNotificationService, MessageNotificationService>()
+            .AddScoped<IConversationNotificationService, ConversationNofiticationService>(); 
 
         services.AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IConversationRepository, ConversationRepository>()

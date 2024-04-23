@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Chat.Application.Abstractions;
 using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
+using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;

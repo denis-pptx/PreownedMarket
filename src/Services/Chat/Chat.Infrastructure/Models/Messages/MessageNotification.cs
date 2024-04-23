@@ -1,6 +1,6 @@
-﻿namespace Chat.Infrastructure.Models;
+﻿namespace Chat.Infrastructure.Models.Messages;
 
-public record MessageNotificationModel(
+public record MessageNotification(
     Guid MessageId,
     string Text,
     DateTime CreatedAt,
