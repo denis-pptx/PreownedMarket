@@ -29,19 +29,19 @@ public class GetAllUserConversationsQueryHandler(
 
         var conversations = await _conversationRepository.GetByUserIdAsync(userId, cancellationToken);
 
-        var response = conversations.Select(async x =>
+        var response = conversations.Select(async conversation =>
         {
-            var lastMessage = await _messageRepository.GetLastMessageInConversationAsync(x.Id, cancellationToken);
+            var lastMessage = await _messageRepository.GetLastMessageInConversationAsync(conversation.Id, cancellationToken);
 
             var lastMessageResponse = lastMessage == null ? 
                 default : 
                 _mapper.Map<Message, MessageResponse>(lastMessage);
 
             return new ConversationWithLastMessageResponse(
-                x.Id, 
-                x.Item, 
-                lastMessageResponse, 
-                x.Members);
+                conversation.Id,
+                conversation.Item, 
+                lastMessageResponse,
+                conversation.Members);
         });
 
         return await Task.WhenAll(response);

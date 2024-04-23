@@ -9,11 +9,11 @@ public class MessageMappingProfile : Profile
     public MessageMappingProfile()
     {
         CreateMap<Message, MessageResponse>()
-            .ConstructUsing(x => new MessageResponse(
-                x.Id, 
-                x.Text, 
-                x.CreatedAt, 
-                x.SenderId, 
-                x.ConversationId));
+            .ConstructUsing(message => new MessageResponse(
+                message.Id, 
+                message.Text, 
+                message.CreatedAt, 
+                message.SenderId,
+                message.ConversationId));
     }
 }

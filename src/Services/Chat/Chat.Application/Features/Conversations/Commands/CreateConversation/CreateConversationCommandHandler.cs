@@ -36,7 +36,9 @@ public class CreateConversationCommandHandler(
         }
 
         var existingConversation = await _conversationRepository.FirstOrDefaultAsync(
-            conversation => conversation.Item.Id == item.Id && conversation.Members.Contains(customer),
+            conversation => 
+                conversation.Item.Id == item.Id && 
+                conversation.Members.Contains(customer),
             cancellationToken);
 
         if (existingConversation != null)

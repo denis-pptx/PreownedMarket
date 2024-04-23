@@ -41,8 +41,8 @@ public class ValidationExceptionHandler : IExceptionHandler
     private static Dictionary<string, string[]> GetErrors(IEnumerable<ValidationFailure> validationFailures)
     {
         return validationFailures.GroupBy(
-            x => x.PropertyName, 
-            x => x.ErrorMessage, 
+            failure => failure.PropertyName,
+            failure => failure.ErrorMessage, 
             (propertyName, errorMessages) => new
             {
                 Key = propertyName,

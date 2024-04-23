@@ -7,7 +7,7 @@ public class CreateMessageCommandValidator
 {
     public CreateMessageCommandValidator()
     {
-        RuleFor(x => x.Request.Text)
+        RuleFor(command => command.Request.Text)
             .NotEmpty()
             .MaximumLength(500)
             .WithName(nameof(CreateMessageCommand.Request.Text));

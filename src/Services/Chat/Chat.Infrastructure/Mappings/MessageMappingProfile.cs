@@ -10,11 +10,11 @@ public class MessageMappingProfile : Profile
     public MessageMappingProfile()
     {
         CreateMap<Message, MessageNotificationModel>()
-            .ConstructUsing(x => new MessageNotificationModel(
-                x.Id,
-                x.Text,
-                x.CreatedAt,
-                x.SenderId,
-                x.ConversationId));
+            .ConstructUsing(message => new MessageNotificationModel(
+                message.Id,
+                message.Text,
+                message.CreatedAt,
+                message.SenderId,
+                message.ConversationId));
     }
 }

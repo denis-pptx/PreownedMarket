@@ -23,8 +23,8 @@ public class MessageRepository(IApplicationDbContext dbContext)
     public async Task<Message?> GetLastMessageInConversationAsync(Guid conversationId, CancellationToken token = default)
     {
         return await _collection
-            .Find(x => x.ConversationId == conversationId)
-            .SortByDescending(x => x.CreatedAt)
+            .Find(message => message.ConversationId == conversationId)
+            .SortByDescending(message => message.CreatedAt)
             .FirstOrDefaultAsync(token);
     }
 }

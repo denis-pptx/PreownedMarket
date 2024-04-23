@@ -8,7 +8,7 @@ public class UpdateMessageCommandValidator
 {
     public UpdateMessageCommandValidator()
     {
-        RuleFor(x => x.Request.Text)
+        RuleFor(command => command.Request.Text)
             .NotEmpty()
             .MaximumLength(500)
             .WithName(nameof(UpdateMessageCommand.Request.Text));
