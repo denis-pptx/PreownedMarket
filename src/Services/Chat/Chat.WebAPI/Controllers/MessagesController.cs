@@ -11,10 +11,10 @@ namespace Chat.WebAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class MessageController(IMediator _mediator) 
+public class MessagesController(IMediator _mediator) 
     : ControllerBase
 {
-    // POST api/<MessageController>
+    // POST api/<MessagesController>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -28,7 +28,7 @@ public class MessageController(IMediator _mediator)
         return Ok(response);
     }
 
-    // PUT api/<MessageController>/<id>
+    // PUT api/<MessagesController>/<id>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -42,7 +42,7 @@ public class MessageController(IMediator _mediator)
         return Ok(response);
     }
 
-    // DELETE api/<MessageController>/<id>
+    // DELETE api/<MessagesController>/<id>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]

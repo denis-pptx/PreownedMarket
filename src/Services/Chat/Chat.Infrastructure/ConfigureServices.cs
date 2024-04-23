@@ -16,15 +16,15 @@ public static class ConfigureServices
     {
         services.ConfigureOptions<MongoDbOptionsSetup>();
 
-        services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
-        services.AddScoped<IUserContext, UserContext>();
+        services.AddSingleton<IApplicationDbContext, ApplicationDbContext>()
+            .AddScoped<IUserContext, UserContext>();
 
         services.AddScoped<IMessageNotificationService, MessageNotificationService>();
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IConversationRepository, ConversationRepository>();  
-        services.AddScoped<IMessageRepository, MessageRepository>();  
-        services.AddScoped<IItemRepository, ItemRepository>();
+        services.AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IConversationRepository, ConversationRepository>()
+            .AddScoped<IMessageRepository, MessageRepository>()
+            .AddScoped<IItemRepository, ItemRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

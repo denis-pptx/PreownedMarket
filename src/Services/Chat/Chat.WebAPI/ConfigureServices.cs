@@ -9,12 +9,12 @@ public static class ConfigureServices
     {
         services.AddControllers();
 
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddEndpointsApiExplorer()
+            .AddSwaggerGen();
 
-        services.AddExceptionHandler<ValidationExceptionHandler>();
-        services.AddExceptionHandler<BaseApiExceptionHandler>();
-        services.AddProblemDetails();
+        services.AddProblemDetails()
+            .AddExceptionHandler<ValidationExceptionHandler>()
+            .AddExceptionHandler<BaseApiExceptionHandler>();
 
         services.AddHttpContextAccessor();
     }
