@@ -49,6 +49,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.ApplyMigrations<ApplicationDbContext>();
+
+    await app.SeedData();
 }
 
 app.UseHttpsRedirection();
@@ -58,9 +62,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseStaticFiles();
-
-app.ApplyMigrations<ApplicationDbContext>();
-
-await app.SeedData();
 
 app.Run();

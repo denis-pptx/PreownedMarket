@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identity-api
+    container_name: identity-api
+    build:
+      context: .
+      dockerfile: Identity/Identity.Presentation/Dockerfile
+    depends_on:
+      - identity.db
+      - elasticsearch 
+    
+  identity.db:
+    image: mysql:8.3.0
+    container_name: identity.db
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.1
+    container_name: elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.1
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+
+  item.api:
+    image: ${DOCKER_REGISTRY-}item-api
+    container_name: item-api
+    build:
+      context: .
+      dockerfile: Item/Item.Presentation/Dockerfile
+    depends_on:
+     - item.db
+
+  item.db:
+    image: mysql:8.3.0
+    container_name: item-db
+
+  chat.api:
+    image: ${DOCKER_REGISTRY-}chat-api
+    container_name: chat-api
+    build:
+      context: .
+      dockerfile: Chat/Chat.Presentation/Dockerfile
+    depends_on:
+      - chat.db
+
+  chat.db:
+    image: mongo:latest
