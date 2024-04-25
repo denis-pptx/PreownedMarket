@@ -1,6 +1,12 @@
-﻿namespace Identity.Application.Features.Users.Commands.DeleteUser;
+﻿using Contracts.Users;
+using MassTransit;
 
-public class DeleteUserByIdHandler(UserManager<User> _userManager, ICurrentUserService _userService) 
+namespace Identity.Application.Features.Users.Commands.DeleteUser;
+
+public class DeleteUserByIdHandler(
+    UserManager<User> _userManager, 
+    ICurrentUserService _userService, 
+    IPublishEndpoint _publishEndpoint) 
     : ICommandHandler<DeleteUserByIdCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteUserByIdCommand request, CancellationToken cancellationToken)
@@ -14,12 +20,18 @@ public class DeleteUserByIdHandler(UserManager<User> _userManager, ICurrentUserS
 
         var userActorId = _userService.UserId;
 
-        if (userActorId == userIdentity.Id) 
+        if (userActorId == userIdentity.Id)
         {
             throw new ConflictException(UserErrorMessages.DeleteYourself);
         }
 
         await _userManager.DeleteAsync(userIdentity);
+
+        await _publishEndpoint.Publish(new UserDeletedEvent 
+            { 
+                UserId = Guid.Parse(userIdentity.Id) 
+            }, 
+            cancellationToken);
 
         return Unit.Value;
     }

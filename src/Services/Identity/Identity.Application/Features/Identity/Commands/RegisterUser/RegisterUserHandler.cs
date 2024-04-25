@@ -1,6 +1,12 @@
-﻿namespace Identity.Application.Features.Identity.Commands.RegisterUser;
+﻿using Contracts.Users;
+using MassTransit;
 
-public class RegisterUserHandler(UserManager<User> _userManager, IMapper _mapper)
+namespace Identity.Application.Features.Identity.Commands.RegisterUser;
+
+public class RegisterUserHandler(
+    UserManager<User> _userManager, 
+    IMapper _mapper, 
+    IPublishEndpoint _publishEndpoint)
     : ICommandHandler<RegisterUserCommand, Unit>
 {
     public async Task<Unit> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
@@ -17,6 +23,13 @@ public class RegisterUserHandler(UserManager<User> _userManager, IMapper _mapper
         }
 
         await _userManager.AddToRoleAsync(user, nameof(Role.User));
+
+        await _publishEndpoint.Publish(new UserCreatedEvent
+            {
+                Id = Guid.Parse(user.Id),
+                UserName = user.UserName!
+            }, 
+            cancellationToken);
 
         return Unit.Value;
     }
