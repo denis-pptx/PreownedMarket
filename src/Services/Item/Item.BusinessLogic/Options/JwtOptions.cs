@@ -1,4 +1,4 @@
-﻿namespace Item.BusinessLogic.Authentication;
+﻿namespace Item.BusinessLogic.Options;
 
 public class JwtOptions
 {

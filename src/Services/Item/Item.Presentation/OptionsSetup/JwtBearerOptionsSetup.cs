@@ -1,4 +1,4 @@
-﻿using Item.BusinessLogic.Authentication;
+﻿using Item.BusinessLogic.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
