@@ -4,16 +4,28 @@ using MassTransit;
 
 namespace Chat.Application.Consumers.Users;
 
-public class UserDeletedConsumer(IUserRepository _userRepository) 
+public class UserDeletedConsumer(
+    IUserRepository _userRepository,
+    IItemRepository _itemRepository,
+    IConversationRepository _conversationRepository,
+    IMessageRepository _messageRepository) 
     : IConsumer<UserDeletedEvent>
 {
     public async Task Consume(ConsumeContext<UserDeletedEvent> context)
     {
-        var existingUser = await _userRepository.GetByIdAsync(context.Message.UserId);
+        var user = await _userRepository.GetByIdAsync(context.Message.UserId);
 
-        if (existingUser is not null)
+        if (user is null)
         {
-            await _userRepository.DeleteAsync(existingUser);
+            return;
         }
+
+        await _userRepository.DeleteAsync(user, context.CancellationToken);
+
+        await _itemRepository.DeleteByUserIdAsync(user.Id, context.CancellationToken);
+
+        await _conversationRepository.DeleteByUserIdAsync(user.Id, context.CancellationToken);
+
+        await _messageRepository.DeleteByUserIdAsync(user.Id, context.CancellationToken);
     }
 }

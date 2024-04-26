@@ -13,6 +13,11 @@ public class MessageRepository(IApplicationDbContext dbContext)
         await _collection.DeleteManyAsync(message => message.ConversationId == conversationId, token);
     }
 
+    public async Task DeleteByUserIdAsync(Guid userId, CancellationToken token = default)
+    {
+        await _collection.DeleteManyAsync(message => message.SenderId == userId, token);    
+    }
+
     public async Task<IEnumerable<Message>> GetByConversationIdAsync(Guid conversationId, CancellationToken token = default)
     {
         return await _collection
