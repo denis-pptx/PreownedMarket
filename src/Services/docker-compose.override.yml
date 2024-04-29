@@ -95,11 +95,23 @@ services:
       - chat.db-data:/data/db
     networks:
       - my-network
- 
+  
+  market.mq:
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 15672:15672
+    volumes:
+      - market.mq-data:/var/lib/rabbitmq
+    networks:
+      - my-network
+    
 volumes:
   identity.db-data:
   item.db-data:
   chat.db-data:
+  market.mq-data:
   elasticsearch-data:
 
 networks:

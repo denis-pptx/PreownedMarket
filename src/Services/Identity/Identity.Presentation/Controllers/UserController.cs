@@ -31,7 +31,7 @@ public class UserController(IMediator _mediator) : Controller
 
     // DELETE api/<UserController>/<id>
     [Authorize(Roles = nameof(Role.Administrator))]
-    [HttpDelete]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteUserById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteUserByIdCommand(id);    

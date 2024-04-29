@@ -1,4 +1,4 @@
-﻿using Item.BusinessLogic.Authentication;
+﻿using Item.BusinessLogic.Options;
 using Microsoft.Extensions.Options;
 
 namespace Item.Presentation.OptionsSetup;

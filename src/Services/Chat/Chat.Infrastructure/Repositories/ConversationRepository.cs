@@ -20,4 +20,11 @@ public class ConversationRepository(IApplicationDbContext dbContext)
     {
         return await _collection.Find(filter).FirstOrDefaultAsync(token);
     }
+
+    public async Task DeleteByUserIdAsync(Guid userId, CancellationToken token = default)
+    {
+        await _collection.DeleteManyAsync(
+            conversation => conversation.Members.Any(member => member.Id == userId), 
+            token);
+    }
 }

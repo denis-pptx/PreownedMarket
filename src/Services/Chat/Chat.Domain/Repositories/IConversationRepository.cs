@@ -10,4 +10,5 @@ public interface IConversationRepository
     Task<Conversation?> FirstOrDefaultAsync(Expression<Func<Conversation, bool>> filter, CancellationToken token = default);
     Task AddAsync(Conversation conversation, CancellationToken token = default);
     Task DeleteAsync(Conversation conversation, CancellationToken token = default);
+    Task DeleteByUserIdAsync(Guid userId, CancellationToken token = default);
 }

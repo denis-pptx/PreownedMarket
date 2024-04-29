@@ -10,10 +10,11 @@ services:
     depends_on:
       - identity.db
       - elasticsearch 
+      - market.mq
     
   identity.db:
     image: mysql:8.3.0
-    container_name: identity.db
+    container_name: identity-db
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.1
@@ -32,7 +33,8 @@ services:
       context: .
       dockerfile: Item/Item.Presentation/Dockerfile
     depends_on:
-     - item.db
+      - item.db
+      - market.mq
 
   item.db:
     image: mysql:8.3.0
@@ -46,6 +48,13 @@ services:
       dockerfile: Chat/Chat.Presentation/Dockerfile
     depends_on:
       - chat.db
+      - market.mq
 
   chat.db:
     image: mongo:latest
+    container_name: chat-db
+
+  market.mq:
+    image: rabbitmq:management
+    container_name: market-mq
+    hostname: market.mq
