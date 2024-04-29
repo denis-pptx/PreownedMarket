@@ -1,7 +1,13 @@
-﻿namespace Chat.Domain.Entities;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+
+namespace Chat.Domain.Entities;
 
 public class Conversation : Entity
 {
-    public Item Item { get; set; } = default!;
-    public IEnumerable<User> Members { get; set; } = [];
+    [BsonRepresentation(BsonType.String)]
+    public Guid ItemId { get; set; }
+
+    [BsonRepresentation(BsonType.String)]
+    public IEnumerable<Guid> MembersIds { get; set; } = [];
 }

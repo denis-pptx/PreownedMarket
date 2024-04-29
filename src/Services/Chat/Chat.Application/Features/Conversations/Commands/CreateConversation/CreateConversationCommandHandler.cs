@@ -22,14 +22,12 @@ public class CreateConversationCommandHandler(
         CreateConversationCommand command,
         CancellationToken cancellationToken)
     {
-        var request = command.Request;
-
         var userId = _userContext.UserId;
 
         var customer = await _userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(customer);
 
-        var item = await _itemRepository.GetByIdAsync(request.ItemId, cancellationToken);
+        var item = await _itemRepository.GetByIdAsync(command.Request.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         if (item.UserId == customer.Id)
@@ -39,11 +37,11 @@ public class CreateConversationCommandHandler(
 
         var existingConversation = await _conversationRepository.FirstOrDefaultAsync(
             conversation => 
-                conversation.Item.Id == item.Id && 
-                conversation.Members.Contains(customer),
+                conversation.ItemId == item.Id && 
+                conversation.MembersIds.Contains(customer.Id),
             cancellationToken);
 
-        if (existingConversation != null)
+        if (existingConversation is not null)
         {
             throw new ConflictException(ConversationErrorMessages.AlreadyExists);
         }
@@ -51,12 +49,10 @@ public class CreateConversationCommandHandler(
         var seller = await _userRepository.GetByIdAsync(item.UserId, cancellationToken);
         NotFoundException.ThrowIfNull(seller);
 
-        IEnumerable<User> conversationMembers = [customer, seller];
-
         var conversation = new Conversation
         {
-            Item = item,
-            Members = conversationMembers
+            ItemId = item.Id,
+            MembersIds = [customer.Id, seller.Id]
         };
 
         await _conversationRepository.AddAsync(conversation, cancellationToken);
@@ -66,6 +62,6 @@ public class CreateConversationCommandHandler(
         return new CreateConversationResponse(
             conversation.Id,
             item,
-            conversationMembers);
+            [customer, seller]);
     }
 }

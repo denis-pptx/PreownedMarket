@@ -2,7 +2,6 @@
 using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Abstractions.Notifications;
-using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
@@ -14,11 +13,10 @@ public class CreateMessageCommandHandler(
     IUserRepository _userRepository,
     IMessageRepository _messageRepository,
     IConversationRepository _conversationRepository,
-    IMessageNotificationService _notificationService,
-    IMapper _mapper)
-    : ICommandHandler<CreateMessageCommand, MessageResponse>
+    IMessageNotificationService _notificationService)
+    : ICommandHandler<CreateMessageCommand, Message>
 {
-    public async Task<MessageResponse> Handle(
+    public async Task<Message> Handle(
         CreateMessageCommand command,
         CancellationToken cancellationToken)
     {
@@ -44,8 +42,6 @@ public class CreateMessageCommandHandler(
 
         await _notificationService.SendMessageAsync(message, cancellationToken);
 
-        var messageResponse = _mapper.Map<Message, MessageResponse>(message);
-
-        return messageResponse;
+        return message;
     }
 }

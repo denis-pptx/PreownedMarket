@@ -12,7 +12,7 @@ public class ConversationRepository(IApplicationDbContext dbContext)
     public async Task<IEnumerable<Conversation>> GetByUserIdAsync(Guid userId, CancellationToken token = default)
     {
         return await _collection
-            .Find(conversation => conversation.Members.Any(member => member.Id == userId))
+            .Find(conversation => conversation.MembersIds.Contains(userId))
             .ToListAsync(token);
     }
 
@@ -24,7 +24,7 @@ public class ConversationRepository(IApplicationDbContext dbContext)
     public async Task DeleteByUserIdAsync(Guid userId, CancellationToken token = default)
     {
         await _collection.DeleteManyAsync(
-            conversation => conversation.Members.Any(member => member.Id == userId), 
+            conversation => conversation.MembersIds.Contains(userId), 
             token);
     }
 }

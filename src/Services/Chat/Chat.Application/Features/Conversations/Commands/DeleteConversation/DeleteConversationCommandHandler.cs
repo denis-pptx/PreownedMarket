@@ -27,7 +27,7 @@ public class DeleteConversationCommandHandler(
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, cancellationToken);
         NotFoundException.ThrowIfNull(user);
 
-        if (!conversation.Members.Contains(user))
+        if (!conversation.MembersIds.Contains(user.Id))
         {
             throw new ForbiddenException(ConversationErrorMessages.AlienConversation);
         }
