@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
 using Chat.Domain.Repositories;
@@ -9,10 +10,10 @@ namespace Chat.Application.Features.Conversations.Queries.GetUserConversations;
 
 public class GetAllUserConversationsQueryHandler(
     IUserContext _userContext,
+    IItemService _itemService,
     IUserRepository _userRepository,
     IConversationRepository _conversationRepository,
-    IMessageRepository _messageRepository,
-    IItemRepository _itemRepository) 
+    IMessageRepository _messageRepository) 
     : IQueryHandler<GetAllUserConversationsQuery, IEnumerable<GetConversationWithLastMessageResponse>>
 {
     public async Task<IEnumerable<GetConversationWithLastMessageResponse>> Handle(
@@ -28,7 +29,7 @@ public class GetAllUserConversationsQueryHandler(
 
         var response = conversations.Select(async conversation =>
         {
-            var item = await _itemRepository.GetByIdAsync(conversation.ItemId, cancellationToken);
+            var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
             NotFoundException.ThrowIfNull(item);
 
             var lastMessage = await _messageRepository.GetLastMessageInConversationAsync(conversation.Id, cancellationToken);

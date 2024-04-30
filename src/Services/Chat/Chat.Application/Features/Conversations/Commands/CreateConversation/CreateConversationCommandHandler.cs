@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Exceptions;
@@ -13,8 +14,8 @@ namespace Chat.Application.Features.Conversations.Commands.CreateConversation;
 public class CreateConversationCommandHandler(
     IUserContext _userContext,
     IConversationNotificationService _notificationService,
+    IItemService _itemService,
     IUserRepository _userRepository,
-    IItemRepository _itemRepository,
     IConversationRepository _conversationRepository)
     : ICommandHandler<CreateConversationCommand, CreateConversationResponse>
 {
@@ -27,7 +28,7 @@ public class CreateConversationCommandHandler(
         var customer = await _userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(customer);
 
-        var item = await _itemRepository.GetByIdAsync(command.Request.ItemId, cancellationToken);
+        var item = await _itemService.GetByIdAsync(command.Request.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         if (item.UserId == customer.Id)

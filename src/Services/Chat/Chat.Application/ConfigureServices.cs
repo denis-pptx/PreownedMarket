@@ -1,5 +1,5 @@
 ﻿using Chat.Application.Behaviors;
-using Chat.Application.OptionsSetup;
+using Chat.Application.Options.Jwt;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;

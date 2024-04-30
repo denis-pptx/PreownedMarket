@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
@@ -11,10 +12,10 @@ namespace Chat.Application.Features.Conversations.Queries.GetConversation;
 
 public class GetConversationQueryHandler(
     IUserContext _userContext,
+    IItemService _itemService,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository,
-    IUserRepository _userRepository,
-    IItemRepository _itemRepository)
+    IUserRepository _userRepository)
     : IQueryHandler<GetConversationQuery, GetConversationResponse>
 {
     public async Task<GetConversationResponse> Handle(
@@ -34,7 +35,7 @@ public class GetConversationQueryHandler(
             throw new ForbiddenException(ConversationErrorMessages.AlienConversation);
         }
 
-        var item = await _itemRepository.GetByIdAsync(conversation.ItemId, cancellationToken);
+        var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         var members = await _userRepository.GetMembersByConversationIdAsync(conversation.Id, cancellationToken);

@@ -10,6 +10,6 @@ public class MessageBrokerOptionsSetup(IConfiguration _configuration)
 
     public void Configure(MessageBrokerOptions options)
     {
-        _configuration.GetSection(_sectionName).Bind(options);
+        _configuration.GetSection(nameof(MessageBrokerOptions)).Bind(options);
     }
 }

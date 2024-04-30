@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
 using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
@@ -9,8 +10,8 @@ namespace Chat.Application.Features.Conversations.Queries.GetConversatoinByItem;
 
 public class GetConversationByItemQueryHandler(
     IUserContext _userContext,
-    IUserRepository _userRepository,
-    IItemRepository _itemRepository, 
+    IItemService _itemService,
+    IUserRepository _userRepository, 
     IMessageRepository _messageRepository,
     IConversationRepository _conversationRepository) 
     : IQueryHandler<GetConversationByItemQuery, GetConversationResponse>
@@ -19,7 +20,7 @@ public class GetConversationByItemQueryHandler(
         GetConversationByItemQuery query, 
         CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetByIdAsync(query.itemId, cancellationToken);
+        var item = await _itemService.GetByIdAsync(query.itemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         var userId = _userContext.UserId;

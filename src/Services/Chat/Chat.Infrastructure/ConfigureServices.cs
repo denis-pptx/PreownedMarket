@@ -1,9 +1,11 @@
 ﻿using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Consumers.Users;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Contexts;
 using Chat.Infrastructure.Options;
+using Chat.Infrastructure.Options.Grpc;
 using Chat.Infrastructure.Options.MongoDb;
 using Chat.Infrastructure.Repositories;
 using Chat.Infrastructure.Services;
@@ -19,13 +21,15 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
         services.ConfigureOptions<MongoDbOptionsSetup>()
-                .ConfigureOptions<MessageBrokerOptionsSetup>();
+                .ConfigureOptions<MessageBrokerOptionsSetup>()
+                .ConfigureOptions<GrpcOptionsSetup>();
 
         services.AddSingleton<IApplicationDbContext, ApplicationDbContext>()
                 .AddScoped<IUserContext, UserContext>();
 
         services.AddScoped<IMessageNotificationService, MessageNotificationService>()
-                .AddScoped<IConversationNotificationService, ConversationNofiticationService>(); 
+                .AddScoped<IConversationNotificationService, ConversationNofiticationService>()
+                .AddScoped<IItemService, ItemService>(); 
 
         services.AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IConversationRepository, ConversationRepository>()
@@ -57,6 +61,21 @@ public static class ConfigureServices
                 configurator.ConfigureEndpoints(context);
             });
         });
+
+        services
+            .AddGrpcClient<Protos.Item.ItemClient>((provider, options) =>
+            {
+                var grpcOptions = provider.GetRequiredService<IOptions<GrpcOptions>>().Value;
+                options.Address = new Uri(grpcOptions.ItemHost);
+            })
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+                handler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+                return handler;
+            });
 
         return services;
     }

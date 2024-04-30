@@ -14,6 +14,4 @@ public class ApplicationDbContext(IOptions<MongoDbOptions> options)
     public IMongoCollection<Message> Messages => Collection<Message>();
 
     public IMongoCollection<User> Users => Collection<User>();
-
-    public IMongoCollection<Item> Items => Collection<Item>();
 }
