@@ -3,6 +3,7 @@ using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Protos;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Implementations.Item;
+using Item.DataAccess.Data.Initializers.Values;
 
 namespace Item.BusinessLogic.Services.Grpc;
 
@@ -21,7 +22,7 @@ public class ItemService(IItemRepository _itemRepository)
         }
 
         var item = await _itemRepository.FirstOrDefaultAsync(
-            new ItemWithImagesSpecification(id), 
+            new ItemWithAllSpecification(id), 
             context.CancellationToken);
 
         if (item is null)
@@ -36,6 +37,7 @@ public class ItemService(IItemRepository _itemRepository)
             Id = item.Id.ToString(),
             Title = item.Title,
             FirstImagePath = item.Images.FirstOrDefault()?.FilePath,
+            IsActive = item.Status!.Equals(StatusValues.Active),
             UserId = item.UserId.ToString()
         };
     }

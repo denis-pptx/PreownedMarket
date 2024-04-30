@@ -18,5 +18,6 @@ message GetItemResponse {
     string id = 1;
     string title = 2;
     google.protobuf.StringValue first_image_Path = 3;
-    string user_id = 4;
+    bool is_active = 4;
+    string user_id = 5;
 }

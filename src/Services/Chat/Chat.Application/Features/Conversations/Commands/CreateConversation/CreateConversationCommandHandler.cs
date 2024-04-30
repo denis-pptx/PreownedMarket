@@ -46,6 +46,11 @@ public class CreateConversationCommandHandler(
         {
             throw new ConflictException(ConversationErrorMessages.AlreadyExists);
         }
+        
+        if (item.IsActive == false)
+        {
+            throw new ConflictException(ConversationErrorMessages.CreateOnInactiveItem);
+        }
 
         var seller = await _userRepository.GetByIdAsync(item.UserId, cancellationToken);
         NotFoundException.ThrowIfNull(seller);

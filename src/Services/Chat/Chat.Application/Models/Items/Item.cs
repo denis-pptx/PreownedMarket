@@ -4,4 +4,5 @@ public record Item(
     Guid Id,
     string Title,
     string? FirstImagePath,
+    bool IsActive,
     Guid UserId);

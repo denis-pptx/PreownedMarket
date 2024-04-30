@@ -24,6 +24,7 @@ public class ItemService(Protos.Item.ItemClient _itemClient)
                 Guid.Parse(itemResponse.Id),
                 itemResponse.Title,
                 itemResponse.FirstImagePath,
+                itemResponse.IsActive,
                 Guid.Parse(itemResponse.UserId));
         }
         catch (RpcException ex) when (ex.Status.StatusCode == StatusCode.NotFound)

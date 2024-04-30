@@ -15,6 +15,10 @@ public static class ConversationErrorMessages
         "Such a conversation already exists.");
 
     public static ErrorMessage DeleteAlienConversation => new(
-        "Message.DeleteAlienMessage",
+        "Conversation.DeleteAlienConversation",
         "Сan't delete someone else's conversation.");
+
+    public static ErrorMessage CreateOnInactiveItem => new(
+        "Conversation.CreateOnInactiveItem",
+        "Can't create conversation on an inactive item");
 }
