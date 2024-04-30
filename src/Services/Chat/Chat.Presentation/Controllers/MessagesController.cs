@@ -1,7 +1,7 @@
 ﻿using Chat.Application.Features.Messages.Commands.CreateMessage;
 using Chat.Application.Features.Messages.Commands.DeleteMessage;
 using Chat.Application.Features.Messages.Commands.UpdateMessage;
-using Chat.Application.Models.DataTransferObjects.Messages.Requests;
+using Chat.Application.Models.Messages.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

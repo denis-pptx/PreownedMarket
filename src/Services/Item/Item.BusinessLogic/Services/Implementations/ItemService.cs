@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Contracts.Items;
 using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
@@ -11,6 +12,7 @@ using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Implementations.Item;
 using Item.DataAccess.Transactions.Interfaces;
+using MassTransit;
 using System.Linq.Expressions;
 
 namespace Item.BusinessLogic.Services.Implementations;
@@ -23,6 +25,7 @@ public class ItemService(
     ICurrentUserService _currentUserService,
     IItemImageService _imageService,
     ITransactionManager _transactionManager,
+    IPublishEndpoint _publishEndpoint,
     IMapper _mapper) 
     : IItemService
 {
@@ -117,6 +120,8 @@ public class ItemService(
             await _imageService.DeleteAllAttachedImagesAsync(item.Id, token);
 
             await _itemRepository.DeleteAsync(item, token);
+
+            await _publishEndpoint.Publish(new ItemDeletedEvent(item.Id), token);
 
             return item;
         }

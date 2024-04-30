@@ -1,4 +1,5 @@
-﻿using Chat.Domain.Entities;
+﻿using Chat.Application.Models.Items;
+using Chat.Domain.Entities;
 
 namespace Chat.Application.Abstractions.Grpc;
 

@@ -2,7 +2,7 @@
 using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
-using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
+using Chat.Application.Models.Conversations.Responses;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 

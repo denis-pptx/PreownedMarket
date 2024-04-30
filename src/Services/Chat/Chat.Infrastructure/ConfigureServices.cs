@@ -1,6 +1,7 @@
 ﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Notifications;
+using Chat.Application.Consumers.Items;
 using Chat.Application.Consumers.Users;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Contexts;
@@ -29,12 +30,11 @@ public static class ConfigureServices
 
         services.AddScoped<IMessageNotificationService, MessageNotificationService>()
                 .AddScoped<IConversationNotificationService, ConversationNofiticationService>()
-                .AddScoped<IItemService, ItemService>(); 
+                .AddScoped<IItemService, ItemService>();
 
         services.AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IConversationRepository, ConversationRepository>()
-                .AddScoped<IMessageRepository, MessageRepository>()
-                .AddScoped<IItemRepository, ItemRepository>();
+                .AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -42,11 +42,16 @@ public static class ConfigureServices
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
 
+            string applicationName = Assembly.GetExecutingAssembly().GetName().Name!.Split('.').First().ToLower();
+
             busConfigurator.AddConsumer<UserCreatedConsumer>()
-                .Endpoint(x => x.InstanceId = "chat");
+                .Endpoint(x => x.InstanceId = applicationName);
 
             busConfigurator.AddConsumer<UserDeletedConsumer>()
-                .Endpoint(x => x.InstanceId = "chat");
+                .Endpoint(x => x.InstanceId = applicationName);
+
+            busConfigurator.AddConsumer<ItemDeletedConsumer>()
+                .Endpoint(x => x.InstanceId = applicationName);
 
             busConfigurator.UsingRabbitMq((context, configurator) =>
             {

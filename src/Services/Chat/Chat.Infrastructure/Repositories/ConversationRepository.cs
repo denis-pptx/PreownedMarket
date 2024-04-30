@@ -27,4 +27,19 @@ public class ConversationRepository(IApplicationDbContext dbContext)
             conversation => conversation.MembersIds.Contains(userId), 
             token);
     }
+
+    public async Task DeleteByItemIdAsync(Guid itemId, CancellationToken token = default)
+    {
+        await _collection.DeleteManyAsync(
+            conversation => conversation.ItemId == itemId,
+            token);
+    }
+
+    public async Task<IEnumerable<Guid>> GetConversationsIdsByItemIdAsync(Guid itemId, CancellationToken token = default)
+    {
+        return await _collection
+            .Find(conversation => conversation.ItemId == itemId)
+            .Project(conversation => conversation.Id)
+            .ToListAsync(token);
+    }
 }

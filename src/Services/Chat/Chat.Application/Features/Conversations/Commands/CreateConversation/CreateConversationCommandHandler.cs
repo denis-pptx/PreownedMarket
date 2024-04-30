@@ -4,7 +4,7 @@ using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
-using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
+using Chat.Application.Models.Conversations.Responses;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;

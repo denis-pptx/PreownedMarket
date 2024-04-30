@@ -6,7 +6,6 @@ namespace Chat.Application.Consumers.Users;
 
 public class UserDeletedConsumer(
     IUserRepository _userRepository,
-    IItemRepository _itemRepository,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository) 
     : IConsumer<UserDeletedEvent>
@@ -21,8 +20,6 @@ public class UserDeletedConsumer(
         }
 
         await _userRepository.DeleteAsync(user, context.CancellationToken);
-
-        await _itemRepository.DeleteByUserIdAsync(user.Id, context.CancellationToken);
 
         await _conversationRepository.DeleteByUserIdAsync(user.Id, context.CancellationToken);
 

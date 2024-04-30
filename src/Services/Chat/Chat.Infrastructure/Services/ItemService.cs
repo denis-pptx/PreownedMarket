@@ -4,7 +4,7 @@ using Grpc.Core;
 
 namespace Chat.Infrastructure.Services;
 
-using Item = Domain.Entities.Item;
+using Item = Application.Models.Items.Item;
 
 public class ItemService(Protos.Item.ItemClient _itemClient) 
     : IItemService
@@ -20,13 +20,11 @@ public class ItemService(Protos.Item.ItemClient _itemClient)
         {
             var itemResponse = await _itemClient.GetItemAsync(request, cancellationToken: token);
 
-            return new Item
-            {
-                Id = Guid.Parse(itemResponse.Id),
-                Title = itemResponse.Title,
-                FirstImagePath = itemResponse.FirstImagePath,
-                UserId = Guid.Parse(itemResponse.UserId),
-            };
+            return new Item(
+                Guid.Parse(itemResponse.Id),
+                itemResponse.Title,
+                itemResponse.FirstImagePath,
+                Guid.Parse(itemResponse.UserId));
         }
         catch (RpcException ex) when (ex.Status.StatusCode == StatusCode.NotFound)
         {

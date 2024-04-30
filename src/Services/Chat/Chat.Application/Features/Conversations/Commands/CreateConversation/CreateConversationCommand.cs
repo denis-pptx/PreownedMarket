@@ -1,6 +1,6 @@
 ﻿using Chat.Application.Abstractions.Messaging;
-using Chat.Application.Models.DataTransferObjects.Conversations.Requests;
-using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
+using Chat.Application.Models.Conversations.Requests;
+using Chat.Application.Models.Conversations.Responses;
 
 namespace Chat.Application.Features.Conversations.Commands.CreateConversation;
 

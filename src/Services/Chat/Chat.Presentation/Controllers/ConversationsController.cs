@@ -3,7 +3,7 @@ using Chat.Application.Features.Conversations.Commands.DeleteConversation;
 using Chat.Application.Features.Conversations.Queries.GetConversation;
 using Chat.Application.Features.Conversations.Queries.GetConversatoinByItem;
 using Chat.Application.Features.Conversations.Queries.GetUserConversations;
-using Chat.Application.Models.DataTransferObjects.Conversations.Requests;
+using Chat.Application.Models.Conversations.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
