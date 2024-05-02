@@ -13,7 +13,8 @@ public static class ConfigureServices
             .AddScoped<IUnitOfWork, UnitOfWork>()
             .AddScoped<IStatusRepository, StatusRepository>()
             .AddScoped<IRegionRepository, RegionRepository>()
-            .AddScoped<ICategoryRepository, CategoryRepository>();
+            .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<ICityRepository, CityRepository>();
 
         return services;
     }
