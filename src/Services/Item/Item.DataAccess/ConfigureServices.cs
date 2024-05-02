@@ -12,7 +12,8 @@ public static class ConfigureServices
         services
             .AddScoped<IUnitOfWork, UnitOfWork>()
             .AddScoped<IStatusRepository, StatusRepository>()
-            .AddScoped<IRegionRepository, RegionRepository>();
+            .AddScoped<IRegionRepository, RegionRepository>()
+            .AddScoped<ICategoryRepository, CategoryRepository>();
 
         return services;
     }

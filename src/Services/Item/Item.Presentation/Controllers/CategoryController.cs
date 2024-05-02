@@ -15,7 +15,7 @@ public class CategoryController(ICategoryService _categoryService)
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-        var result = await _categoryService.GetAsync(cancellationToken);
+        var result = await _categoryService.GetAllAsync(cancellationToken);
 
         return Ok(result);
     }

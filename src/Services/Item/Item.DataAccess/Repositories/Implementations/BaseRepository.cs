@@ -21,21 +21,17 @@ public abstract class BaseRepository<TEntity>(ApplicationDbContext _dbContext)
             cancellationToken);
     }
 
-    public virtual TEntity Add(TEntity entity)
+    public virtual void Add(TEntity entity)
     {
         _entities.Add(entity);
-
-        return entity;
     }
 
-    public virtual TEntity Update(TEntity entity)
+    public virtual void Update(TEntity entity)
     {
         _entities.Update(entity);
-
-        return entity;
     }
 
-    public virtual void Delete(TEntity entity)
+    public virtual void Remove(TEntity entity)
     {
         _entities.Remove(entity);
     }
