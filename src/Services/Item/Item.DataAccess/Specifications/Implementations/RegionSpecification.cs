@@ -2,14 +2,14 @@
 
 namespace Item.DataAccess.Specifications.Implementations;
 
-public class RegionWithCitiesSpecification : BaseSpecification<Region>
+public class RegionSpecification : BaseSpecification<Region>
 {
-    public RegionWithCitiesSpecification()
+    public RegionSpecification()
     {
         AddInclude(x => x.Cities);
     }
 
-    public RegionWithCitiesSpecification(Guid id) : base(x => x.Id.Equals(id)) 
+    public RegionSpecification(Guid id) : base(x => x.Id.Equals(id))
     {
         AddInclude(x => x.Cities);
     }

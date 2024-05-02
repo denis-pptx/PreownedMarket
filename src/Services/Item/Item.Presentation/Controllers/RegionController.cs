@@ -15,7 +15,7 @@ public class RegionController(IRegionService _regionService)
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-        var result = await _regionService.GetAsync(cancellationToken);
+        var result = await _regionService.GetAllAsync(cancellationToken);
 
         return Ok(result);
     }
