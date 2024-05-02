@@ -2,6 +2,6 @@
 
 public interface ICurrentUserService
 {
-    Guid? UserId { get; }
-    string? Role { get; }
+    Guid UserId { get; }
+    string Role { get; }
 }

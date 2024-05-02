@@ -1,22 +1,24 @@
-﻿using Item.BusinessLogic.Services.Interfaces;
+﻿using Item.BusinessLogic.Extensions;
+using Item.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-public class CurrentUserService(IHttpContextAccessor httpContextAccessor) 
+public class CurrentUserService(IHttpContextAccessor _httpContextAccessor) 
     : ICurrentUserService
 {
-    private readonly HttpContext _httpContext = httpContextAccessor.HttpContext!;
-    public Guid? UserId
-    {
-        get
-        {
-            var stringId = _httpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public Guid UserId =>
+        _httpContextAccessor
+            .HttpContext?
+            .User
+            .GetUserId() ??
+        throw new ApplicationException("User context is unavailable");
 
-            return stringId is null ? null : Guid.Parse(stringId);
-        }
-    }
-
-    public string? Role => _httpContext.User?.FindFirstValue(ClaimTypes.Role);
+    public string Role =>
+        _httpContextAccessor
+            .HttpContext?
+            .User
+            .GetUserRole() ?? 
+        throw new ApplicationException("User context is unavailable");
 }
