@@ -1,12 +1,14 @@
-﻿namespace Item.DataAccess.Specifications.Implementations.Item;
+﻿namespace Item.DataAccess.Specifications.Implementations;
 
-public class ItemWithAllSpecification : BaseSpecification<Models.Entities.Item>
+public class ItemSpecification 
+    : BaseSpecification<Models.Entities.Item>
 {
-    public ItemWithAllSpecification(Guid id) : base(x => x.Id == id)
+    public ItemSpecification(Guid id) 
+        : base(x => x.Id == id)
     {
         ConfigureIncludes();
     }
-    public ItemWithAllSpecification()
+    public ItemSpecification()
     {
         ConfigureIncludes();
     }

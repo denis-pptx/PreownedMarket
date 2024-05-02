@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Item.BusinessLogic.Services.Grpc;
+using Item.BusinessLogic.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 

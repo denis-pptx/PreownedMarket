@@ -7,5 +7,7 @@ using Item = Models.Entities.Item;
 
 public interface ILikeRepository
 {
-    Task<IEnumerable<Item>> GetByUserIdAsync(Guid userId, ISpecification<Item> itemSpecification, CancellationToken token = default);
+    Task<Like?> GetByItemAndUserAsync(Guid itemId, Guid userId, CancellationToken cancellationToken = default);
+    void Add(Like like);
+    void Remove(Like like);
 }

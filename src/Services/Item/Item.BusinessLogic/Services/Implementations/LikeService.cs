@@ -3,44 +3,41 @@ using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Specifications.Implementations.Item;
+using Item.DataAccess.Repositories.UnitOfWork;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
 using Item = DataAccess.Models.Entities.Item;
 
 public class LikeService(
+    IUnitOfWork _unitOfWork,
     ILikeRepository _likeRepository, 
-    IRepository<Item> _itemRepository,
+    IItemRepository _itemRepository,
     ICurrentUserService _currentUserService) 
     : ILikeService
 {
-    public async Task<IEnumerable<Item>> GetLikedItemsAsync(CancellationToken token = default)
+    public async Task<IEnumerable<Item>> GetLikedItemsAsync(CancellationToken cancellationToken = default)
     {
-        var currentUserId = _currentUserService.UserId!.Value;
+        var userId = _currentUserService.UserId;
 
-        var specification = new ItemWithAllSpecification();
+        var items = await _itemRepository.GetLikedByUserAsync(userId, cancellationToken);
 
-        var likedItems = await _likeRepository.GetByUserIdAsync(currentUserId, specification, token);
-
-        return likedItems;
+        return items;
     }
 
-    public async Task LikeItemAsync(Guid itemId, CancellationToken token = default)
+    public async Task LikeItemAsync(Guid itemId, CancellationToken cancellationToken = default)
     {
-        var item = await _itemRepository.SingleOrDefaultAsync(x => x.Id == itemId, token);
-
+        var item = await _itemRepository.GetByIdAsync(itemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
-        var currentUserId = _currentUserService.UserId!.Value;
+        var userId = _currentUserService.UserId!;
 
-        if (item.UserId == currentUserId)
+        if (item.UserId == userId)
         {
             throw new ConflictException(LikeErrorMessages.LikeYourItem);
         }
 
-        var existingLike = await _likeRepository.SingleOrDefaultAsync(
-            x => x.ItemId.Equals(itemId) && x.UserId.Equals(currentUserId), token);
+        var existingLike = await _likeRepository.GetByItemAndUserAsync(itemId, userId, cancellationToken);
 
         if (existingLike is not null)
         {
@@ -49,25 +46,28 @@ public class LikeService(
 
         var like = new Like
         {
-            UserId = currentUserId,
+            UserId = userId,
             ItemId = itemId
         };
 
-        await _likeRepository.AddAsync(like, token);
+        _likeRepository.Add(like);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UnlikeItemAsync(Guid itemId, CancellationToken token = default)
+    public async Task UnlikeItemAsync(Guid itemId, CancellationToken cancellationToken = default)
     {
-        var currentUserId = _currentUserService.UserId!.Value;
+        var userId = _currentUserService.UserId;
 
-        var existingLike = await _likeRepository.SingleOrDefaultAsync(
-            x => x.ItemId.Equals(itemId) && x.UserId.Equals(currentUserId), token);
+        var existingLike = await _likeRepository.GetByItemAndUserAsync(itemId, userId, cancellationToken);
 
         if (existingLike is null)
         {
             throw new ConflictException(LikeErrorMessages.NotLiked);
         }
 
-        await _likeRepository.DeleteAsync(existingLike, token);
+        _likeRepository.Remove(existingLike);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

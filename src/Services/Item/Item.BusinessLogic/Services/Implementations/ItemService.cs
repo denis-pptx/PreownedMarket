@@ -6,22 +6,21 @@ using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Data.Initializers.Values;
 using Item.DataAccess.Models;
-using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Models.Enums;
 using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Specifications.Implementations.Item;
+using Item.DataAccess.Repositories.UnitOfWork;
 using Item.DataAccess.Transactions.Interfaces;
 using MassTransit;
-using System.Linq.Expressions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
 using Item = DataAccess.Models.Entities.Item;
 
 public class ItemService(
+    IUnitOfWork _unitOfWork,
     IItemRepository _itemRepository, 
-    IRepository<Status> _statusRepository,
+    IStatusRepository _statusRepository,
     ICurrentUserService _currentUserService,
     IItemImageService _imageService,
     ITransactionManager _transactionManager,
@@ -29,33 +28,35 @@ public class ItemService(
     IMapper _mapper) 
     : IItemService
 {
-    public async Task<Item> CreateAsync(ItemDto itemDto, CancellationToken token)
+    public async Task<Item> CreateAsync(ItemDto itemDto, CancellationToken cancellationToken)
     {
         var item = _mapper.Map<ItemDto, Item>(itemDto);
 
-        item.Status = await _statusRepository.SingleOrDefaultAsync(x => x.NormalizedName == StatusValues.UnderReview.NormalizedName, token);
+        item.Status = await _statusRepository.GetByNormalizedNameAsync(StatusValues.UnderReview.NormalizedName, cancellationToken);
 
-        item.UserId = _currentUserService.UserId!.Value;
+        item.UserId = _currentUserService.UserId;
 
-        var createdItem = await _itemRepository.AddAsync(item, token);
+        _itemRepository.Add(item);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         try
         {
-            await _imageService.SaveAttachedImagesAsync(createdItem.Id, itemDto.AttachedImages, token);
+            await _imageService.SaveAttachedImagesAsync(item.Id, itemDto.AttachedImages, cancellationToken);
         }
         catch
         {
-            await DeleteByIdAsync(createdItem.Id, token);
+            await DeleteByIdAsync(item.Id, cancellationToken);
 
             throw;
         }
 
-        return createdItem;
+        return item;
     }
 
-    public async Task<Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken token)
+    public async Task<Item> UpdateAsync(Guid id, ItemDto itemDto, CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetByIdAsync(id, token);
+        var item = await _itemRepository.GetByIdAsync(id, cancellationToken);
 
         NotFoundException.ThrowIfNull(item);
 
@@ -70,42 +71,44 @@ public class ItemService(
             throw new ForbiddenException();
         }
 
-        using var transaction = await _transactionManager.BeginTransactionAsync(token);
+        using var transaction = await _transactionManager.BeginTransactionAsync(cancellationToken);
 
         _mapper.Map(itemDto, item);
 
-        item.Status = await _statusRepository.SingleOrDefaultAsync(x => x.Equals(StatusValues.UnderReview), token);
+        item.Status = await _statusRepository.GetByNormalizedNameAsync(StatusValues.UnderReview.NormalizedName, cancellationToken);
 
-        var updatedImage = await _itemRepository.UpdateAsync(item, token);
+        _itemRepository.Update(item);
 
-        var oldImages = await _imageService.GetItemImagesAsync(item.Id, token);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var oldImages = await _imageService.GetItemImagesAsync(item.Id, cancellationToken);
 
         try
         {
-            await _imageService.SaveAttachedImagesAsync(item.Id, itemDto.AttachedImages, token);
+            await _imageService.SaveAttachedImagesAsync(item.Id, itemDto.AttachedImages, cancellationToken);
 
-            await _imageService.DeleteAttachedImagesAsync(oldImages, token);
+            await _imageService.DeleteAttachedImagesAsync(oldImages, cancellationToken);
 
-            await transaction.CommitAsync(token);
+            await transaction.CommitAsync(cancellationToken);
 
-            return updatedImage;
+            return item;
         }
         catch
         {
-            var allImages = await _imageService.GetItemImagesAsync(item.Id, token);
+            var allImages = await _imageService.GetItemImagesAsync(item.Id, cancellationToken);
             var imagesToDelete = allImages.ExceptBy(oldImages.Select(x => x.Id), x => x.Id);
 
-            await _imageService.DeleteAttachedImagesAsync(imagesToDelete, token);
+            await _imageService.DeleteAttachedImagesAsync(imagesToDelete, cancellationToken);
 
-            await transaction.RollbackAsync(token);
+            await transaction.RollbackAsync(cancellationToken);
 
             throw;
         }
     }
 
-    public async Task<Item> DeleteByIdAsync(Guid id, CancellationToken token)
+    public async Task<Item> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetByIdAsync(id, token);
+        var item = await _itemRepository.GetByIdAsync(id, cancellationToken);
 
         NotFoundException.ThrowIfNull(item);
 
@@ -117,11 +120,13 @@ public class ItemService(
             currentRole == nameof(Role.Administrator) ||
             currentRole == nameof(Role.Moderator))
         {
-            await _imageService.DeleteAllAttachedImagesAsync(item.Id, token);
+            await _imageService.DeleteAllAttachedImagesAsync(item.Id, cancellationToken);
 
-            await _itemRepository.DeleteAsync(item, token);
+            _itemRepository.Delete(item);
 
-            await _publishEndpoint.Publish(new ItemDeletedEvent(item.Id), token);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            await _publishEndpoint.Publish(new ItemDeletedEvent(item.Id), cancellationToken);
 
             return item;
         }
@@ -131,23 +136,20 @@ public class ItemService(
         }
     }
 
-    public async Task<Item> ChangeStatus(Guid id, UpdateStatusDto updateStatusDto, CancellationToken token = default)
+    public async Task<Item> ChangeStatus(Guid id, UpdateStatusDto updateStatusDto, CancellationToken cancellationToken = default)
     {
-        var specification = new ItemWithStatusSpecification(id);
-        var item = await _itemRepository.FirstOrDefaultAsync(specification, token);
-
+        var item = await _itemRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
-        var currentStatus = item.Status!;
-
-        var newStatus = await _statusRepository.FirstOrDefaultAsync(x => x.NormalizedName == updateStatusDto.NormalizedName, token);
-
+        var newStatus = await _statusRepository.GetByNormalizedNameAsync(updateStatusDto.NormalizedName, cancellationToken);
         NotFoundException.ThrowIfNull(newStatus);
 
         var currentRole = _currentUserService.Role;
 
         if (_currentUserService.UserId == item.UserId)
         {
+            var currentStatus = await _statusRepository.GetByItemIdAsync(id, cancellationToken);
+
             if ((currentStatus.Equals(StatusValues.Active) && newStatus.Equals(StatusValues.Inactive)) ||
                 (currentStatus.Equals(StatusValues.Inactive) && newStatus.Equals(StatusValues.Active)))
             {
@@ -158,7 +160,8 @@ public class ItemService(
                 throw new ConflictException(ItemErrorMessages.StatusFailure);
             }
         }
-        else if (currentRole == nameof(Role.Administrator) || currentRole == nameof(Role.Moderator))
+        else if (currentRole == nameof(Role.Administrator) || 
+            currentRole == nameof(Role.Moderator))
         {
             item.Status = newStatus;
         }
@@ -167,13 +170,16 @@ public class ItemService(
             throw new ForbiddenException();
         }
 
-        return await _itemRepository.UpdateAsync(item, token);
+        _itemRepository.Update(item);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return item;
     }
 
     public async Task<Item> GetByIdAsync(Guid id, CancellationToken token)
     {
-        var specification = new ItemWithAllSpecification(id);
-        var item = await _itemRepository.FirstOrDefaultAsync(specification, token);
+        var item = await _itemRepository.GetByIdAsync(id, token);
 
         NotFoundException.ThrowIfNull(item);
 
@@ -182,9 +188,7 @@ public class ItemService(
 
     public async Task<PagedList<Item>> GetAsync(ItemFilterRequest filterRequest, CancellationToken token = default)
     {
-        var specification = new ItemWithAllSpecification();
-
-        var items = await _itemRepository.GetAsync(filterRequest, specification, token);    
+        var items = await _itemRepository.GetAsync(filterRequest, token);    
 
         return items;
     }

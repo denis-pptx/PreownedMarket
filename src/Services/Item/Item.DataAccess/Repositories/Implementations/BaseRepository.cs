@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Item.DataAccess.Repositories.Implementations;
 
-public abstract class BaseRepository<TEntity>(ApplicationDbContext _dbContext)
+public abstract class BaseRepository<TEntity>(ApplicationDbContext dbContext)
     where TEntity : BaseEntity
 {
-    protected readonly DbSet<TEntity> _entities = _dbContext.Set<TEntity>();
+    protected readonly ApplicationDbContext _dbContext = dbContext;
+    protected readonly DbSet<TEntity> _entities = dbContext.Set<TEntity>();
 
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
     {

@@ -10,11 +10,11 @@ namespace Item.DataAccess.Repositories.Implementations;
 public class RegionRepository(ApplicationDbContext dbContext) 
     : BaseRepository<Region>(dbContext), IRegionRepository
 {
-    public override async Task<Region?> GetByIdAsync(Guid id, CancellationToken token = default)
+    public override async Task<Region?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _entities
             .ApplySpecification(new RegionSpecification(id))
-            .SingleOrDefaultAsync(entity => entity.Id == id, token);
+            .SingleOrDefaultAsync(entity => entity.Id == id, cancellationToken);
     }
 
     public override async Task<IEnumerable<Region>> GetAllAsync(CancellationToken cancellationToken = default)

@@ -14,7 +14,9 @@ public static class ConfigureServices
             .AddScoped<IStatusRepository, StatusRepository>()
             .AddScoped<IRegionRepository, RegionRepository>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
-            .AddScoped<ICityRepository, CityRepository>();
+            .AddScoped<ICityRepository, CityRepository>()
+            .AddScoped<ILikeRepository, LikeRepository>()
+            .AddScoped<IItemRepository, ItemRepository>();
 
         return services;
     }

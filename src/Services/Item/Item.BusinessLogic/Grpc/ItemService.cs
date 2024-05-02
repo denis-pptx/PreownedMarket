@@ -5,11 +5,11 @@ using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Implementations.Item;
 using Item.DataAccess.Data.Initializers.Values;
 
-namespace Item.BusinessLogic.Services.Grpc;
+namespace Item.BusinessLogic.Grpc;
 
 using Item = DataAccess.Models.Entities.Item;
 
-public class ItemService(IItemRepository _itemRepository) 
+public class ItemService(IItemRepository _itemRepository)
     : Protos.Item.ItemBase
 {
     public override async Task<GetItemResponse> GetItem(GetItemRequest request, ServerCallContext context)
@@ -17,18 +17,18 @@ public class ItemService(IItemRepository _itemRepository)
         if (!Guid.TryParse(request.Id, out var id))
         {
             throw new RpcException(new Status(
-                StatusCode.InvalidArgument, 
+                StatusCode.InvalidArgument,
                 CommonErrorMessages.InvalidGuid.Description));
         }
 
         var item = await _itemRepository.FirstOrDefaultAsync(
-            new ItemWithAllSpecification(id), 
+            new ItemWithAllSpecification(id),
             context.CancellationToken);
 
         if (item is null)
         {
             throw new RpcException(new Status(
-                StatusCode.NotFound, 
+                StatusCode.NotFound,
                 GenericErrorMessages<Item>.NotFound.Description));
         }
 

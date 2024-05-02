@@ -8,5 +8,10 @@ using Item = Models.Entities.Item;
 
 public interface IItemRepository 
 {
-    Task<PagedList<Item>> GetAsync(ItemFilterRequest filterRequest, ISpecification<Item> specification, CancellationToken token = default);
+    Task<Item?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<PagedList<Item>> GetAsync(ItemFilterRequest filterRequest, CancellationToken token = default);
+    Task<IEnumerable<Item>> GetLikedByUserAsync(Guid userId, CancellationToken token = default);
+    void Add(Item item);
+    void Update(Item item);
+    void Delete(Item item);
 }

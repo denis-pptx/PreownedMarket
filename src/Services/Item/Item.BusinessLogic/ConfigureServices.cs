@@ -10,7 +10,11 @@ public static class ConfigureServices
     {
         services
             .AddScoped<IStatusService, StatusService>()
-            .AddScoped<IRegionService, RegionService>();
+            .AddScoped<IRegionService, RegionService>()
+            .AddScoped<ICityService, CityService>()
+            .AddScoped<ICategoryService, CategoryService>()
+            .AddScoped<ILikeService, LikeService>()
+            .AddScoped<IItemService, ItemService>();
 
         return services;
     }
