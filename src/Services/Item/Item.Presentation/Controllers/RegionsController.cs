@@ -8,10 +8,10 @@ namespace Item.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RegionController(IRegionService _regionService) 
+public class RegionsController(IRegionService _regionService) 
     : ControllerBase
 {
-    // GET: api/<RegionController>
+    // GET: api/<RegionsController>
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
@@ -20,7 +20,7 @@ public class RegionController(IRegionService _regionService)
         return Ok(result);
     }
 
-    // GET: api/<RegionController>/<id>
+    // GET: api/<RegionsController>/<id>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -29,7 +29,7 @@ public class RegionController(IRegionService _regionService)
         return Ok(result);
     }
 
-    // POST: api/<RegionController>
+    // POST: api/<RegionsController>
     [HttpPost]
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Post([FromBody] RegionDto categoryDto, CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ public class RegionController(IRegionService _regionService)
         return Ok(result);
     }
 
-    // PUT api/<RegionController>/<id>
+    // PUT api/<RegionsController>/<id>
     [HttpPut("{id:guid}")]
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] RegionDto categoryDto, CancellationToken cancellationToken)
@@ -49,7 +49,7 @@ public class RegionController(IRegionService _regionService)
         return Ok(result);
     }
 
-    // DELETE api/<RegionController>/<id>
+    // DELETE api/<RegionsController>/<id>
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)

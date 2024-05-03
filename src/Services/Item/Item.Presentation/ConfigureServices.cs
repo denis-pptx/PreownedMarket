@@ -15,6 +15,9 @@ public static class ConfigureServices
             .AddEndpointsApiExplorer()
             .AddSwaggerGen();
 
+        services.AddRouting(options => 
+            options.LowercaseUrls = true);
+
         services.AddHttpContextAccessor();
 
         services

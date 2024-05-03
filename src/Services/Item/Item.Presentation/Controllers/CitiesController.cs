@@ -8,53 +8,53 @@ namespace Item.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CategoryController(ICategoryService _categoryService) 
+public class CitiesController(ICityService _cityService)
     : ControllerBase
 {
-    // GET: api/<CategoryController>
+    // GET: api/<CitiesController>
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-        var result = await _categoryService.GetAllAsync(cancellationToken);
+       var result = await _cityService.GetAllAsync(cancellationToken);
 
         return Ok(result);
     }
 
-    // GET: api/<CategoryController>/<id>
+    // GET: api/<CitiesController>/<id>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.GetByIdAsync(id, cancellationToken);
+        var result = await _cityService.GetByIdAsync(id, cancellationToken);
 
         return Ok(result);
     }
 
-    // POST: api/<CategoryController>
+    // POST: api/<CitiesController>
     [HttpPost]
     [Authorize(Roles = nameof(Role.Administrator))]
-    public async Task<IActionResult> Post([FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> Post([FromBody] CityDto cityDto, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.CreateAsync(categoryDto, cancellationToken);
+        var result = await _cityService.CreateAsync(cityDto, cancellationToken);
 
         return Ok(result);
     }
 
-    // PUT api/<CategoryController>/<id>
+    // PUT api/<CitiesController>/<id>
     [HttpPut("{id:guid}")]
     [Authorize(Roles = nameof(Role.Administrator))]
-    public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] CityDto cityDto, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.UpdateAsync(id, categoryDto, cancellationToken);
+        var result = await _cityService.UpdateAsync(id, cityDto, cancellationToken);
 
         return Ok(result);
     }
 
-    // DELETE api/<CategoryController>/<id>
+    // DELETE api/<CitiesController>/<id>
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.DeleteByIdAsync(id, cancellationToken);
+        var result = await _cityService.DeleteByIdAsync(id, cancellationToken);
 
         return Ok(result);
     }

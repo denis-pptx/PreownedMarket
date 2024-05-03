@@ -8,13 +8,18 @@ public static class ConfigureServices
     {
         services.AddControllers();
 
-        services.AddEndpointsApiExplorer()
+        services
+            .AddEndpointsApiExplorer()
             .AddSwaggerGen();
 
-        services.AddProblemDetails()
+        services
+            .AddProblemDetails()
             .AddExceptionHandler<ValidationExceptionHandler>()
             .AddExceptionHandler<BaseApiExceptionHandler>();
 
         services.AddHttpContextAccessor();
+
+        services.AddRouting(options => 
+            options.LowercaseUrls = true);
     }
 }

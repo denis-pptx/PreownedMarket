@@ -5,10 +5,10 @@ namespace Item.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class StatusController(IStatusService _statusService) 
+public class StatusesController(IStatusService _statusService) 
     : Controller
 {
-    // GET: api/<StatusController>
+    // GET: api/<StatusesController>
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
@@ -17,7 +17,7 @@ public class StatusController(IStatusService _statusService)
         return Ok(result);
     }
 
-    // GET: api/<StatusController>/<id>
+    // GET: api/<StatusesController>/<id>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
