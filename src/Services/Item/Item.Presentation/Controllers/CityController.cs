@@ -15,7 +15,7 @@ public class CityController(ICityService _cityService)
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-       var result = await _cityService.GetAsync(cancellationToken);
+       var result = await _cityService.GetAllAsync(cancellationToken);
 
         return Ok(result);
     }

@@ -2,7 +2,6 @@
 using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Protos;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Specifications.Implementations.Item;
 using Item.DataAccess.Data.Initializers.Values;
 
 namespace Item.BusinessLogic.Grpc;
@@ -21,9 +20,7 @@ public class ItemService(IItemRepository _itemRepository)
                 CommonErrorMessages.InvalidGuid.Description));
         }
 
-        var item = await _itemRepository.FirstOrDefaultAsync(
-            new ItemWithAllSpecification(id),
-            context.CancellationToken);
+        var item = await _itemRepository.GetByIdAsync(id, context.CancellationToken);
 
         if (item is null)
         {

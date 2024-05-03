@@ -4,10 +4,8 @@ using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models.Entities;
-using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
-using Library.BLL.Services.Implementations;
 
 namespace Item.BusinessLogic.Services.Implementations;
 

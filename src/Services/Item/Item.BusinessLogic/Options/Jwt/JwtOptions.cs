@@ -1,4 +1,4 @@
-﻿namespace Item.BusinessLogic.Options;
+﻿namespace Item.BusinessLogic.Options.Jwt;
 
 public class JwtOptions
 {

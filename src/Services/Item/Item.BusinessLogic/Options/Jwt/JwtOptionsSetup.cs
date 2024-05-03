@@ -1,7 +1,7 @@
-﻿using Item.BusinessLogic.Options;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Item.Presentation.OptionsSetup;
+namespace Item.BusinessLogic.Options.Jwt;
 
 public class JwtOptionsSetup(IConfiguration _configuration)
     : IConfigureOptions<JwtOptions>
@@ -10,6 +10,6 @@ public class JwtOptionsSetup(IConfiguration _configuration)
 
     public void Configure(JwtOptions options)
     {
-        _configuration.GetSection(_sectionName).Bind(options);
+        _configuration.GetSection(nameof(JwtOptions)).Bind(options);
     }
 }

@@ -122,7 +122,7 @@ public class ItemService(
         {
             await _imageService.DeleteAllAttachedImagesAsync(item.Id, cancellationToken);
 
-            _itemRepository.Delete(item);
+            _itemRepository.Remove(item);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

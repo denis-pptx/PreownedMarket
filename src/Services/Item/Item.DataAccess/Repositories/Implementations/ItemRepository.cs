@@ -5,8 +5,6 @@ using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Common;
 using Item.DataAccess.Specifications.Implementations;
-using Item.DataAccess.Specifications.Implementations.Item;
-using Item.DataAccess.Specifications.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
