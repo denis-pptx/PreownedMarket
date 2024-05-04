@@ -1,6 +1,8 @@
 ﻿using Identity.Domain.Enums;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Identity.Infrastructure.Data.Seed;
 
@@ -16,6 +18,7 @@ public static class SeedUsers
             {
                 user = new User
                 {
+                    Id = ComputeGuidString(role),
                     UserName = role,
                     Email = $"{role}@mail.ru",
                 };
@@ -26,5 +29,14 @@ public static class SeedUsers
                 await userManager.AddToRoleAsync(user, role);
             }
         }
+    }
+
+    private static string ComputeGuidString(string input)
+    {
+        byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(input));
+
+        var guid = new Guid(hash);
+
+        return guid.ToString();
     }
 }

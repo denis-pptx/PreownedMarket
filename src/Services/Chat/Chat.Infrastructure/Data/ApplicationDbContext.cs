@@ -4,7 +4,7 @@ using Chat.Infrastructure.Options.MongoDb;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Chat.Infrastructure.Contexts;
+namespace Chat.Infrastructure.Data;
 
 public class ApplicationDbContext(IOptions<MongoDbOptions> options)
     : MongoDbContext(options), IApplicationDbContext

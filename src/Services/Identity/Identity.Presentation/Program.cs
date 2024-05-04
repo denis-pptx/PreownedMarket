@@ -2,6 +2,7 @@ using Identity.Application;
 using Identity.Infrastructure;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Data.Seed;
+using Identity.Presentation;
 using Identity.Presentation.Extensions;
 using Serilog;
 
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddApplicationServices()
     .AddInfrastructureServices(builder.Configuration)
-    .AddApplicationServices();
+    .AddPresentationServices();
 
 builder.Host.UseLogging();
 

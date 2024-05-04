@@ -4,7 +4,7 @@ namespace Chat.Presentation;
 
 public static class ConfigureServices
 {
-    public static void AddWebUIServices(this IServiceCollection services)
+    public static void AddPresentationServices(this IServiceCollection services)
     {
         services.AddControllers();
 

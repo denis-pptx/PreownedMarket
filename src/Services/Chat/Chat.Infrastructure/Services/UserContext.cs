@@ -2,15 +2,15 @@
 using Chat.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Http;
 
-namespace Chat.Infrastructure.Contexts;
+namespace Chat.Infrastructure.Services;
 
-public class UserContext(IHttpContextAccessor httpContextAccessor) 
+public class UserContext(IHttpContextAccessor httpContextAccessor)
     : IUserContext
 {
-    public Guid UserId => 
+    public Guid UserId =>
         httpContextAccessor
             .HttpContext?
             .User
-            .GetUserId() ?? 
+            .GetUserId() ??
         throw new ApplicationException("User context is unavailable");
 }
