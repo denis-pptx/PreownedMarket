@@ -55,7 +55,7 @@ public class ItemRepository(ApplicationDbContext dbContext)
             query = query.OrderBy(GetSortProperty(filter.SortColumn));
         }
 
-        var items = await PagedList<Item>.CreateAsync(query, filter.Page, filter.PageSize);
+        var items = await PagedList<Item>.CreateAsync(query, filter.Page, filter.PageSize, cancellationToken);
 
         return items;
     }
