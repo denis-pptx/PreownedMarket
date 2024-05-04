@@ -1,4 +1,8 @@
-﻿namespace Identity.Application.Behaviours;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
+
+namespace Identity.Application.Behaviours;
 
 public class RequestLoggingPipelineBehavior<TRequest, TResponse>(
     ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> _logger)

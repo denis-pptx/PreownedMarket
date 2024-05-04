@@ -1,4 +1,5 @@
-﻿using Identity.Application.Behaviours;
+﻿using Identity.Application.Abstractions;
+using Identity.Application.Behaviours;
 using Identity.Application.Features.Identity.Commands.LoginUser;
 using Identity.Application.Mappings;
 using Identity.Application.Options.Jwt;

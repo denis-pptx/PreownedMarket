@@ -1,4 +1,8 @@
 ﻿using Identity.Application.Options.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Identity.Presentation.OptionsSetup;
 

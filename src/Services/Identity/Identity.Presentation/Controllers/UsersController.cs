@@ -1,5 +1,12 @@
-﻿using Identity.Application.Features.Users.Commands.UpdateUserRole;
+﻿using Identity.Application.Features.Users.Commands.DeleteUser;
+using Identity.Application.Features.Users.Commands.UpdateUserRole;
+using Identity.Application.Features.Users.Queries.GetAllUsers;
+using Identity.Application.Features.Users.Queries.GetUserById;
 using Identity.Application.Models.DataTransferObjects.Users.Requests;
+using Identity.Domain.Enums;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Presentation.Controllers;
 

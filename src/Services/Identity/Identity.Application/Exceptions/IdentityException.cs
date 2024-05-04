@@ -1,4 +1,7 @@
-﻿namespace Identity.Application.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Application.Exceptions;
 
 public class IdentityException : BaseApiException
 {

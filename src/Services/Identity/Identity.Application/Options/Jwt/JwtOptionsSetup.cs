@@ -1,5 +1,4 @@
-﻿using Identity.Application.Options.Jwt;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Identity.Application.Options.Jwt;

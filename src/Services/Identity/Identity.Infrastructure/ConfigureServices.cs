@@ -1,8 +1,11 @@
-﻿using Identity.Infrastructure.Data;
+﻿using Identity.Application.Abstractions;
+using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Options.MessageBroker;
 using Identity.Infrastructure.Services;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Identity.Infrastructure;

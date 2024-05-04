@@ -1,5 +1,4 @@
-﻿using Identity.Infrastructure.Options.MessageBroker;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Identity.Infrastructure.Options.MessageBroker;

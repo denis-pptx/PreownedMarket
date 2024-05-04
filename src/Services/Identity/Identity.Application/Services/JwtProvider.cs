@@ -1,8 +1,13 @@
-﻿using Identity.Application.Options.Jwt;
+﻿using Identity.Application.Abstractions;
+using Identity.Application.Models;
+using Identity.Application.Options.Jwt;
+using Identity.Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 

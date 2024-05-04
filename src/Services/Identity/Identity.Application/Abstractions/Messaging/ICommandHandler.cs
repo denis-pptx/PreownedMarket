@@ -1,4 +1,6 @@
-﻿namespace Identity.Application.Abstractions.Messaging;
+﻿using MediatR;
+
+namespace Identity.Application.Abstractions.Messaging;
 
 public interface ICommandHandler<in TCommand, TResponse> 
     : IRequestHandler<TCommand, TResponse> 

@@ -2,6 +2,8 @@
 using Identity.Infrastructure.Data;
 using Identity.Presentation.ExceptionHandlers;
 using Identity.Presentation.OptionsSetup;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Presentation;
 

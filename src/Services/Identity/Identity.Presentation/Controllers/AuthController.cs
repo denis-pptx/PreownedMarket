@@ -1,4 +1,9 @@
-﻿using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+﻿using Identity.Application.Features.Identity.Commands.LoginUser;
+using Identity.Application.Features.Identity.Commands.RefreshToken;
+using Identity.Application.Features.Identity.Commands.RegisterUser;
+using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Presentation.Controllers;
 

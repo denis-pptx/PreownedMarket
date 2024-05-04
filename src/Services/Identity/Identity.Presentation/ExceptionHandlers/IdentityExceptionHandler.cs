@@ -1,4 +1,10 @@
-﻿namespace Identity.Presentation.ExceptionHandlers;
+﻿using Identity.Application.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+
+namespace Identity.Presentation.ExceptionHandlers;
 
 public class IdentityExceptionHandler : IExceptionHandler
 {
@@ -15,7 +21,10 @@ public class IdentityExceptionHandler : IExceptionHandler
                 Title = ReasonPhrases.GetReasonPhrase(identityException.StatusCode),
                 Detail = identityException.ErrorMessage?.Description ?? string.Empty,
                 Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1",
-                Extensions = { ["errors"] = ConvertErrors(identityException.Errors) }
+                Extensions = 
+                { 
+                    ["errors"] = ConvertErrors(identityException.Errors) 
+                }
             };
             
             httpContext.Response.StatusCode = problemDetails.Status.Value;

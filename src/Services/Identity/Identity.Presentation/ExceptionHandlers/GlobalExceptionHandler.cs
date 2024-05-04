@@ -1,4 +1,9 @@
-﻿namespace Identity.Presentation.ExceptionHandlers;
+﻿using Identity.Application.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+
+namespace Identity.Presentation.ExceptionHandlers;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
