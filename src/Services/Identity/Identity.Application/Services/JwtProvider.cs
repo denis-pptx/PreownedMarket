@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Identity.Application.Options.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Identity.Application.Authentication;
+namespace Identity.Application.Services;
 
 public class JwtProvider(
     IOptions<JwtOptions> _jwtOptions,
-    IOptions<JwtBearerOptions> _jwtBearerOptions, 
-    UserManager<User> _userManager) 
+    IOptions<JwtBearerOptions> _jwtBearerOptions,
+    UserManager<User> _userManager)
     : IJwtProvider
 {
     private readonly JwtOptions _jwtOptions = _jwtOptions.Value;
@@ -26,9 +27,9 @@ public class JwtProvider(
             new(ClaimTypes.Name, user.UserName ?? ""),
             new(ClaimTypes.Role, role)
         };
-        
+
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)), 
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
             SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

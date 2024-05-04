@@ -75,9 +75,11 @@ public static class ConfigureServices
             })
             .ConfigurePrimaryHttpMessageHandler(() =>
             {
-                var handler = new HttpClientHandler();
-                handler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                var handler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = 
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                };
 
                 return handler;
             });

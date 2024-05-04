@@ -1,4 +1,4 @@
-﻿using Identity.Application.Authentication;
+﻿using Identity.Application.Options.Jwt;
 
 namespace Identity.Presentation.OptionsSetup;
 

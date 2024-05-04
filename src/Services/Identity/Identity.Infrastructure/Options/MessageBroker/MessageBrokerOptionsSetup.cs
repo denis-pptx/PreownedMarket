@@ -1,16 +1,14 @@
-﻿using Identity.Infrastructure.Options;
+﻿using Identity.Infrastructure.Options.MessageBroker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Identity.Presentations.OptionsSetup;
+namespace Identity.Infrastructure.Options.MessageBroker;
 
 public class MessageBrokerOptionsSetup(IConfiguration _configuration) 
     : IConfigureOptions<MessageBrokerOptions>
 {
-    private const string _sectionName = "MessageBroker";
-
     public void Configure(MessageBrokerOptions options)
     {
-        _configuration.GetSection(_sectionName).Bind(options);
+        _configuration.GetSection(nameof(MessageBrokerOptions)).Bind(options);
     }
 }

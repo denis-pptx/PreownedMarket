@@ -1,4 +1,4 @@
-﻿namespace Identity.Infrastructure.Options;
+﻿namespace Identity.Infrastructure.Options.MessageBroker;
 
 public class MessageBrokerOptions
 {
