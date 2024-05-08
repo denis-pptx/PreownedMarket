@@ -13,10 +13,7 @@ public class ConversationNofiticationService(IHubContext<ChatHub, IChatHub> _hub
     {
         var receiversIds = GetReceiversIds(conversation);
 
-        var notification = new ConversationCreatedNotification(
-            conversation.Id, 
-            conversation.Item, 
-            conversation.Members);
+        var notification = new ConversationCreatedNotification(conversation.Id);
 
         await _hubContext.Clients
             .Users(receiversIds)
@@ -34,10 +31,6 @@ public class ConversationNofiticationService(IHubContext<ChatHub, IChatHub> _hub
             .DeleteConversation(notification);
     }
 
-    private static IEnumerable<string> GetReceiversIds(Conversation conversation)
-    {
-        var membersIds = conversation.Members.Select(x => x.Id);
-
-        return membersIds.Select(x => x.ToString());
-    }
+    private static IEnumerable<string> GetReceiversIds(Conversation conversation) => 
+        conversation.MembersIds.Select(guid => guid.ToString());
 }

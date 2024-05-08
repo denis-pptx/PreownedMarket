@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
-using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
@@ -12,13 +12,14 @@ using Identity.Application.Exceptions;
 namespace Chat.Application.Features.Messages.Commands.UpdateMessage;
 
 public class UpdateMessageCommandHandler(
-    IMapper _mapper,
     IUserContext _userContext,
     IMessageNotificationService _notificationService,
-    IMessageRepository _messageRepository) 
-    : ICommandHandler<UpdateMessageCommand, MessageResponse>
+    IItemService _itemService,
+    IMessageRepository _messageRepository,
+    IConversationRepository _conversationRepository) 
+    : ICommandHandler<UpdateMessageCommand, Message>
 {
-    public async Task<MessageResponse> Handle(
+    public async Task<Message> Handle(
         UpdateMessageCommand command, 
         CancellationToken cancellationToken)
     {
@@ -33,14 +34,23 @@ public class UpdateMessageCommandHandler(
             throw new ForbiddenException(MessageErrorMessages.UpdateAlienMessage);
         }
 
+        var conversation = await _conversationRepository.GetByIdAsync(message.ConversationId, cancellationToken);
+        NotFoundException.ThrowIfNull(conversation);
+
+        var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
+        NotFoundException.ThrowIfNull(item);
+
+        if (item.IsActive == false)
+        {
+            throw new ConflictException(MessageErrorMessages.InactiveItem);
+        }
+
         message.Text = request.Text;
 
         await _messageRepository.UpdateAsync(message, cancellationToken);
 
         await _notificationService.UpdateMessageAsync(message, cancellationToken);
 
-        var messageResponse = _mapper.Map<Message, MessageResponse>(message);
-
-        return messageResponse;
+        return message;
     }
 }

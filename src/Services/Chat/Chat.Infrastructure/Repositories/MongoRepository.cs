@@ -8,7 +8,7 @@ public class MongoRepository<TEntity>(IApplicationDbContext dbContext)
     where TEntity : Entity
 {
     protected readonly IMongoCollection<TEntity> _collection = dbContext.Collection<TEntity>();
-
+    protected readonly IApplicationDbContext _dbContext = dbContext;
     public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken token = default)
     {
         return await _collection.Find(_ => true).ToListAsync(token);

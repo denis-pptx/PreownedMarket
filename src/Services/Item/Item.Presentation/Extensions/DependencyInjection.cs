@@ -9,6 +9,7 @@ using Item.DataAccess.Transactions.Interfaces;
 using Item.Presentation.OptionsSetup;
 using MassTransit;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace Item.Presentation.Extensions;
 
@@ -40,11 +41,13 @@ public static class DependencyInjection
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
 
+            string applicationName = Assembly.GetExecutingAssembly().GetName().Name!.Split('.').First().ToLower();
+
             busConfigurator.AddConsumer<UserCreatedConsumer>()
-                .Endpoint(x => x.InstanceId = "item");
+                .Endpoint(x => x.InstanceId = applicationName);
 
             busConfigurator.AddConsumer<UserDeletedConsumer>()
-                .Endpoint(x => x.InstanceId = "item");
+                .Endpoint(x => x.InstanceId = applicationName);
 
             busConfigurator.UsingRabbitMq((context, configurator) =>
             {

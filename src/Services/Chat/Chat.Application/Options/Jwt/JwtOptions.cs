@@ -1,4 +1,4 @@
-﻿namespace Chat.Application.Authentication;
+﻿namespace Chat.Application.Options.Jwt;
 
 public class JwtOptions
 {

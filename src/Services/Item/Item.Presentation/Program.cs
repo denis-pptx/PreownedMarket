@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Item.BusinessLogic.Services.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,9 +41,10 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
+builder.Services.AddGrpc();
+
 var app = builder.Build();
 
-app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -54,6 +56,10 @@ if (app.Environment.IsDevelopment())
 
     await app.SeedData();
 }
+
+app.MapGrpcService<ItemService>();
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

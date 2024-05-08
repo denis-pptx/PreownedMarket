@@ -8,4 +8,8 @@ public static class MessageErrorMessages
     public static ErrorMessage DeleteAlienMessage => new(
         "Message.DeleteAlienMessage",
         "Сan't delete someone else's message.");
+
+    public static ErrorMessage InactiveItem => new(
+        "Message.InactiveItem",
+        "Can't write / update a message on an inactive item");
 }

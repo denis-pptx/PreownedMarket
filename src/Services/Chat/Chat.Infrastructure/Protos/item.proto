@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "Chat.Infrastructure.Protos";
+ 
+package item;
+
+service Item {
+    rpc GetItem (GetItemRequest) returns (GetItemResponse);
+}
+
+message GetItemRequest {
+    string id = 1;
+}
+
+message GetItemResponse {
+    string id = 1;
+    string title = 2;
+    google.protobuf.StringValue first_image_Path = 3;
+    bool is_active = 4;
+    string user_id = 5;
+}

@@ -1,20 +1,17 @@
-﻿using AutoMapper;
-using Chat.Application.Abstractions.Contexts;
+﻿using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Exceptions;
-using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
-using Chat.Application.Models.DataTransferObjects.Messages.Responses;
-using Chat.Domain.Entities;
+using Chat.Application.Models.Conversations.Responses;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
 
 namespace Chat.Application.Features.Conversations.Queries.GetConversatoinByItem;
 
 public class GetConversationByItemQueryHandler(
-    IMapper _mapper,
     IUserContext _userContext,
-    IUserRepository _userRepository,
-    IItemRepository _itemRepository, 
+    IItemService _itemService,
+    IUserRepository _userRepository, 
     IMessageRepository _messageRepository,
     IConversationRepository _conversationRepository) 
     : IQueryHandler<GetConversationByItemQuery, GetConversationResponse>
@@ -23,7 +20,7 @@ public class GetConversationByItemQueryHandler(
         GetConversationByItemQuery query, 
         CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetByIdAsync(query.itemId, cancellationToken);
+        var item = await _itemService.GetByIdAsync(query.itemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         var userId = _userContext.UserId;
@@ -41,24 +38,19 @@ public class GetConversationByItemQueryHandler(
 
         var conversation = await _conversationRepository.FirstOrDefaultAsync(
             conversation => 
-                conversation.Item.Id == item.Id && 
-                conversation.Members.Contains(customer) && 
-                conversation.Members.Contains(seller), 
+                conversation.ItemId == item.Id && 
+                conversation.MembersIds.Contains(customer.Id) && 
+                conversation.MembersIds.Contains(seller.Id), 
             cancellationToken);
 
         NotFoundException.ThrowIfNull(conversation);
 
         var messages = await _messageRepository.GetByConversationIdAsync(conversation.Id, cancellationToken);
-        var messagesResponse = _mapper.Map<IEnumerable<Message>, IEnumerable<MessageResponse>>(messages);
 
-        var response = new GetConversationResponse
-        {
-            ConversationId = conversation.Id,
-            Item = conversation.Item,
-            Members = conversation.Members,
-            Messages = messagesResponse
-        };
-
-        return response;
+        return new GetConversationResponse(
+            conversation.Id,
+            item,
+            [customer, seller],
+            messages);
     }
 }

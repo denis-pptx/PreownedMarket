@@ -1,9 +1,12 @@
 ﻿using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Notifications;
+using Chat.Application.Consumers.Items;
 using Chat.Application.Consumers.Users;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Contexts;
 using Chat.Infrastructure.Options;
+using Chat.Infrastructure.Options.Grpc;
 using Chat.Infrastructure.Options.MongoDb;
 using Chat.Infrastructure.Repositories;
 using Chat.Infrastructure.Services;
@@ -19,18 +22,19 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
         services.ConfigureOptions<MongoDbOptionsSetup>()
-                .ConfigureOptions<MessageBrokerOptionsSetup>();
+                .ConfigureOptions<MessageBrokerOptionsSetup>()
+                .ConfigureOptions<GrpcOptionsSetup>();
 
         services.AddSingleton<IApplicationDbContext, ApplicationDbContext>()
                 .AddScoped<IUserContext, UserContext>();
 
         services.AddScoped<IMessageNotificationService, MessageNotificationService>()
-                .AddScoped<IConversationNotificationService, ConversationNofiticationService>(); 
+                .AddScoped<IConversationNotificationService, ConversationNofiticationService>()
+                .AddScoped<IItemService, ItemService>();
 
         services.AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IConversationRepository, ConversationRepository>()
-                .AddScoped<IMessageRepository, MessageRepository>()
-                .AddScoped<IItemRepository, ItemRepository>();
+                .AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -38,11 +42,16 @@ public static class ConfigureServices
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
 
+            string applicationName = Assembly.GetExecutingAssembly().GetName().Name!.Split('.').First().ToLower();
+
             busConfigurator.AddConsumer<UserCreatedConsumer>()
-                .Endpoint(x => x.InstanceId = "chat");
+                .Endpoint(x => x.InstanceId = applicationName);
 
             busConfigurator.AddConsumer<UserDeletedConsumer>()
-                .Endpoint(x => x.InstanceId = "chat");
+                .Endpoint(x => x.InstanceId = applicationName);
+
+            busConfigurator.AddConsumer<ItemDeletedConsumer>()
+                .Endpoint(x => x.InstanceId = applicationName);
 
             busConfigurator.UsingRabbitMq((context, configurator) =>
             {
@@ -57,6 +66,21 @@ public static class ConfigureServices
                 configurator.ConfigureEndpoints(context);
             });
         });
+
+        services
+            .AddGrpcClient<Protos.Item.ItemClient>((provider, options) =>
+            {
+                var grpcOptions = provider.GetRequiredService<IOptions<GrpcOptions>>().Value;
+                options.Address = new Uri(grpcOptions.ItemHost);
+            })
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+                handler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+                return handler;
+            });
 
         return services;
     }

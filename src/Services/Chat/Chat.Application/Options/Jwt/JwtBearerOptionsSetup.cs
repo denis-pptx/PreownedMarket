@@ -1,10 +1,9 @@
-﻿using Chat.Application.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Chat.Application.OptionsSetup;
+namespace Chat.Application.Options.Jwt;
 
 public class JwtBearerOptionsSetup(IOptions<JwtOptions> _jwtOptions)
     : IConfigureNamedOptions<JwtBearerOptions>

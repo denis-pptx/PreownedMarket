@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
 using Chat.Application.Abstractions.Contexts;
+using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
-using Chat.Application.Models.DataTransferObjects.Conversations.Responses;
-using Chat.Application.Models.DataTransferObjects.Messages.Responses;
-using Chat.Domain.Entities;
+using Chat.Application.Models.Conversations.Responses;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
-using Microsoft.VisualBasic;
 
 namespace Chat.Application.Features.Conversations.Queries.GetUserConversations;
 
 public class GetAllUserConversationsQueryHandler(
-    IMapper _mapper,
     IUserContext _userContext,
+    IItemService _itemService,
     IUserRepository _userRepository,
     IConversationRepository _conversationRepository,
     IMessageRepository _messageRepository) 
@@ -31,17 +29,18 @@ public class GetAllUserConversationsQueryHandler(
 
         var response = conversations.Select(async conversation =>
         {
+            var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
+            NotFoundException.ThrowIfNull(item);
+
             var lastMessage = await _messageRepository.GetLastMessageInConversationAsync(conversation.Id, cancellationToken);
 
-            var lastMessageResponse = lastMessage == null ? 
-                default : 
-                _mapper.Map<Message, MessageResponse>(lastMessage);
+            var members = await _userRepository.GetMembersByConversationIdAsync(conversation.Id, cancellationToken);
 
             return new GetConversationWithLastMessageResponse(
                 conversation.Id,
-                conversation.Item, 
-                lastMessageResponse,
-                conversation.Members);
+                item, 
+                lastMessage,
+                members);
         });
 
         return await Task.WhenAll(response);

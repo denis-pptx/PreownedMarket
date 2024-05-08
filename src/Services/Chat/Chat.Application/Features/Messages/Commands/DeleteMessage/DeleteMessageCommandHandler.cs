@@ -4,7 +4,6 @@ using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Exceptions;
 using Chat.Application.Exceptions.ErrorMessages;
-using Chat.Application.Models.DataTransferObjects.Messages.Responses;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Identity.Application.Exceptions;
@@ -12,13 +11,12 @@ using Identity.Application.Exceptions;
 namespace Chat.Application.Features.Messages.Commands.DeleteMessage;
 
 public class DeleteMessageCommandHandler(
-    IMapper _mapper,
     IUserContext _userContext,
     IMessageNotificationService _notificationService,
     IMessageRepository _messageRepository) 
-    : ICommandHandler<DeleteMessageCommand, MessageResponse>
+    : ICommandHandler<DeleteMessageCommand, Message>
 {
-    public async Task<MessageResponse> Handle(
+    public async Task<Message> Handle(
         DeleteMessageCommand command, 
         CancellationToken cancellationToken)
     {
@@ -36,8 +34,6 @@ public class DeleteMessageCommandHandler(
 
         await _notificationService.DeleteMessageAsync(message, cancellationToken);
 
-        var messageResponse = _mapper.Map<Message, MessageResponse>(message);
-
-        return messageResponse;
+        return message;
     }
 }
