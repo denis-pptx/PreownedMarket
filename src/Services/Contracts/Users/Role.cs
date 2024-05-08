@@ -1,4 +1,4 @@
-﻿namespace Identity.Domain.Enums;
+﻿namespace Contracts.Users;
 
 public enum Role
 {

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Contracts.Items;
+using Contracts.Users;
 using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Data.Initializers.Values;
 using Item.DataAccess.Models;
-using Item.DataAccess.Models.Enums;
 using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;

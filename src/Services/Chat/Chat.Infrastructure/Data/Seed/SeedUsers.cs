@@ -1,18 +1,16 @@
 ﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Domain.Entities;
+using Contracts;
+using Contracts.Users;
 using MongoDB.Driver;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Chat.Infrastructure.Data.Seed;
 
 internal static class SeedUsers
 {
-    private static readonly List<string> _roles = ["User", "Moderator", "Administrator"];
-
     public async static Task SeedUsersAsync(this IApplicationDbContext dbContext)
     {
-        foreach (var role in _roles)
+        foreach (var role in Enum.GetNames(typeof(Role)))
         {
             var user = await dbContext.Users
                 .Find(user => user.UserName == role)
@@ -22,21 +20,12 @@ internal static class SeedUsers
             {
                 user = new User
                 {
-                    Id = ComputeGuid(role),
+                    Id = GuidComputer.Calculate(role),
                     UserName = role,
                 };
 
                 await dbContext.Users.InsertOneAsync(user);
             }
         }
-    }
-
-    private static Guid ComputeGuid(string input)
-    {
-        byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(input));
-
-        var guid = new Guid(hash);
-
-        return guid;
     }
 }

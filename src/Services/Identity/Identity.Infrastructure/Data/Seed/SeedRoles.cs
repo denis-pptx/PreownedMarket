@@ -1,4 +1,4 @@
-﻿using Identity.Domain.Enums;
+﻿using Contracts.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Infrastructure.Data.Seed;
