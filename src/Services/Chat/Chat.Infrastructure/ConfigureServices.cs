@@ -4,7 +4,7 @@ using Chat.Application.Abstractions.Notifications;
 using Chat.Application.Consumers.Items;
 using Chat.Application.Consumers.Users;
 using Chat.Domain.Repositories;
-using Chat.Infrastructure.Contexts;
+using Chat.Infrastructure.Data;
 using Chat.Infrastructure.Options;
 using Chat.Infrastructure.Options.Grpc;
 using Chat.Infrastructure.Options.MongoDb;
@@ -21,20 +21,24 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        services.ConfigureOptions<MongoDbOptionsSetup>()
-                .ConfigureOptions<MessageBrokerOptionsSetup>()
-                .ConfigureOptions<GrpcOptionsSetup>();
+        services
+            .ConfigureOptions<MongoDbOptionsSetup>()
+            .ConfigureOptions<MessageBrokerOptionsSetup>()
+            .ConfigureOptions<GrpcOptionsSetup>();
 
-        services.AddSingleton<IApplicationDbContext, ApplicationDbContext>()
-                .AddScoped<IUserContext, UserContext>();
+        services
+            .AddSingleton<IApplicationDbContext, ApplicationDbContext>()
+            .AddScoped<IUserContext, UserContext>();
 
-        services.AddScoped<IMessageNotificationService, MessageNotificationService>()
-                .AddScoped<IConversationNotificationService, ConversationNofiticationService>()
-                .AddScoped<IItemService, ItemService>();
+        services
+            .AddScoped<IMessageNotificationService, MessageNotificationService>()
+            .AddScoped<IConversationNotificationService, ConversationNofiticationService>()
+            .AddScoped<IItemService, ItemService>();
 
-        services.AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<IConversationRepository, ConversationRepository>()
-                .AddScoped<IMessageRepository, MessageRepository>();
+        services
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IConversationRepository, ConversationRepository>()
+            .AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -75,12 +79,17 @@ public static class ConfigureServices
             })
             .ConfigurePrimaryHttpMessageHandler(() =>
             {
-                var handler = new HttpClientHandler();
-                handler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                var handler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = 
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                };
 
                 return handler;
             });
+
+
+        services.AddSignalR();
 
         return services;
     }

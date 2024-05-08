@@ -5,21 +5,36 @@ using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Specifications.Implementations;
-using Library.BLL.Services.Implementations;
+using Item.DataAccess.Repositories.UnitOfWork;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-public class RegionService : BaseService<Region, RegionDto>, IRegionService
+public class RegionService(
+    IUnitOfWork _unitOfWork,
+    IRegionRepository _regionRepository, 
+    IMapper _mapper) 
+    : IRegionService
 {
-    public RegionService(IRepository<Region> entityRepository, IMapper mapper) 
-        : base(entityRepository, mapper)
+    public async Task<Region> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
+        var region = await _regionRepository.GetByIdAsync(id, cancellationToken);
+
+        NotFoundException.ThrowIfNull(region);
+
+        return region;
     }
 
-    public async override Task<Region> CreateAsync(RegionDto regionDto, CancellationToken token)
+    public async Task<IEnumerable<Region>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var existingRegion = await _entityRepository.FirstOrDefaultAsync(x => x.Name == regionDto.Name);
+        var regions = await _regionRepository.GetAllAsync(cancellationToken);
+
+        return regions;
+    }
+
+
+    public async Task<Region> CreateAsync(RegionDto regionDto, CancellationToken cancellationToken)
+    {
+        var existingRegion = await _regionRepository.GetByNameAsync(regionDto.Name, cancellationToken);
 
         if (existingRegion is not null)
         {
@@ -28,41 +43,36 @@ public class RegionService : BaseService<Region, RegionDto>, IRegionService
 
         var region = _mapper.Map<RegionDto, Region>(regionDto);
 
-        var result = await _entityRepository.AddAsync(region, token);
+        _regionRepository.Add(region);
 
-        return result;
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return region;
     }
 
-    public async override Task<Region> UpdateAsync(Guid id, RegionDto regionDto, CancellationToken token)
+    public async Task<Region> UpdateAsync(Guid id, RegionDto regionDto, CancellationToken cancellationToken)
     {
-        var region = await _entityRepository.GetByIdAsync(id, token);
-
+        var region = await _regionRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(region);
 
         _mapper.Map(regionDto, region);
 
-        var result = await _entityRepository.UpdateAsync(region, token);
+        _regionRepository.Update(region);
 
-        return result;
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return region;
     }
 
-    public async override Task<IEnumerable<Region>> GetAsync(CancellationToken token)
+    public async Task<Region> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var specification = new RegionWithCitiesSpecification();
+        var region = await _regionRepository.GetByIdAsync(id, cancellationToken);
+        NotFoundException.ThrowIfNull(region);
 
-        var entities = await _entityRepository.GetAsync(specification, token);
+        _regionRepository.Remove(region);
 
-        return entities;
-    }
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-    public async override Task<Region> GetByIdAsync(Guid id, CancellationToken token)
-    {
-        var specification = new RegionWithCitiesSpecification(id);
-
-        var entity = await _entityRepository.FirstOrDefaultAsync(specification, token);
-
-        NotFoundException.ThrowIfNull(entity);
-
-        return entity;
+        return region;
     }
 }

@@ -1,4 +1,12 @@
-﻿namespace Identity.Application.Features.Identity.Commands.LoginUser;
+﻿using Identity.Application.Abstractions;
+using Identity.Application.Abstractions.Messaging;
+using Identity.Application.Exceptions;
+using Identity.Application.Exceptions.ErrorMessages;
+using Identity.Application.Models.DataTransferObjects.Identity.Responses;
+using Identity.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Application.Features.Identity.Commands.LoginUser;
 
 public class LoginUserHandler(UserManager<User> _userManager, IJwtProvider _jwtProvider)
     : ICommandHandler<LoginUserCommand, LoginUserResponse>

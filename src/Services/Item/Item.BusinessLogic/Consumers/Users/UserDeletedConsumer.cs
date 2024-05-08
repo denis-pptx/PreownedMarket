@@ -1,11 +1,13 @@
 ﻿using Contracts.Users;
-using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
+using Item.DataAccess.Repositories.UnitOfWork;
 using MassTransit;
 
 namespace Item.BusinessLogic.Consumers.Users;
 
-public class UserDeletedConsumer(IRepository<User> _userRepository) 
+public class UserDeletedConsumer(
+    IUnitOfWork _unitOfWork,
+    IUserRepository _userRepository) 
     : IConsumer<UserDeletedEvent>
 {
     public async Task Consume(ConsumeContext<UserDeletedEvent> context)
@@ -14,7 +16,9 @@ public class UserDeletedConsumer(IRepository<User> _userRepository)
 
         if (existingUser is not null)
         {
-            await _userRepository.DeleteAsync(existingUser);
+            _userRepository.Remove(existingUser);
+
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

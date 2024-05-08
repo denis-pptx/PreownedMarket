@@ -1,24 +1,24 @@
 ﻿using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-public class StatusService(IRepository<Status> _repository) : IStatusService
+public class StatusService(IStatusRepository _statusRepository) 
+    : IStatusService
 {
     public async Task<IEnumerable<Status>> GetAsync(CancellationToken token = default)
     {
-        return await _repository.GetAsync(token);
+        return await _statusRepository.GetAllAsync(token);
     }
 
     public async Task<Status> GetByIdAsync(Guid id, CancellationToken token = default)
     {
-        var entity = await _repository.GetByIdAsync(id, token);
+        var status = await _statusRepository.GetByIdAsync(id, token);
         
-        NotFoundException.ThrowIfNull(entity);
+        NotFoundException.ThrowIfNull(status);
 
-        return entity;
+        return status;
     }
 }

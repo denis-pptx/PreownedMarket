@@ -1,11 +1,10 @@
 ﻿using Item.DataAccess.Models.Entities;
-using Item.DataAccess.Specifications.Interfaces;
 
 namespace Item.DataAccess.Repositories.Interfaces;
 
-using Item = Models.Entities.Item;
-
-public interface ILikeRepository : IRepository<Like>
+public interface ILikeRepository
 {
-    Task<IEnumerable<Item>> GetByUserIdAsync(Guid userId, ISpecification<Item> itemSpecification, CancellationToken token = default);
+    Task<Like?> GetByItemAndUserAsync(Guid itemId, Guid userId, CancellationToken cancellationToken = default);
+    void Add(Like like);
+    void Remove(Like like);
 }

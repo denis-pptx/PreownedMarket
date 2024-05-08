@@ -14,5 +14,6 @@ public static class DataInitializer
         await CategoryInitializer.SeedAsync(dbContext);
         await LocationInitializer.SeedAsync(dbContext);
         await StatusInitializer.SeedAsync(dbContext);
+        await UserInitializer.SeedAsync(dbContext);
     }
 }

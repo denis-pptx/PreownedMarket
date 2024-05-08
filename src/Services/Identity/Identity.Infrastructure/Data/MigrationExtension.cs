@@ -1,4 +1,8 @@
-﻿namespace Identity.Infrastructure.Data;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Identity.Infrastructure.Data;
 
 public static class MigrationExtension
 {

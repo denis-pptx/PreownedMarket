@@ -1,4 +1,9 @@
-﻿namespace Identity.Application.Mappings;
+﻿using AutoMapper;
+using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+using Identity.Application.Models.DataTransferObjects.Users.Responses;
+using Identity.Domain.Models;
+
+namespace Identity.Application.Mappings;
 
 public class UserMappingProfile : Profile
 {

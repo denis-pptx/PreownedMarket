@@ -1,7 +1,15 @@
-﻿namespace Identity.Application.Features.Users.Commands.UpdateUserRole;
+﻿using Identity.Application.Abstractions;
+using Identity.Application.Abstractions.Messaging;
+using Identity.Application.Exceptions;
+using Identity.Application.Exceptions.ErrorMessages;
+using Identity.Domain.Models;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Application.Features.Users.Commands.UpdateUserRole;
 
 public class UpdateUserRoleHandler(
-    UserManager<User> _userManager, 
+    UserManager<User> _userManager,
     RoleManager<IdentityRole> _roleManager, 
     ICurrentUserService _userSerivce) 
     : ICommandHandler<UpdateUserRoleCommand, Unit>

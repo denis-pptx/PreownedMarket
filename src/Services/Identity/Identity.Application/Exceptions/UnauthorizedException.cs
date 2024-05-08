@@ -1,4 +1,7 @@
-﻿namespace Identity.Application.Exceptions;
+﻿using Identity.Application.Exceptions.ErrorMessages;
+using Microsoft.AspNetCore.Http;
+
+namespace Identity.Application.Exceptions;
 
 public class UnauthorizedException : BaseApiException
 {

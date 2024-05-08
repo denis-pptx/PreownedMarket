@@ -1,4 +1,11 @@
-﻿namespace Identity.Application.Features.Users.Queries.GetAllUsers;
+﻿using AutoMapper;
+using Identity.Application.Abstractions.Messaging;
+using Identity.Application.Models.DataTransferObjects.Users.Responses;
+using Identity.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+namespace Identity.Application.Features.Users.Queries.GetAllUsers;
 
 public class GetAllUsersHandler(UserManager<User> _userManager, IMapper _mapper)
     : IQueryHandler<GetAllUsersQuery, IEnumerable<GetUserResponse>>

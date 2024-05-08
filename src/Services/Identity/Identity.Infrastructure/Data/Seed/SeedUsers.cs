@@ -1,4 +1,9 @@
-﻿namespace Identity.Infrastructure.Data.Seed;
+﻿using Contracts;
+using Contracts.Users;
+using Identity.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Infrastructure.Data.Seed;
 
 public static class SeedUsers
 {
@@ -12,6 +17,7 @@ public static class SeedUsers
             {
                 user = new User
                 {
+                    Id = GuidComputer.Calculate(role).ToString(),
                     UserName = role,
                     Email = $"{role}@mail.ru",
                 };

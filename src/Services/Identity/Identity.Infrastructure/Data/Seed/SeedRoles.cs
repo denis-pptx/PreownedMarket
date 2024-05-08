@@ -1,4 +1,7 @@
-﻿namespace Identity.Infrastructure.Data.Seed;
+﻿using Contracts.Users;
+using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Infrastructure.Data.Seed;
 
 public static class SeedRoles
 {

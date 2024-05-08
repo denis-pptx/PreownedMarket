@@ -1,5 +1,12 @@
-﻿using Contracts.Users;
+﻿using AutoMapper;
+using Contracts.Users;
+using Identity.Application.Abstractions.Messaging;
+using Identity.Application.Exceptions;
+using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+using Identity.Domain.Models;
 using MassTransit;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Identity.Commands.RegisterUser;
 

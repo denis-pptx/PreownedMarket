@@ -1,4 +1,9 @@
-﻿namespace Identity.Infrastructure.Data.Seed;
+﻿using Identity.Domain.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Identity.Infrastructure.Data.Seed;
 
 public static class DataInitializer
 {

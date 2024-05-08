@@ -1,5 +1,12 @@
 ﻿using Contracts.Users;
+using Identity.Application.Abstractions;
+using Identity.Application.Abstractions.Messaging;
+using Identity.Application.Exceptions;
+using Identity.Application.Exceptions.ErrorMessages;
+using Identity.Domain.Models;
 using MassTransit;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Users.Commands.DeleteUser;
 

@@ -1,26 +1,24 @@
-﻿using Item.BusinessLogic.Exceptions.ErrorMessages;
-using Item.BusinessLogic.Exceptions;
+﻿using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Services.Interfaces;
-using Item.DataAccess.Specifications.Implementations.Item;
 using Microsoft.AspNetCore.Http;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Models.Entities;
+using Item.DataAccess.Repositories.UnitOfWork;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-using Item = DataAccess.Models.Entities.Item;
-
 public class ItemImageService(
     IFileService _fileService,
-    IRepository<ItemImage> _imageRepository,
-    IRepository<Item> _itemRepository)
+    IUnitOfWork _unitOfWork,
+    IImageRepository _imageRepository,
+    IItemRepository _itemRepository)
     : IItemImageService
 {
-    public async Task SaveAttachedImagesAsync(Guid itemId, IEnumerable<IFormFile> images, CancellationToken token = default)
+    public async Task SaveAttachedImagesAsync(Guid itemId, IEnumerable<IFormFile> images, CancellationToken cancellationToken = default)
     {
         foreach (var image in images)
         {
-            var imagePath = await _fileService.SaveFileAsync(image, FileService.ImagesDirectory, token);
+            var imagePath = await _fileService.SaveFileAsync(image, FileService.ImagesDirectory, cancellationToken);
 
             var itemImage = new ItemImage
             {
@@ -28,38 +26,40 @@ public class ItemImageService(
                 ItemId = itemId,
             };
 
-            await _imageRepository.AddAsync(itemImage, token);
+            _imageRepository.Add(itemImage);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 
-    public async Task DeleteAllAttachedImagesAsync(Guid itemId, CancellationToken token = default)
+    public async Task DeleteAllAttachedImagesAsync(Guid itemId, CancellationToken cancellationToken = default)
     {
-        var specification = new ItemWithImagesSpecification(itemId);
-
-        var item = await _itemRepository.FirstOrDefaultAsync(specification, token);
-
+        var item = await _itemRepository.GetByIdAsync(itemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
-            
-        await DeleteAttachedImagesAsync(item.Images, token);
+
+        var images = await _imageRepository.GetByItemIdAsync(item.Id, cancellationToken);
+
+        await DeleteAttachedImagesAsync(images, cancellationToken);
     }
 
-    public async Task DeleteAttachedImagesAsync(IEnumerable<ItemImage> images, CancellationToken token = default)
+    public async Task DeleteAttachedImagesAsync(IEnumerable<ItemImage> images, CancellationToken cancellationToken = default)
     {
         foreach (var image in images.ToList())
         {
             _fileService.DeleteFile(image.FilePath);
 
-            await _imageRepository.DeleteAsync(image, token);
+            _imageRepository.Remove(image);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 
-    public async Task<IEnumerable<ItemImage>> GetItemImagesAsync(Guid itemId, CancellationToken token = default)
+    public async Task<IEnumerable<ItemImage>> GetItemImagesAsync(Guid itemId, CancellationToken cancellationToken = default)
     {
-        var item = await _itemRepository.GetByIdAsync(itemId, token);
-
+        var item = await _itemRepository.GetByIdAsync(itemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
-        var images = await _imageRepository.GetAsync(x => x.ItemId == itemId, token);
+        var images = await _imageRepository.GetByItemIdAsync(item.Id, cancellationToken);
 
         return images;
     }

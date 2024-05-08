@@ -4,8 +4,8 @@ using Item.DataAccess.Models.Enums;
 using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Specifications.Common;
-using Item.DataAccess.Specifications.Implementations.Item;
-using Item.DataAccess.Specifications.Interfaces;
+using Item.DataAccess.Specifications.Implementations;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Item.DataAccess.Repositories.Implementations;
@@ -13,14 +13,13 @@ namespace Item.DataAccess.Repositories.Implementations;
 using Item = Models.Entities.Item;
 
 public class ItemRepository(ApplicationDbContext dbContext)
-    : EfRepository<Item>(dbContext), IItemRepository
+    : BaseRepository<Item>(dbContext), IItemRepository
 {
     public async Task<PagedList<Item>> GetAsync(
         ItemFilterRequest filter, 
-        ISpecification<Item> specification, 
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.Items.ApplySpecification(specification);
+        var query = _dbContext.Items.ApplySpecification(new ItemSpecification());
 
         if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
         {
@@ -56,7 +55,7 @@ public class ItemRepository(ApplicationDbContext dbContext)
             query = query.OrderBy(GetSortProperty(filter.SortColumn));
         }
 
-        var items = await PagedList<Item>.CreateAsync(query, filter.Page, filter.PageSize);
+        var items = await PagedList<Item>.CreateAsync(query, filter.Page, filter.PageSize, cancellationToken);
 
         return items;
     }
@@ -79,5 +78,30 @@ public class ItemRepository(ApplicationDbContext dbContext)
         }
 
         return item => item.Id;
+    }
+
+    public async Task<IEnumerable<Item>> GetLikedByUserAsync(
+        Guid userId, 
+        CancellationToken cancellationToken = default)
+    {
+        var itemsQuery = from like in _dbContext.Likes
+                         join item in _dbContext.Items
+                         on like.ItemId equals item.Id
+                         where like.UserId == userId
+                         orderby like.CreatedOn
+                         select item;
+
+        var items = await itemsQuery
+            .ApplySpecification(new ItemSpecification())
+            .ToListAsync(cancellationToken);
+
+        return items;
+    }
+
+    public override async Task<Item?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _entities
+            .ApplySpecification(new ItemSpecification())
+            .SingleOrDefaultAsync(entity => entity.Id == id, cancellationToken);
     }
 }

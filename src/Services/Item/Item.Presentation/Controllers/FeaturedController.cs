@@ -20,7 +20,7 @@ public class FeaturedController(ILikeService _likeService)
         return Ok(result);
     }
 
-    // POST api/<FeaturedController>/like
+    // POST api/<FeaturedController>/like/<id>
     [HttpPost("like/{itemId:guid}")]
     public async Task<IActionResult> LikeItem([FromRoute] Guid itemId, CancellationToken token)
     {
@@ -29,7 +29,7 @@ public class FeaturedController(ILikeService _likeService)
         return Ok();
     }
 
-    // POST api/<FeaturedController>/like
+    // POST api/<FeaturedController>/like/<id>
     [HttpPost("unlike/{itemId:guid}")]
     public async Task<IActionResult> UnlikeItem([FromRoute] Guid itemId, CancellationToken token)
     {
