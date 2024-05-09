@@ -5,6 +5,6 @@ namespace Item.DataAccess.Repositories.Interfaces;
 public interface IImageRepository
 {
     Task<IEnumerable<ItemImage>> GetByItemIdAsync(Guid itemId, CancellationToken cancellationToken = default);
-    void Add(ItemImage image);
-    void Remove(ItemImage image);
+    Task AddAsync(ItemImage image, CancellationToken cancellationToken = default);
+    Task RemoveAsync(ItemImage image, CancellationToken cancellationToken = default);
 }

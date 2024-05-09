@@ -17,18 +17,23 @@ public class CachedUserRepository(
         SlidingExpiration = TimeSpan.FromMinutes(1)
     };
 
-    public void Add(User user) =>
-        _decorated.Add(user);
+    public async Task AddAsync(User user, CancellationToken cancellationToken = default) =>
+        await _decorated.AddAsync(user, cancellationToken);
 
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _cacheService.GetOrCreateAsync(
-            typeof(User).GetCacheKey(id), 
+            typeof(User).GetCacheKeyWithId(id), 
             async () => await _decorated.GetByIdAsync(id, cancellationToken), 
             _cacheOptions, 
             cancellationToken);
     }
 
-    public void Remove(User user) => 
-        _decorated.Remove(user);
+    public async Task RemoveAsync(User user, CancellationToken cancellationToken = default)
+    {
+        await _decorated.RemoveAsync(user, cancellationToken);
+
+        await _cacheService.RemoveAsync(user.GetCacheKeyWithId(), cancellationToken);
+
+    }
 }

@@ -50,7 +50,7 @@ public class LikeService(
             ItemId = itemId
         };
 
-        _likeRepository.Add(like);
+        await _likeRepository.AddAsync(like, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
@@ -66,7 +66,7 @@ public class LikeService(
             throw new ConflictException(LikeErrorMessages.NotLiked);
         }
 
-        _likeRepository.Remove(existingLike);
+        await _likeRepository.RemoveAsync(existingLike, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }

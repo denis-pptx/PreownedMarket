@@ -22,18 +22,24 @@ public abstract class BaseRepository<TEntity>(ApplicationDbContext dbContext)
             cancellationToken);
     }
 
-    public virtual void Add(TEntity entity)
+    public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        _entities.Add(entity);
+        await Task.Run(
+            () => _entities.Add(entity), 
+            cancellationToken);
     }
 
-    public virtual void Update(TEntity entity)
+    public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        _entities.Update(entity);
+        await Task.Run(
+            () => _entities.Update(entity), 
+            cancellationToken);
     }
 
-    public virtual void Remove(TEntity entity)
+    public virtual async Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        _entities.Remove(entity);
+        await Task.Run(
+            () => _entities.Remove(entity), 
+            cancellationToken);
     }
 }

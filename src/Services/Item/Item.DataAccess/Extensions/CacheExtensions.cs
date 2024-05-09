@@ -4,14 +4,17 @@ namespace Item.DataAccess.Extensions;
 
 public static class CacheExtensions
 {
-    public static string GetCacheKey<T>(this T entity)
-        where T : BaseEntity =>
-        typeof(T).GetCacheKey(entity.Id.ToString());
+    public static string GetCacheKeyWithId<T>(this T entity)
+        where T : BaseEntity => 
+        typeof(T).GetCacheKeyWithId(entity.Id);
 
-    public static string GetCacheKey(this Type type, Guid id) =>
-        type.GetCacheKey(id.ToString());
+    public static string GetCacheKeyWithAll(this Type type) =>
+        type.GetCacheKeyWithSuffix("all");
 
-    public static string GetCacheKey(this Type type, string suffix)
+    public static string GetCacheKeyWithId(this Type type, Guid id) =>
+        type.GetCacheKeyWithSuffix(id.ToString());
+
+    public static string GetCacheKeyWithSuffix(this Type type, string suffix)
     {
         var key = $"{type.Name.ToLower()}-{suffix}";
 

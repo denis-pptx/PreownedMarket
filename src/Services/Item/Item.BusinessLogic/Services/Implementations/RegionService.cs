@@ -43,7 +43,7 @@ public class RegionService(
 
         var region = _mapper.Map<RegionDto, Region>(regionDto);
 
-        _regionRepository.Add(region);
+        await _regionRepository.AddAsync(region, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -57,7 +57,7 @@ public class RegionService(
 
         _mapper.Map(regionDto, region);
 
-        _regionRepository.Update(region);
+        await _regionRepository.UpdateAsync(region, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -69,7 +69,7 @@ public class RegionService(
         var region = await _regionRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(region);
 
-        _regionRepository.Remove(region);
+        await _regionRepository.RemoveAsync(region, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

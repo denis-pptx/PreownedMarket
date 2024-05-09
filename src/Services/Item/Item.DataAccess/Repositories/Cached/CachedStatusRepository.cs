@@ -12,10 +12,8 @@ public class CachedStatusRepository(
 {
     public async Task<IEnumerable<Status>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var key = "all-statuses";
-
         var cachedStatuses = await _cacheService.GetOrCreateAsync(
-            key,
+            typeof(Status).GetCacheKeyWithAll(),
             async () => await _decorated.GetAllAsync(cancellationToken),
             cancellationToken);
 
@@ -25,7 +23,7 @@ public class CachedStatusRepository(
     public async Task<Status?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var status = await _cacheService.GetOrCreateAsync(
-           typeof(Status).GetCacheKey(id),
+           typeof(Status).GetCacheKeyWithId(id),
            async () => await _decorated.GetByIdAsync(id, cancellationToken),
            cancellationToken);
 
@@ -38,7 +36,7 @@ public class CachedStatusRepository(
     public async Task<Status> GetByNormalizedNameAsync(string normalizedName, CancellationToken cancellationToken = default)
     {
         var status = await _cacheService.GetOrCreateAsync(
-           typeof(Status).GetCacheKey(normalizedName),
+           typeof(Status).GetCacheKeyWithSuffix(normalizedName),
            async () => await _decorated.GetByNormalizedNameAsync(normalizedName, cancellationToken),
            cancellationToken);
 

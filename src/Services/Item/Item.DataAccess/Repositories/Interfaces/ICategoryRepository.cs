@@ -7,7 +7,7 @@ public interface ICategoryRepository
     Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Category?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     Task<IEnumerable<Category>> GetAllAsync(CancellationToken cancellationToken = default);
-    void Add(Category region);
-    void Update(Category region);
-    void Remove(Category region);
+    Task AddAsync(Category region, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Category region, CancellationToken cancellationToken = default);
+    Task RemoveAsync(Category region, CancellationToken cancellationToken = default);
 }

@@ -16,7 +16,7 @@ public class UserDeletedConsumer(
 
         if (existingUser is not null)
         {
-            _userRepository.Remove(existingUser);
+            await _userRepository.RemoveAsync(existingUser);
 
             await _unitOfWork.SaveChangesAsync();
         }

@@ -22,7 +22,7 @@ public class UserCreatedConsumer(
 
         if (existingUser is null)
         {
-            _userRepository.Add(user);
+            await _userRepository.AddAsync(user);
 
             await _unitOfWork.SaveChangesAsync();
         }

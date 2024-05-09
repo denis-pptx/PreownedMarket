@@ -1,6 +1,5 @@
 ﻿using Item.DataAccess.Caching;
 using Item.DataAccess.Data;
-using Item.DataAccess.Data.Interceptors;
 using Item.DataAccess.Options.Cache;
 using Item.DataAccess.Repositories.Cached;
 using Item.DataAccess.Repositories.Implementations;
@@ -19,20 +18,12 @@ public static class ConfigureServices
     {
         services.ConfigureOptions<CacheOptionsSetup>();
 
-        services.AddSingleton<CacheInterceptor>();
-
         var connection = configurationManager.GetConnectionString("MySQL");
         services.AddDbContext<ApplicationDbContext>(
             options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
 
-        services.AddDbContext<ApplicationDbContext>(
-            (serviceProvider, options) => options
-                .UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0)))
-                .AddInterceptors(serviceProvider.GetRequiredService<CacheInterceptor>()));
-
         services
             .AddScoped<IUnitOfWork, UnitOfWork>()
-            .AddScoped<IRegionRepository, RegionRepository>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<ICityRepository, CityRepository>()
             .AddScoped<ILikeRepository, LikeRepository>()
@@ -40,12 +31,9 @@ public static class ConfigureServices
             .AddScoped<IImageRepository, ImageRepository>();
 
         services
-            .AddScoped<IUserRepository, UserRepository>()
-            .Decorate<IUserRepository, CachedUserRepository>();
-
-        services
-            .AddScoped<IStatusRepository, StatusRepository>()
-            .Decorate<IStatusRepository, CachedStatusRepository>();
+            .AddScoped<IUserRepository, UserRepository>().Decorate<IUserRepository, CachedUserRepository>()
+            .AddScoped<IStatusRepository, StatusRepository>().Decorate<IStatusRepository, CachedStatusRepository>()
+            .AddScoped<IRegionRepository, RegionRepository>().Decorate<IRegionRepository, CachedRegionRepository>();
 
         services
             .AddDistributedMemoryCache()

@@ -26,7 +26,7 @@ public class CityService(
 
         var city = _mapper.Map<CityDto, City>(cityDto);
 
-        _cityRepository.Add(city);
+        await _cityRepository.AddAsync(city, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -38,7 +38,7 @@ public class CityService(
         var city = await _cityRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(city);
 
-        _cityRepository.Remove(city);
+        await _cityRepository.RemoveAsync(city, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -68,7 +68,7 @@ public class CityService(
 
         _mapper.Map(cityDto, city);
 
-        _cityRepository.Update(city);
+        await _cityRepository.UpdateAsync(city, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

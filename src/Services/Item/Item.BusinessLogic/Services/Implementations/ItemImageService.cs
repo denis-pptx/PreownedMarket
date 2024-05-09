@@ -26,7 +26,7 @@ public class ItemImageService(
                 ItemId = itemId,
             };
 
-            _imageRepository.Add(itemImage);
+            await _imageRepository.AddAsync(itemImage, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
@@ -48,7 +48,7 @@ public class ItemImageService(
         {
             _fileService.DeleteFile(image.FilePath);
 
-            _imageRepository.Remove(image);
+            await _imageRepository.RemoveAsync(image);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
