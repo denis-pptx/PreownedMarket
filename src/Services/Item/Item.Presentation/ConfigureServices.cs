@@ -8,8 +8,10 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddPresentationServices(this IServiceCollection services)
     {
-        services.AddControllers().AddJsonOptions(x => 
-            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        services
+            .AddControllers()
+            .AddJsonOptions(x => 
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
         services
             .AddEndpointsApiExplorer()

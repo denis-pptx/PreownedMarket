@@ -1,13 +1,18 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
-using System.Collections.Concurrent;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Item.DataAccess.Caching;
 
 public class CacheService(IDistributedCache _distributedCache) 
     : ICacheService
 {
-    private readonly DistributedCacheEntryOptions _defaultOptions = new();
+    private readonly DistributedCacheEntryOptions _defaultCacheOptions = new();
+
+    private readonly JsonSerializerOptions _serializerOptions = new()
+    {
+        ReferenceHandler = ReferenceHandler.Preserve
+    };
 
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) 
         where T : class
@@ -19,7 +24,7 @@ public class CacheService(IDistributedCache _distributedCache)
             return null;
         }
 
-        var value = JsonSerializer.Deserialize<T>(cachedValue);
+        var value = JsonSerializer.Deserialize<T>(cachedValue, _serializerOptions);
         
         return value;
     }
@@ -48,7 +53,7 @@ public class CacheService(IDistributedCache _distributedCache)
 
     public Task<T?> GetOrCreateAsync<T>(string key, Func<Task<T?>> factory, CancellationToken cancellationToken = default) 
         where T : class => 
-        GetOrCreateAsync(key, factory, _defaultOptions, cancellationToken);
+        GetOrCreateAsync(key, factory, _defaultCacheOptions, cancellationToken);
 
     public async Task RemoveAsync(string key, CancellationToken cancellationToken = default) 
     {
@@ -62,7 +67,7 @@ public class CacheService(IDistributedCache _distributedCache)
         CancellationToken cancellationToken = default)
         where T : class
     {
-        string cacheValue = JsonSerializer.Serialize(value);
+        string cacheValue = JsonSerializer.Serialize(value, _serializerOptions);
 
         await _distributedCache.SetStringAsync(
             key, 
@@ -73,5 +78,5 @@ public class CacheService(IDistributedCache _distributedCache)
 
     public Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default) 
         where T : class => 
-        SetAsync(key, value, _defaultOptions, cancellationToken);
+        SetAsync(key, value, _defaultCacheOptions, cancellationToken);
 }
