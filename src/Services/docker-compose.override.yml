@@ -106,11 +106,20 @@ services:
       - market.mq-data:/var/lib/rabbitmq
     networks:
       - my-network
-    
+  
+  redis:
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - my-network
+
 volumes:
   identity.db-data:
   item.db-data:
   chat.db-data:
+  redis-data:
   market.mq-data:
   elasticsearch-data:
 

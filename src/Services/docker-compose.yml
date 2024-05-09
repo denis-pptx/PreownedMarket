@@ -58,3 +58,7 @@ services:
     image: rabbitmq:management
     container_name: market-mq
     hostname: market.mq
+
+  redis:
+    image: redis:latest
+    container_name: redis
