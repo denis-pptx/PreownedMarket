@@ -1,4 +1,4 @@
-﻿using Identity.Application.Exceptions;
+﻿using Identity.Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +36,7 @@ public class IdentityExceptionHandler : IExceptionHandler
         return false;
     }
 
-    private Dictionary<string, IEnumerable<string>> ConvertErrors(IEnumerable<IdentityError> errors)
+    private static Dictionary<string, IEnumerable<string>> ConvertErrors(IEnumerable<IdentityError> errors)
     {
         var result = new Dictionary<string, IEnumerable<string>>
         {

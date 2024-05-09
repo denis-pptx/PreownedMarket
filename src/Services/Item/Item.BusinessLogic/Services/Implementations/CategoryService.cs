@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models.Entities;
-using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
+using Shared.Errors.Exceptions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 

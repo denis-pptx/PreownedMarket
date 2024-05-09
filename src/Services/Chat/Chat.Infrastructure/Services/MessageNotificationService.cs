@@ -1,10 +1,9 @@
-﻿using AutoMapper;
-using Chat.Application.Abstractions.Notifications;
+﻿using Chat.Application.Abstractions.Notifications;
 using Chat.Domain.Entities;
 using Chat.Domain.Repositories;
 using Chat.Infrastructure.Hubs;
-using Identity.Application.Exceptions;
 using Microsoft.AspNetCore.SignalR;
+using Shared.Errors.Exceptions;
 
 namespace Chat.Infrastructure.Services;
 

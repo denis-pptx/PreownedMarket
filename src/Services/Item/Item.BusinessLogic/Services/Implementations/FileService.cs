@@ -1,8 +1,8 @@
-﻿using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
-using Item.BusinessLogic.Services.Interfaces;
+﻿using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.ErrorMessages;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Shared.Errors.Exceptions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 

@@ -2,6 +2,7 @@
 using Identity.Application.Abstractions.Messaging;
 using Identity.Application.Exceptions;
 using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+using Identity.Domain.Exceptions;
 using Identity.Domain.Models;
 using MassTransit;
 using MediatR;

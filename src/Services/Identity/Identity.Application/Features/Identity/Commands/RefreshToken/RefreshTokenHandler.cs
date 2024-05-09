@@ -1,17 +1,21 @@
 ﻿using Identity.Application.Abstractions;
 using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Exceptions;
 using Identity.Application.Models.DataTransferObjects.Identity.Responses;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Shared.Errors.Exceptions;
 using System.Security.Claims;
 
 namespace Identity.Application.Features.Identity.Commands.RefreshToken;
 
-public class RefreshTokenHandler(IJwtProvider _jwtProvider, UserManager<User> _userManager)
+public class RefreshTokenHandler(
+    IJwtProvider _jwtProvider, 
+    UserManager<User> _userManager)
     : ICommandHandler<RefreshTokenCommand, RefreshTokenResponse>
 {
-    public async Task<RefreshTokenResponse> Handle(RefreshTokenCommand command, CancellationToken cancellationToken)
+    public async Task<RefreshTokenResponse> Handle(
+        RefreshTokenCommand command, 
+        CancellationToken cancellationToken)
     {
         var request = command.Request;
 

@@ -5,6 +5,7 @@ using Identity.Application.Exceptions.ErrorMessages;
 using Identity.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Shared.Errors.Exceptions;
 
 namespace Identity.Application.Features.Users.Commands.UpdateUserRole;
 
