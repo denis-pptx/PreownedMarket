@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
+using System.Collections.Concurrent;
 using System.Text.Json;
 
 namespace Item.DataAccess.Caching;
@@ -17,31 +18,28 @@ public class CacheService(IDistributedCache _distributedCache)
         }
 
         var value = JsonSerializer.Deserialize<T>(cachedValue);
-
+        
         return value;
     }
 
     public async Task<T?> GetOrCreateAsync<T>(
         string key, 
-        Func<Task<T>> factory, 
+        Func<Task<T?>> factory, 
         DistributedCacheEntryOptions options, 
         CancellationToken cancellationToken = default) 
         where T : class
     {
         var cachedValue = await GetAsync<T>(key, cancellationToken);
 
-        if (cachedValue is not null)
+        if (cachedValue is null)
         {
-            return cachedValue;
+            cachedValue = await factory();
+
+            if (cachedValue is not null)
+            {
+                await SetAsync(key, cachedValue, options, cancellationToken);
+            }
         }
-
-        cachedValue = await factory();
-
-        await SetAsync(
-            key, 
-            cachedValue, 
-            options, 
-            cancellationToken);
 
         return cachedValue;
     }
