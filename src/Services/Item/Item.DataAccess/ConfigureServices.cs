@@ -30,6 +30,9 @@ public static class ConfigureServices
             .AddScoped<IItemRepository, ItemRepository>()
             .AddScoped<IImageRepository, ImageRepository>()
             .AddScoped<IUserRepository, UserRepository>();
+        services
+            .AddDistributedMemoryCache()
+            .AddSingleton<ICacheService, CacheService>();
 
         services.AddStackExchangeRedisCache(redisOptions =>
         {
