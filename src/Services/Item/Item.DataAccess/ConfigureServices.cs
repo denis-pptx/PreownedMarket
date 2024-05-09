@@ -1,5 +1,7 @@
-﻿using Item.DataAccess.Data;
+﻿using Item.DataAccess.Caching;
+using Item.DataAccess.Data;
 using Item.DataAccess.Options.Cache;
+using Item.DataAccess.Repositories.Cached;
 using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
@@ -28,8 +30,12 @@ public static class ConfigureServices
             .AddScoped<ICityRepository, CityRepository>()
             .AddScoped<ILikeRepository, LikeRepository>()
             .AddScoped<IItemRepository, ItemRepository>()
-            .AddScoped<IImageRepository, ImageRepository>()
-            .AddScoped<IUserRepository, UserRepository>();
+            .AddScoped<IImageRepository, ImageRepository>();
+
+        services
+            .AddScoped<IUserRepository, UserRepository>()
+            .Decorate<IUserRepository, CachedUserRepository>();
+
         services
             .AddDistributedMemoryCache()
             .AddSingleton<ICacheService, CacheService>();
