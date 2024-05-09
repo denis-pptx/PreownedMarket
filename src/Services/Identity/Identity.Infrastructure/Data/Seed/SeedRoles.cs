@@ -1,5 +1,5 @@
-﻿using Contracts.Users;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Shared.Models;
 
 namespace Identity.Infrastructure.Data.Seed;
 

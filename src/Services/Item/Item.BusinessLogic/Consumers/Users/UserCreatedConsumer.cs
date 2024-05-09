@@ -1,8 +1,8 @@
-﻿using Contracts.Users;
-using Item.DataAccess.Models.Entities;
+﻿using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
 using MassTransit;
+using Shared.Events.Users;
 
 namespace Item.BusinessLogic.Consumers.Users;
 

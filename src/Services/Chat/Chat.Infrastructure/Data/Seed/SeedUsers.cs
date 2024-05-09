@@ -1,8 +1,8 @@
 ﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Domain.Entities;
-using Contracts;
-using Contracts.Users;
 using MongoDB.Driver;
+using Shared;
+using Shared.Models;
 
 namespace Chat.Infrastructure.Data.Seed;
 

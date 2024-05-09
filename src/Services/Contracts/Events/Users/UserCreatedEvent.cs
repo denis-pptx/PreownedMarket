@@ -1,4 +1,4 @@
-﻿namespace Contracts.Users;
+﻿namespace Shared.Events.Users;
 
 public class UserCreatedEvent
 {

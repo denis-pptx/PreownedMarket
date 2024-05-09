@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Contracts;
+namespace Shared;
 
 public static class GuidComputer
 {

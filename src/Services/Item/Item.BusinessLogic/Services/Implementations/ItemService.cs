@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Contracts.Items;
-using Contracts.Users;
 using Item.BusinessLogic.Exceptions;
 using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
@@ -12,6 +10,8 @@ using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
 using Item.DataAccess.Transactions.Interfaces;
 using MassTransit;
+using Shared.Events.Items;
+using Shared.Models;
 
 namespace Item.BusinessLogic.Services.Implementations;
 

@@ -1,7 +1,7 @@
-﻿using Contracts;
-using Contracts.Users;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Item.DataAccess.Models.Entities;
+using Shared.Models;
+using Shared;
 
 namespace Item.DataAccess.Data.Initializers;
 

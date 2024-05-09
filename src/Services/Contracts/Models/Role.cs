@@ -1,4 +1,4 @@
-﻿namespace Contracts.Users;
+﻿namespace Shared.Models;
 
 public enum Role
 {
