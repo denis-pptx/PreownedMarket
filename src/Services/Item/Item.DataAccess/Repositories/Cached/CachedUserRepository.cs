@@ -1,6 +1,6 @@
 ﻿using Item.DataAccess.Caching;
+using Item.DataAccess.Extensions;
 using Item.DataAccess.Models.Entities;
-using Item.DataAccess.Options.Cache;
 using Item.DataAccess.Repositories.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -17,10 +17,8 @@ public class CachedUserRepository(
         SlidingExpiration = TimeSpan.FromMinutes(1)
     };
 
-    public void Add(User user)
-    {
+    public void Add(User user) =>
         _decorated.Add(user);
-    }
 
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
@@ -31,8 +29,6 @@ public class CachedUserRepository(
             cancellationToken);
     }
 
-    public void Remove(User user)
-    {
+    public void Remove(User user) => 
         _decorated.Remove(user);
-    }
 }

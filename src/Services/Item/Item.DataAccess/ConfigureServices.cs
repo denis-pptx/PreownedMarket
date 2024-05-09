@@ -24,7 +24,6 @@ public static class ConfigureServices
 
         services
             .AddScoped<IUnitOfWork, UnitOfWork>()
-            .AddScoped<IStatusRepository, StatusRepository>()
             .AddScoped<IRegionRepository, RegionRepository>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<ICityRepository, CityRepository>()
@@ -35,6 +34,10 @@ public static class ConfigureServices
         services
             .AddScoped<IUserRepository, UserRepository>()
             .Decorate<IUserRepository, CachedUserRepository>();
+
+        services
+            .AddScoped<IStatusRepository, StatusRepository>()
+            .Decorate<IStatusRepository, CachedStatusRepository>();
 
         services
             .AddDistributedMemoryCache()
@@ -48,7 +51,7 @@ public static class ConfigureServices
                 .Value;
 
             redisOptions.Configuration = cacheOptions.ConnectionString;
-            redisOptions.InstanceName = cacheOptions.InstanceName;
+            redisOptions.InstanceName = $"{cacheOptions.InstanceName}-";
         });
 
         return services;

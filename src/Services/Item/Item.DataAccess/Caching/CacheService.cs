@@ -7,6 +7,8 @@ namespace Item.DataAccess.Caching;
 public class CacheService(IDistributedCache _distributedCache) 
     : ICacheService
 {
+    private readonly DistributedCacheEntryOptions _defaultOptions = new();
+
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) 
         where T : class
     {
@@ -44,6 +46,10 @@ public class CacheService(IDistributedCache _distributedCache)
         return cachedValue;
     }
 
+    public Task<T?> GetOrCreateAsync<T>(string key, Func<Task<T?>> factory, CancellationToken cancellationToken = default) 
+        where T : class => 
+        GetOrCreateAsync(key, factory, _defaultOptions, cancellationToken);
+
     public async Task RemoveAsync(string key, CancellationToken cancellationToken = default) 
     {
         await _distributedCache.RemoveAsync(key, cancellationToken);
@@ -64,4 +70,8 @@ public class CacheService(IDistributedCache _distributedCache)
             options, 
             cancellationToken);
     }
+
+    public Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default) 
+        where T : class => 
+        SetAsync(key, value, _defaultOptions, cancellationToken);
 }

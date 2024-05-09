@@ -4,10 +4,10 @@ using Microsoft.Extensions.Options;
 namespace Item.DataAccess.Options.Cache;
 
 public class CacheOptionsSetup(IConfiguration _configuration)
-    : IConfigureOptions<CacheOptionsSetup>
+    : IConfigureOptions<CacheOptions>
 {
-    public void Configure(CacheOptionsSetup options)
+    public void Configure(CacheOptions options)
     {
-        _configuration.GetSection(nameof(CacheOptionsSetup)).Bind(options);
+        _configuration.GetSection(nameof(CacheOptions)).Bind(options);
     }
 }
