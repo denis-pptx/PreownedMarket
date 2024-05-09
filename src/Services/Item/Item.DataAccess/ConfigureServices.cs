@@ -1,5 +1,6 @@
 ﻿using Item.DataAccess.Caching;
 using Item.DataAccess.Data;
+using Item.DataAccess.Data.Interceptors;
 using Item.DataAccess.Options.Cache;
 using Item.DataAccess.Repositories.Cached;
 using Item.DataAccess.Repositories.Implementations;
@@ -18,9 +19,16 @@ public static class ConfigureServices
     {
         services.ConfigureOptions<CacheOptionsSetup>();
 
+        services.AddSingleton<CacheInterceptor>();
+
         var connection = configurationManager.GetConnectionString("MySQL");
         services.AddDbContext<ApplicationDbContext>(
             options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
+
+        services.AddDbContext<ApplicationDbContext>(
+            (serviceProvider, options) => options
+                .UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0)))
+                .AddInterceptors(serviceProvider.GetRequiredService<CacheInterceptor>()));
 
         services
             .AddScoped<IUnitOfWork, UnitOfWork>()
