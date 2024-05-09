@@ -50,19 +50,20 @@ public static class ConfigureServices
         services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
-
-            string applicationName = Assembly.GetExecutingAssembly().GetName().Name!.Split('.').First().ToLower();
+           
+            var options = busConfigurator
+                .BuildServiceProvider()
+                .GetRequiredService<IOptions<MessageBrokerOptions>>()
+                .Value;
 
             busConfigurator.AddConsumer<UserCreatedConsumer>()
-                .Endpoint(x => x.InstanceId = applicationName);
+                .Endpoint(x => x.InstanceId = options.InstanceId);
 
             busConfigurator.AddConsumer<UserDeletedConsumer>()
-                .Endpoint(x => x.InstanceId = applicationName);
+                .Endpoint(x => x.InstanceId = options.InstanceId);
 
             busConfigurator.UsingRabbitMq((context, configurator) =>
             {
-                var options = context.GetRequiredService<IOptions<MessageBrokerOptions>>().Value;
-
                 configurator.Host(new Uri(options.Host), h =>
                 {
                     h.Username(options.Username);
