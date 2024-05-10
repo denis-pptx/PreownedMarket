@@ -1,7 +1,7 @@
-﻿using Contracts.Users;
-using Item.DataAccess.Repositories.Interfaces;
+﻿using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
 using MassTransit;
+using Shared.Events.Users;
 
 namespace Item.BusinessLogic.Consumers.Users;
 
@@ -16,7 +16,7 @@ public class UserDeletedConsumer(
 
         if (existingUser is not null)
         {
-            _userRepository.Remove(existingUser);
+            await _userRepository.RemoveAsync(existingUser);
 
             await _unitOfWork.SaveChangesAsync();
         }

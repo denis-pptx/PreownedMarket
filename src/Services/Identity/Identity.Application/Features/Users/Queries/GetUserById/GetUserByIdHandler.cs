@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Exceptions;
 using Identity.Application.Exceptions.ErrorMessages;
 using Identity.Application.Models.DataTransferObjects.Users.Responses;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Shared.Errors.Exceptions;
 
 namespace Identity.Application.Features.Users.Queries.GetUserById;
 

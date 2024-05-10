@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models.Entities;
-using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
+using Shared.Errors.Exceptions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
@@ -27,7 +26,7 @@ public class CategoryService(
 
         var category = _mapper.Map<CategoryDto, Category>(categoryDto);
 
-        _categoryRepository.Add(category);
+        await _categoryRepository.AddAsync(category);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -39,7 +38,7 @@ public class CategoryService(
         var category = await _categoryRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(category);
 
-        _categoryRepository.Remove(category);
+        await _categoryRepository.RemoveAsync(category);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -69,7 +68,7 @@ public class CategoryService(
 
         _mapper.Map(categoryDto, category);
 
-        _categoryRepository.Update(category);
+        await _categoryRepository.UpdateAsync(category);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Shared.Errors.Exceptions;
 
 namespace Identity.Presentation.ExceptionHandlers;
 

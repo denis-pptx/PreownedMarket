@@ -1,7 +1,7 @@
-﻿using Chat.Application.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Shared.Errors.Exceptions;
 
 namespace Chat.Presentation.ExceptionHandlers;
 

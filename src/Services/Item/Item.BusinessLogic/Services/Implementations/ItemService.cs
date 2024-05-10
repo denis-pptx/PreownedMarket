@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
-using Contracts.Items;
-using Contracts.Users;
-using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Data.Initializers.Values;
+using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models;
 using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
 using Item.DataAccess.Transactions.Interfaces;
 using MassTransit;
+using Shared.Errors.Exceptions;
+using Shared.Events.Items;
+using Shared.Models;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
@@ -36,7 +36,7 @@ public class ItemService(
 
         item.UserId = _currentUserService.UserId;
 
-        _itemRepository.Add(item);
+        await _itemRepository.AddAsync(item, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -77,7 +77,7 @@ public class ItemService(
 
         item.Status = await _statusRepository.GetByNormalizedNameAsync(StatusValues.UnderReview.NormalizedName, cancellationToken);
 
-        _itemRepository.Update(item);
+        await _itemRepository.UpdateAsync(item, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -122,7 +122,7 @@ public class ItemService(
         {
             await _imageService.DeleteAllAttachedImagesAsync(item.Id, cancellationToken);
 
-            _itemRepository.Remove(item);
+            await _itemRepository.RemoveAsync(item, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -170,7 +170,7 @@ public class ItemService(
             throw new ForbiddenException();
         }
 
-        _itemRepository.Update(item);
+        await _itemRepository.UpdateAsync(item, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -7,7 +7,7 @@ public interface IRegionRepository
     Task<Region?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Region?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     Task<IEnumerable<Region>> GetAllAsync(CancellationToken cancellationToken = default);
-    void Add(Region region);
-    void Update(Region region);
-    void Remove(Region region);
+    Task AddAsync(Region region, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Region region, CancellationToken cancellationToken = default);
+    Task RemoveAsync(Region region, CancellationToken cancellationToken = default);
 }

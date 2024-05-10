@@ -1,6 +1,6 @@
 ﻿using Chat.Domain.Repositories;
-using Contracts.Items;
 using MassTransit;
+using Shared.Events.Items;
 
 namespace Chat.Application.Consumers.Items;
 

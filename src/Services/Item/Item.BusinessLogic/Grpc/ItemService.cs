@@ -1,8 +1,9 @@
 ﻿using Grpc.Core;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Protos;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Data.Initializers.Values;
+using Item.DataAccess.ErrorMessages;
+using Shared.Errors.Messages;
 
 namespace Item.BusinessLogic.Grpc;
 

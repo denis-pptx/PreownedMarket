@@ -80,24 +80,6 @@ public class ItemRepository(ApplicationDbContext dbContext)
         return item => item.Id;
     }
 
-    public async Task<IEnumerable<Item>> GetLikedByUserAsync(
-        Guid userId, 
-        CancellationToken cancellationToken = default)
-    {
-        var itemsQuery = from like in _dbContext.Likes
-                         join item in _dbContext.Items
-                         on like.ItemId equals item.Id
-                         where like.UserId == userId
-                         orderby like.CreatedOn
-                         select item;
-
-        var items = await itemsQuery
-            .ApplySpecification(new ItemSpecification())
-            .ToListAsync(cancellationToken);
-
-        return items;
-    }
-
     public override async Task<Item?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _entities

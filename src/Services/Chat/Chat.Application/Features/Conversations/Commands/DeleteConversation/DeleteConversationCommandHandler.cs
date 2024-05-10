@@ -1,11 +1,10 @@
 ﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Abstractions.Notifications;
-using Chat.Application.Exceptions;
-using Chat.Application.Exceptions.ErrorMessages;
+using Chat.Domain.ErrorMessages;
 using Chat.Domain.Repositories;
-using Identity.Application.Exceptions;
 using MediatR;
+using Shared.Errors.Exceptions;
 
 namespace Chat.Application.Features.Conversations.Commands.DeleteConversation;
 

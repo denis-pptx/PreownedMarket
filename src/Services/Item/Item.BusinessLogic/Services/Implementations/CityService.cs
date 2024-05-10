@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
 using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
+using Shared.Errors.Exceptions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
@@ -26,7 +26,7 @@ public class CityService(
 
         var city = _mapper.Map<CityDto, City>(cityDto);
 
-        _cityRepository.Add(city);
+        await _cityRepository.AddAsync(city, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -38,7 +38,7 @@ public class CityService(
         var city = await _cityRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(city);
 
-        _cityRepository.Remove(city);
+        await _cityRepository.RemoveAsync(city, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -68,7 +68,7 @@ public class CityService(
 
         _mapper.Map(cityDto, city);
 
-        _cityRepository.Update(city);
+        await _cityRepository.UpdateAsync(city, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

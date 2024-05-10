@@ -1,10 +1,9 @@
-﻿using AutoMapper;
-using Chat.Application.Abstractions.Contexts;
+﻿using Chat.Application.Abstractions.Contexts;
 using Chat.Application.Abstractions.Grpc;
 using Chat.Application.Abstractions.Messaging;
 using Chat.Application.Models.Conversations.Responses;
 using Chat.Domain.Repositories;
-using Identity.Application.Exceptions;
+using Shared.Errors.Exceptions;
 
 namespace Chat.Application.Features.Conversations.Queries.GetUserConversations;
 

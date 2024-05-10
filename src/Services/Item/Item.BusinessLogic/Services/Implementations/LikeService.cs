@@ -1,9 +1,9 @@
-﻿using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Exceptions.ErrorMessages;
-using Item.BusinessLogic.Services.Interfaces;
+﻿using Item.BusinessLogic.Services.Interfaces;
+using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Repositories.UnitOfWork;
+using Shared.Errors.Exceptions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
@@ -20,7 +20,7 @@ public class LikeService(
     {
         var userId = _currentUserService.UserId;
 
-        var items = await _itemRepository.GetLikedByUserAsync(userId, cancellationToken);
+        var items = await _likeRepository.GetLikedByUserItemsAsync(userId, cancellationToken);
 
         return items;
     }
@@ -50,7 +50,7 @@ public class LikeService(
             ItemId = itemId
         };
 
-        _likeRepository.Add(like);
+        await _likeRepository.AddAsync(like, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
@@ -66,7 +66,7 @@ public class LikeService(
             throw new ConflictException(LikeErrorMessages.NotLiked);
         }
 
-        _likeRepository.Remove(existingLike);
+        await _likeRepository.RemoveAsync(existingLike, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }

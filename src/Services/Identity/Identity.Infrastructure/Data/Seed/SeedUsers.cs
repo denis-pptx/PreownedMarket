@@ -1,7 +1,7 @@
-﻿using Contracts;
-using Contracts.Users;
-using Identity.Domain.Models;
+﻿using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Shared;
+using Shared.Models;
 
 namespace Identity.Infrastructure.Data.Seed;
 

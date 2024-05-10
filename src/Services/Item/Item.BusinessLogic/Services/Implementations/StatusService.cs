@@ -1,7 +1,7 @@
-﻿using Item.BusinessLogic.Exceptions;
-using Item.BusinessLogic.Services.Interfaces;
+﻿using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
+using Shared.Errors.Exceptions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
