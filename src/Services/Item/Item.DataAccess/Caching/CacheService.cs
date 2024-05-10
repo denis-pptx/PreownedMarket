@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
+using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,8 @@ public class CacheService(IDistributedCache _distributedCache)
     {
         ReferenceHandler = ReferenceHandler.Preserve
     };
+
+    private readonly ConcurrentDictionary<string, bool> _cacheKeys = [];
 
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) 
         where T : class
@@ -58,6 +61,8 @@ public class CacheService(IDistributedCache _distributedCache)
     public async Task RemoveAsync(string key, CancellationToken cancellationToken = default) 
     {
         await _distributedCache.RemoveAsync(key, cancellationToken);
+
+        _cacheKeys.TryRemove(key, out _);   
     }
 
     public async Task SetAsync<T>(
@@ -74,9 +79,21 @@ public class CacheService(IDistributedCache _distributedCache)
             cacheValue, 
             options, 
             cancellationToken);
+
+        _cacheKeys.TryAdd(key, default);
     }
 
     public Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default) 
         where T : class => 
         SetAsync(key, value, _defaultCacheOptions, cancellationToken);
+
+    public async Task RemoveByPrefixAsync(string prefixKey, CancellationToken cancellationToken = default)
+    {
+        IEnumerable<Task> tasks = _cacheKeys
+            .Keys
+            .Where(key => key.StartsWith(prefixKey))
+            .Select(key => RemoveAsync(key, cancellationToken));
+
+        await Task.WhenAll(tasks);
+    }
 }

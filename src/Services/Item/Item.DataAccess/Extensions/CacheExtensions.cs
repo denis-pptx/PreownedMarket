@@ -4,8 +4,7 @@ namespace Item.DataAccess.Extensions;
 
 public static class CacheExtensions
 {
-    public static string GetCacheKeyWithId<T>(this T entity)
-        where T : BaseEntity => 
+    public static string GetCacheKeyWithId<T>(this T entity) where T : BaseEntity => 
         typeof(T).GetCacheKeyWithId(entity.Id);
 
     public static string GetCacheKeyWithAll(this Type type) =>

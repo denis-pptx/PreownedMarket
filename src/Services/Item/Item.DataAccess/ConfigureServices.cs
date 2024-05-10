@@ -26,14 +26,14 @@ public static class ConfigureServices
             .AddScoped<IUnitOfWork, UnitOfWork>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<ICityRepository, CityRepository>()
-            .AddScoped<ILikeRepository, LikeRepository>()
-            .AddScoped<IItemRepository, ItemRepository>()
             .AddScoped<IImageRepository, ImageRepository>();
 
         services
             .AddScoped<IUserRepository, UserRepository>().Decorate<IUserRepository, CachedUserRepository>()
             .AddScoped<IStatusRepository, StatusRepository>().Decorate<IStatusRepository, CachedStatusRepository>()
-            .AddScoped<IRegionRepository, RegionRepository>().Decorate<IRegionRepository, CachedRegionRepository>();
+            .AddScoped<IRegionRepository, RegionRepository>().Decorate<IRegionRepository, CachedRegionRepository>()
+            .AddScoped<IItemRepository, ItemRepository>().Decorate<IItemRepository, CachedItemRepository>()
+            .AddScoped<ILikeRepository, LikeRepository>().Decorate<ILikeRepository, CachedLikeRepository>();
 
         services
             .AddDistributedMemoryCache()

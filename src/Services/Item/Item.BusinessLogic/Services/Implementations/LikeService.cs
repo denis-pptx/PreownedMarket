@@ -20,7 +20,7 @@ public class LikeService(
     {
         var userId = _currentUserService.UserId;
 
-        var items = await _itemRepository.GetLikedByUserAsync(userId, cancellationToken);
+        var items = await _likeRepository.GetLikedByUserItemsAsync(userId, cancellationToken);
 
         return items;
     }

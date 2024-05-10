@@ -20,4 +20,6 @@ public interface ICacheService
         where T : class;
 
     Task RemoveAsync(string key, CancellationToken cancellationToken = default);
+
+    Task RemoveByPrefixAsync(string prefixKey, CancellationToken cancellationToken = default);
 }
