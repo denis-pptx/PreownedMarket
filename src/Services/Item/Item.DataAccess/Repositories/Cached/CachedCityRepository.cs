@@ -53,7 +53,6 @@ public class CachedCityRepository(
 
     public async Task UpdateAsync(City city, CancellationToken cancellationToken = default)
     {
-
         await _decorated.UpdateAsync(city, cancellationToken);
 
         await _cacheService.RemoveAsync(city.GetCacheKeyWithId(), cancellationToken);
