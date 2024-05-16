@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Item.DataAccess.Repositories.Interfaces;
 using Item.DataAccess.Models.Entities;
-using Item.DataAccess.Repositories.UnitOfWork;
 using Shared.Errors.Exceptions;
+using Item.DataAccess.UnitOfWork;
 
 namespace Item.BusinessLogic.Services.Implementations;
 

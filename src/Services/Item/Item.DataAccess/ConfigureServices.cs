@@ -4,7 +4,7 @@ using Item.DataAccess.Options.Cache;
 using Item.DataAccess.Repositories.Cached;
 using Item.DataAccess.Repositories.Implementations;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Repositories.UnitOfWork;
+using Item.DataAccess.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +23,7 @@ public static class ConfigureServices
             options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
 
         services
-            .AddScoped<IUnitOfWork, UnitOfWork>()
+            .AddScoped<IUnitOfWork, EfUnitOfWork>()
             .AddScoped<ICategoryRepository, CategoryRepository>().Decorate<ICategoryRepository, CachedCategoryRepository>()
             .AddScoped<IUserRepository, UserRepository>().Decorate<IUserRepository, CachedUserRepository>()
             .AddScoped<IStatusRepository, StatusRepository>().Decorate<IStatusRepository, CachedStatusRepository>()

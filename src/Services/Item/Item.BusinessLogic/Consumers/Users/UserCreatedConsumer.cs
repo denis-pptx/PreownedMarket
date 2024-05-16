@@ -1,6 +1,6 @@
 ﻿using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Repositories.UnitOfWork;
+using Item.DataAccess.UnitOfWork;
 using MassTransit;
 using Shared.Events.Users;
 

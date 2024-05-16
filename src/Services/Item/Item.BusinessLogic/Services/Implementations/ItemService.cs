@@ -6,8 +6,7 @@ using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models;
 using Item.DataAccess.Models.Filter;
 using Item.DataAccess.Repositories.Interfaces;
-using Item.DataAccess.Repositories.UnitOfWork;
-using Item.DataAccess.Transactions.Interfaces;
+using Item.DataAccess.UnitOfWork;
 using MassTransit;
 using Shared.Errors.Exceptions;
 using Shared.Events.Items;
@@ -23,7 +22,6 @@ public class ItemService(
     IStatusRepository _statusRepository,
     ICurrentUserService _currentUserService,
     IItemImageService _imageService,
-    ITransactionManager _transactionManager,
     IPublishEndpoint _publishEndpoint,
     IMapper _mapper) 
     : IItemService
@@ -71,11 +69,12 @@ public class ItemService(
             throw new ForbiddenException();
         }
 
-        using var transaction = await _transactionManager.BeginTransactionAsync(cancellationToken);
+        using var transaction = _unitOfWork.BeginTransaction();
 
         _mapper.Map(itemDto, item);
 
-        item.Status = await _statusRepository.GetByNormalizedNameAsync(StatusValues.UnderReview.NormalizedName, cancellationToken);
+        item.Status = await _statusRepository
+            .GetByNormalizedNameAsync(StatusValues.UnderReview.NormalizedName, cancellationToken);
 
         await _itemRepository.UpdateAsync(item, cancellationToken);
 
@@ -89,7 +88,7 @@ public class ItemService(
 
             await _imageService.DeleteAttachedImagesAsync(oldImages, cancellationToken);
 
-            await transaction.CommitAsync(cancellationToken);
+            transaction.Commit();
 
             return item;
         }
@@ -100,7 +99,7 @@ public class ItemService(
 
             await _imageService.DeleteAttachedImagesAsync(imagesToDelete, cancellationToken);
 
-            await transaction.RollbackAsync(cancellationToken);
+            transaction.Rollback();
 
             throw;
         }

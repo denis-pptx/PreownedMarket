@@ -6,8 +6,6 @@ using Item.BusinessLogic.Options.Jwt;
 using Item.BusinessLogic.Options.MessageBroker;
 using Item.BusinessLogic.Services.Implementations;
 using Item.BusinessLogic.Services.Interfaces;
-using Item.DataAccess.Transactions.Implementations;
-using Item.DataAccess.Transactions.Interfaces;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -36,7 +34,6 @@ public static class ConfigureServices
 
         services
             .AddScoped<ICurrentUserService, CurrentUserService>()
-            .AddScoped<ITransactionManager, EfTransactionManager>()
             .AddScoped<IFileService, FileService>();
 
         services
