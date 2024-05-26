@@ -79,6 +79,7 @@
       "UpstreamHttpMethod": [ "Put" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
+
     // Item.API
     {
       "DownstreamPathTemplate": "/api/categories",
@@ -260,6 +261,73 @@
       ],
       "UpstreamPathTemplate": "/statuses",
       "UpstreamHttpMethod": [ "Get" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    // Chat.API
+    {
+      "DownstreamPathTemplate": "/api/conversations",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chat.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/conversations",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/conversations/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chat.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/conversations/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/conversations/item/{itemId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chat.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/conversations/item/{itemId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/messages",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chat.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/messages",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/messages/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chat.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/messages/{id}",
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     }
   ],
