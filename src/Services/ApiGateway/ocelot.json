@@ -40,6 +40,7 @@
       "UpstreamHttpMethod": [ "Post" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
+
     {
       "DownstreamPathTemplate": "/api/users",
       "DownstreamScheme": "https",
@@ -67,7 +68,10 @@
       ],
       "UpstreamPathTemplate": "/users/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/users/role",
@@ -80,7 +84,10 @@
       ],
       "UpstreamPathTemplate": "/users/role",
       "UpstreamHttpMethod": [ "Put" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     // Item.API
@@ -94,7 +101,36 @@
         }
       ],
       "UpstreamPathTemplate": "/categories",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/categories",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/categories",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/categories/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -107,7 +143,24 @@
         }
       ],
       "UpstreamPathTemplate": "/categories/{id}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/cities",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/cities",
+      "UpstreamHttpMethod": [ "Get" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -120,7 +173,23 @@
         }
       ],
       "UpstreamPathTemplate": "/cities",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/cities/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/cities/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -133,9 +202,13 @@
         }
       ],
       "UpstreamPathTemplate": "/cities/{id}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
+
     {
       "DownstreamPathTemplate": "/api/featured",
       "DownstreamScheme": "https",
@@ -147,7 +220,10 @@
       ],
       "UpstreamPathTemplate": "/featured",
       "UpstreamHttpMethod": [ "Get" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/featured/like/{itemId}",
@@ -160,7 +236,10 @@
       ],
       "UpstreamPathTemplate": "/featured/like/{itemId}",
       "UpstreamHttpMethod": [ "Post" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/featured/unlike/{itemId}",
@@ -173,6 +252,23 @@
       ],
       "UpstreamPathTemplate": "/featured/unlike/{itemId}",
       "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/items",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/items",
+      "UpstreamHttpMethod": [ "Get" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -185,7 +281,23 @@
         }
       ],
       "UpstreamPathTemplate": "/items",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/items/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/items/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -198,8 +310,11 @@
         }
       ],
       "UpstreamPathTemplate": "/items/{id}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/items/status/{id}",
@@ -212,6 +327,23 @@
       ],
       "UpstreamPathTemplate": "/items/status/{id}",
       "UpstreamHttpMethod": [ "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/regions",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/regions",
+      "UpstreamHttpMethod": [ "Get" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -224,7 +356,23 @@
         }
       ],
       "UpstreamPathTemplate": "/regions",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/regions/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "item.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/regions/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -237,9 +385,13 @@
         }
       ],
       "UpstreamPathTemplate": "/regions/{id}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
+
     {
       "DownstreamPathTemplate": "/api/statuses/{id}",
       "DownstreamScheme": "https",
@@ -279,7 +431,10 @@
       ],
       "UpstreamPathTemplate": "/conversations",
       "UpstreamHttpMethod": [ "Get", "Post" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/conversations/{id}",
@@ -292,7 +447,10 @@
       ],
       "UpstreamPathTemplate": "/conversations/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/conversations/item/{itemId}",
@@ -305,8 +463,12 @@
       ],
       "UpstreamPathTemplate": "/conversations/item/{itemId}",
       "UpstreamHttpMethod": [ "Get" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
+
     {
       "DownstreamPathTemplate": "/api/messages",
       "DownstreamScheme": "https",
@@ -318,7 +480,10 @@
       ],
       "UpstreamPathTemplate": "/messages",
       "UpstreamHttpMethod": [ "Post" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/messages/{id}",
@@ -331,7 +496,10 @@
       ],
       "UpstreamPathTemplate": "/messages/{id}",
       "UpstreamHttpMethod": [ "Put", "Delete" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
   ],
   "GlobalConfiguration": {
