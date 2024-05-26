@@ -1,7 +1,5 @@
 ﻿using Chat.Application.Behaviors;
-using Chat.Application.Options.Jwt;
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -11,12 +9,6 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services
-            .ConfigureOptions<JwtOptionsSetup>()
-            .ConfigureOptions<JwtBearerOptionsSetup>();
-
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-
         services.AddMediatR(config => 
         {
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

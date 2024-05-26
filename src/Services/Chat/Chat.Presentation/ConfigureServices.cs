@@ -1,4 +1,6 @@
 ﻿using Chat.Presentation.ExceptionHandlers;
+using Chat.Presentation.Options.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Chat.Presentation;
 
@@ -21,5 +23,13 @@ public static class ConfigureServices
 
         services.AddRouting(options => 
             options.LowercaseUrls = true);
+
+        services
+            .ConfigureOptions<JwtOptionsSetup>()
+            .ConfigureOptions<JwtBearerOptionsSetup>();
+
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
     }
 }

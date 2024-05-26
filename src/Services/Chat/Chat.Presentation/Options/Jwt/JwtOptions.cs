@@ -1,4 +1,4 @@
-﻿namespace Chat.Application.Options.Jwt;
+﻿namespace Chat.Presentation.Options.Jwt;
 
 public class JwtOptions
 {
