@@ -1,5 +1,84 @@
 {
   "Routes": [
+    // Identity.API
+    {
+      "DownstreamPathTemplate": "/api/auth/register",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/register",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/auth/login",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/login",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/auth/refresh",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/refresh",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/users",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/users/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/role",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/users/role",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
     // Item.API
     {
       "DownstreamPathTemplate": "/api/categories",
