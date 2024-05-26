@@ -9,20 +9,21 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Chat.WebAPI/Chat.WebAPI.csproj", "Chat.WebAPI/"]
-COPY ["Chat.Infrastructure/Chat.Infrastructure.csproj", "Chat.Infrastructure/"]
-COPY ["Chat.Application/Chat.Application.csproj", "Chat.Application/"]
-COPY ["Chat.Domain/Chat.Domain.csproj", "Chat.Domain/"]
-RUN dotnet restore "./Chat.WebAPI/./Chat.WebAPI.csproj"
+COPY ["Services/Chat/Chat.Presentation/Chat.Presentation.csproj", "Services/Chat/Chat.Presentation/"]
+COPY ["Services/Chat/Chat.Infrastructure/Chat.Infrastructure.csproj", "Services/Chat/Chat.Infrastructure/"]
+COPY ["Services/Chat/Chat.Application/Chat.Application.csproj", "Services/Chat/Chat.Application/"]
+COPY ["Services/Shared/Shared.csproj", "Services/Shared/"]
+COPY ["Services/Chat/Chat.Domain/Chat.Domain.csproj", "Services/Chat/Chat.Domain/"]
+RUN dotnet restore "./Services/Chat/Chat.Presentation/./Chat.Presentation.csproj"
 COPY . .
-WORKDIR "/src/Chat.WebAPI"
-RUN dotnet build "./Chat.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Services/Chat/Chat.Presentation"
+RUN dotnet build "./Chat.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Chat.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Chat.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Chat.WebAPI.dll"]
+ENTRYPOINT ["dotnet", "Chat.Presentation.dll"]

@@ -17,7 +17,7 @@ services:
     container_name: identity-api
     build:
       context: .
-      dockerfile: Identity/Identity.Presentation/Dockerfile
+      dockerfile: Services/Identity/Identity.Presentation/Dockerfile
     depends_on:
       - identity.db
       - elasticsearch 
@@ -42,7 +42,7 @@ services:
     container_name: item-api
     build:
       context: .
-      dockerfile: Item/Item.Presentation/Dockerfile
+      dockerfile: Services/Item/Item.Presentation/Dockerfile
     depends_on:
       - item.db
       - market.mq
@@ -57,7 +57,7 @@ services:
     container_name: chat-api
     build:
       context: .
-      dockerfile: Chat/Chat.Presentation/Dockerfile
+      dockerfile: Services/Chat/Chat.Presentation/Dockerfile
     depends_on:
       - chat.db
       - market.mq
