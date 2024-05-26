@@ -1,5 +1,4 @@
 ﻿using Item.DataAccess.Caching;
-using Item.DataAccess.Extensions;
 using Item.DataAccess.Models.Entities;
 using Item.DataAccess.Repositories.Interfaces;
 

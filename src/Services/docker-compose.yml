@@ -7,6 +7,10 @@ services:
     build:
       context: .
       dockerfile: ApiGateway/Dockerfile
+    depends_on:
+     - identity.api
+     - item.api
+     - chat.api 
 
   identity.api:
     image: ${DOCKER_REGISTRY-}identity-api
