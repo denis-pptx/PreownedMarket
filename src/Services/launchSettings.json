@@ -6,7 +6,8 @@
       "serviceActions": {
         "chat.presentation": "StartDebugging",
         "identity.presentation": "StartDebugging",
-        "item.presentation": "StartDebugging"
+        "item.presentation": "StartDebugging",
+        "apigateway": "StartDebugging"
       }
     }
   }

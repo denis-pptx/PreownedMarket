@@ -1,6 +1,13 @@
 version: '3.4'
 
 services:
+  api.gateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+
   identity.api:
     image: ${DOCKER_REGISTRY-}identity-api
     container_name: identity-api
