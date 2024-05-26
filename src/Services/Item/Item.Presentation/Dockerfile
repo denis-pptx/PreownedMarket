@@ -9,12 +9,13 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Item.Presentation/Item.Presentation.csproj", "Item.Presentation/"]
-COPY ["Item.BusinessLogic/Item.BusinessLogic.csproj", "Item.BusinessLogic/"]
-COPY ["Item.DataAccess/Item.DataAccess.csproj", "Item.DataAccess/"]
-RUN dotnet restore "./Item.Presentation/./Item.Presentation.csproj"
+COPY ["Services/Item/Item.Presentation/Item.Presentation.csproj", "Services/Item/Item.Presentation/"]
+COPY ["Services/Item/Item.BusinessLogic/Item.BusinessLogic.csproj", "Services/Item/Item.BusinessLogic/"]
+COPY ["Services/Shared/Shared.csproj", "Services/Shared/"]
+COPY ["Services/Item/Item.DataAccess/Item.DataAccess.csproj", "Services/Item/Item.DataAccess/"]
+RUN dotnet restore "./Services/Item/Item.Presentation/./Item.Presentation.csproj"
 COPY . .
-WORKDIR "/src/Item.Presentation"
+WORKDIR "/src/Services/Item/Item.Presentation"
 RUN dotnet build "./Item.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Chat.Application.Options.Jwt;
+namespace ApiGateway.Options.Jwt;
 
 public class JwtBearerOptionsSetup(IOptions<JwtOptions> _jwtOptions)
     : IConfigureNamedOptions<JwtBearerOptions>
@@ -12,6 +12,8 @@ public class JwtBearerOptionsSetup(IOptions<JwtOptions> _jwtOptions)
 
     public void Configure(JwtBearerOptions options)
     {
+        options.SaveToken = true;
+
         options.TokenValidationParameters = new()
         {
             ValidateIssuer = true,

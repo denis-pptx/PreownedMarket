@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
-namespace Chat.Application.Options.Jwt;
+namespace Chat.Presentation.Options.Jwt;
 
 public class JwtOptionsSetup(IConfiguration _configuration)
     : IConfigureOptions<JwtOptions>
