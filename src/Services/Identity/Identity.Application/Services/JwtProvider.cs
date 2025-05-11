@@ -42,7 +42,7 @@ public class JwtProvider(
             audience: _jwtOptions.Audience,
             claims: claims,
             null,
-            expires: DateTime.Now.AddMinutes(_jwtOptions.AccessTokenLifeTimeMinutes),
+            expires: DateTime.UtcNow.AddMinutes(_jwtOptions.AccessTokenLifeTimeMinutes),
             signingCredentials: signingCredentials);
 
         var tokenValue = new JwtSecurityTokenHandler()
@@ -59,7 +59,7 @@ public class JwtProvider(
         numberGenerator.GetBytes(randomNumber);
 
         var tokenString = Convert.ToBase64String(randomNumber);
-        var tokenLifeTime = DateTime.Now.AddMinutes(_jwtOptions.RefreshTokenLifeTimeMinutes);
+        var tokenLifeTime = DateTime.UtcNow.AddMinutes(_jwtOptions.RefreshTokenLifeTimeMinutes);
 
         return new RefreshTokenModel(tokenString, tokenLifeTime);
     }

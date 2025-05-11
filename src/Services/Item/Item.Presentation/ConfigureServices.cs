@@ -1,6 +1,7 @@
 ﻿using Item.Presentation.ExceptionHandlers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
+using Shared.Configuration;
 
 namespace Item.Presentation;
 
@@ -15,7 +16,7 @@ public static class ConfigureServices
 
         services
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen();
+            .AddSwagger(Const.ApplicationName);
 
         services.AddRouting(options => 
             options.LowercaseUrls = true);

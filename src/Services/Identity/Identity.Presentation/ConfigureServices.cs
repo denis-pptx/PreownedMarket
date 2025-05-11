@@ -4,6 +4,7 @@ using Identity.Presentation.ExceptionHandlers;
 using Identity.Presentation.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Shared.Configuration;
 
 namespace Identity.Presentation;
 
@@ -15,7 +16,7 @@ public static class ConfigureServices
 
         services.AddEndpointsApiExplorer();
 
-        services.AddSwaggerGen();
+        services.AddSwagger(Const.ApplicationName);
 
         services.ConfigureOptions<JwtBearerOptionsSetup>();
 

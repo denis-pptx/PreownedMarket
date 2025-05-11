@@ -1,4 +1,5 @@
 ﻿using Chat.Presentation.ExceptionHandlers;
+using Shared.Configuration;
 
 namespace Chat.Presentation;
 
@@ -10,7 +11,7 @@ public static class ConfigureServices
 
         services
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen();
+            .AddSwagger(Const.ApplicationName);
 
         services
             .AddProblemDetails()

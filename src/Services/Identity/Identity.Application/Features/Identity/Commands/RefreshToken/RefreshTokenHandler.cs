@@ -32,7 +32,7 @@ public class RefreshTokenHandler(
 
         if (user is null || 
             user.RefreshToken != request.RefreshToken || 
-            user.RefreshExpiryTime < DateTime.Now)
+            user.RefreshExpiryTime < DateTime.UtcNow)
         {
             throw new UnauthorizedException();
         }
