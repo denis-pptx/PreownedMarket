@@ -12,21 +12,21 @@ public class RegionRepository(ApplicationDbContext dbContext)
 {
     public override async Task<Region?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .ApplySpecification(new RegionSpecification(id))
             .SingleOrDefaultAsync(entity => entity.Id == id, cancellationToken);
     }
 
     public override async Task<IEnumerable<Region>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .ApplySpecification(new RegionSpecification())
             .ToListAsync(cancellationToken);
     }
 
     public async Task<Region?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .ApplySpecification(new RegionSpecification())
             .SingleOrDefaultAsync(cancellationToken);
     }

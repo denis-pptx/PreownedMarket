@@ -1,6 +1,7 @@
 ﻿using Shared.Errors.Messages;
 
 namespace Item.DataAccess.ErrorMessages;
+
 public static class LikeErrorMessages
 {
     public static ErrorMessage AlreadyLiked => new(

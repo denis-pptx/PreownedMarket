@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Item.DataAccess.Caching;
 
-public class CacheService(IDistributedCache _distributedCache) 
+public class CacheService(IDistributedCache distributedCache) 
     : ICacheService
 {
     private readonly DistributedCacheEntryOptions _defaultCacheOptions = new();
@@ -20,7 +20,7 @@ public class CacheService(IDistributedCache _distributedCache)
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) 
         where T : class
     {
-        var cachedValue = await _distributedCache.GetStringAsync(key, cancellationToken);
+        var cachedValue = await distributedCache.GetStringAsync(key, cancellationToken);
 
         if (cachedValue is null)
         {
@@ -60,7 +60,7 @@ public class CacheService(IDistributedCache _distributedCache)
 
     public async Task RemoveAsync(string key, CancellationToken cancellationToken = default) 
     {
-        await _distributedCache.RemoveAsync(key, cancellationToken);
+        await distributedCache.RemoveAsync(key, cancellationToken);
 
         _cacheKeys.TryRemove(key, out _);   
     }
@@ -72,9 +72,9 @@ public class CacheService(IDistributedCache _distributedCache)
         CancellationToken cancellationToken = default)
         where T : class
     {
-        string cacheValue = JsonSerializer.Serialize(value, _serializerOptions);
+        var cacheValue = JsonSerializer.Serialize(value, _serializerOptions);
 
-        await _distributedCache.SetStringAsync(
+        await distributedCache.SetStringAsync(
             key, 
             cacheValue, 
             options, 
@@ -89,7 +89,7 @@ public class CacheService(IDistributedCache _distributedCache)
 
     public async Task RemoveByPrefixAsync(string prefixKey, CancellationToken cancellationToken = default)
     {
-        IEnumerable<Task> tasks = _cacheKeys
+        var tasks = _cacheKeys
             .Keys
             .Where(key => key.StartsWith(prefixKey))
             .Select(key => RemoveAsync(key, cancellationToken));

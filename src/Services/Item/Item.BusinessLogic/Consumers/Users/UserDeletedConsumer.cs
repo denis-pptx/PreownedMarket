@@ -6,19 +6,19 @@ using Shared.Events.Users;
 namespace Item.BusinessLogic.Consumers.Users;
 
 public class UserDeletedConsumer(
-    IUnitOfWork _unitOfWork,
-    IUserRepository _userRepository) 
+    IUnitOfWork unitOfWork,
+    IUserRepository userRepository) 
     : IConsumer<UserDeletedEvent>
 {
     public async Task Consume(ConsumeContext<UserDeletedEvent> context)
     {
-        var existingUser = await _userRepository.GetByIdAsync(context.Message.UserId);
+        var existingUser = await userRepository.GetByIdAsync(context.Message.UserId);
 
         if (existingUser is not null)
         {
-            await _userRepository.RemoveAsync(existingUser);
+            await userRepository.RemoveAsync(existingUser);
 
-            await _unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
     }
 }

@@ -7,8 +7,8 @@ using Shared.Events.Users;
 namespace Item.BusinessLogic.Consumers.Users;
 
 public class UserCreatedConsumer(
-    IUnitOfWork _unitOfWork, 
-    IUserRepository _userRepository) 
+    IUnitOfWork unitOfWork, 
+    IUserRepository userRepository) 
     : IConsumer<UserCreatedEvent>
 {
     public async Task Consume(ConsumeContext<UserCreatedEvent> context)
@@ -18,13 +18,13 @@ public class UserCreatedConsumer(
             Id = context.Message.Id
         };
 
-        var existingUser = await _userRepository.GetByIdAsync(user.Id);
+        var existingUser = await userRepository.GetByIdAsync(user.Id);
 
         if (existingUser is null)
         {
-            await _userRepository.AddAsync(user);
+            await userRepository.AddAsync(user);
 
-            await _unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
     }
 }

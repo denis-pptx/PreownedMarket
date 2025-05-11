@@ -8,14 +8,14 @@ namespace Item.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CitiesController(ICityService _cityService)
+public class CitiesController(ICityService cityService)
     : ControllerBase
 {
     // GET: api/<CitiesController>
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-       var result = await _cityService.GetAllAsync(cancellationToken);
+       var result = await cityService.GetAllAsync(cancellationToken);
 
         return Ok(result);
     }
@@ -24,7 +24,7 @@ public class CitiesController(ICityService _cityService)
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _cityService.GetByIdAsync(id, cancellationToken);
+        var result = await cityService.GetByIdAsync(id, cancellationToken);
 
         return Ok(result);
     }
@@ -34,7 +34,7 @@ public class CitiesController(ICityService _cityService)
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Post([FromBody] CityDto cityDto, CancellationToken cancellationToken)
     {
-        var result = await _cityService.CreateAsync(cityDto, cancellationToken);
+        var result = await cityService.CreateAsync(cityDto, cancellationToken);
 
         return Ok(result);
     }
@@ -44,7 +44,7 @@ public class CitiesController(ICityService _cityService)
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] CityDto cityDto, CancellationToken cancellationToken)
     {
-        var result = await _cityService.UpdateAsync(id, cityDto, cancellationToken);
+        var result = await cityService.UpdateAsync(id, cityDto, cancellationToken);
 
         return Ok(result);
     }
@@ -54,7 +54,7 @@ public class CitiesController(ICityService _cityService)
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _cityService.DeleteByIdAsync(id, cancellationToken);
+        var result = await cityService.DeleteByIdAsync(id, cancellationToken);
 
         return Ok(result);
     }

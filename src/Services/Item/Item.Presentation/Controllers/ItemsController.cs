@@ -8,14 +8,14 @@ namespace Item.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ItemsController(IItemService _itemService) 
+public class ItemsController(IItemService itemService) 
     : ControllerBase
 {
     // GET: api/<ItemsController>
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] ItemFilterRequest filterRequest, CancellationToken cancellationToken)
     {
-        var result = await _itemService.GetAsync(filterRequest, cancellationToken);
+        var result = await itemService.GetAsync(filterRequest, cancellationToken);
 
         return Ok(result);
     }
@@ -24,7 +24,7 @@ public class ItemsController(IItemService _itemService)
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _itemService.GetByIdAsync(id, cancellationToken);
+        var result = await itemService.GetByIdAsync(id, cancellationToken);
         
         return Ok(result);
     }
@@ -34,7 +34,7 @@ public class ItemsController(IItemService _itemService)
     [Authorize]
     public async Task<IActionResult> Post([FromForm] ItemDto itemDto, CancellationToken cancellationToken)
     {
-        var result = await _itemService.CreateAsync(itemDto, cancellationToken);
+        var result = await itemService.CreateAsync(itemDto, cancellationToken);
 
         return Ok(result);
     }
@@ -44,7 +44,7 @@ public class ItemsController(IItemService _itemService)
     [Authorize]
     public async Task<IActionResult> ChangeItemStatus(Guid id, [FromBody] UpdateStatusDto updateStatusDto, CancellationToken cancellationToken)
     {
-        var result = await _itemService.ChangeStatus(id, updateStatusDto, cancellationToken);
+        var result = await itemService.ChangeStatus(id, updateStatusDto, cancellationToken);
 
         return Ok(result);
     }
@@ -54,7 +54,7 @@ public class ItemsController(IItemService _itemService)
     [Authorize]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromForm] ItemDto itemDto, CancellationToken cancellationToken)
     {
-        var result = await _itemService.UpdateAsync(id, itemDto, cancellationToken);
+        var result = await itemService.UpdateAsync(id, itemDto, cancellationToken);
 
         return Ok(result);
     }
@@ -64,7 +64,7 @@ public class ItemsController(IItemService _itemService)
     [Authorize]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _itemService.DeleteByIdAsync(id, cancellationToken);
+        var result = await itemService.DeleteByIdAsync(id, cancellationToken);
 
         return Ok(result);
     }

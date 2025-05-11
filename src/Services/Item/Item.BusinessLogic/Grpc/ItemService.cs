@@ -9,7 +9,7 @@ namespace Item.BusinessLogic.Grpc;
 
 using Item = DataAccess.Models.Entities.Item;
 
-public class ItemService(IItemRepository _itemRepository)
+public class ItemService(IItemRepository itemRepository)
     : Protos.Item.ItemBase
 {
     public override async Task<GetItemResponse> GetItem(GetItemRequest request, ServerCallContext context)
@@ -21,7 +21,7 @@ public class ItemService(IItemRepository _itemRepository)
                 CommonErrorMessages.InvalidGuid.Description));
         }
 
-        var item = await _itemRepository.GetByIdAsync(id, context.CancellationToken);
+        var item = await itemRepository.GetByIdAsync(id, context.CancellationToken);
 
         if (item is null)
         {

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Item.DataAccess.Data.Initializers;
 
-public class StatusInitializer
+public static class StatusInitializer
 {
     private static IEnumerable<Status> GetAllStatuses()
     {
@@ -22,9 +22,9 @@ public class StatusInitializer
         var existingStatusNames = dbContext.Statuses.Select(c => c.NormalizedName);
 
         var allStatuses = GetAllStatuses();
-        var statusedToAdd = allStatuses.Where(status => !existingStatusNames.Contains(status.NormalizedName));
+        var statusesToAdd = allStatuses.Where(status => !existingStatusNames.Contains(status.NormalizedName));
 
-        dbContext.Statuses.AddRange(statusedToAdd);
+        dbContext.Statuses.AddRange(statusesToAdd);
 
         await dbContext.SaveChangesAsync();
     }

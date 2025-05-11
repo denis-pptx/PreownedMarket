@@ -10,7 +10,7 @@ public class CityRepository(ApplicationDbContext dbContext)
 {
     public async Task<City?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .Where(city => city.Name == name)
             .SingleOrDefaultAsync(cancellationToken);
     }

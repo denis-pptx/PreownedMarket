@@ -8,8 +8,8 @@ namespace Item.DataAccess.Repositories.Cached;
 using Item = Models.Entities.Item;
 
 public class CachedLikeRepository(
-    ILikeRepository _decorated, 
-    ICacheService _cacheService) 
+    ILikeRepository decorated, 
+    ICacheService cacheService) 
     : ILikeRepository
 {
     private readonly DistributedCacheEntryOptions _cacheOptions = new()
@@ -19,13 +19,13 @@ public class CachedLikeRepository(
     };
 
     public Task<Like?> GetByItemAndUserAsync(Guid itemId, Guid userId, CancellationToken cancellationToken = default) =>
-        _decorated.GetByItemAndUserAsync(itemId, userId, cancellationToken);
+        decorated.GetByItemAndUserAsync(itemId, userId, cancellationToken);
 
     public async Task<IEnumerable<Item>> GetLikedByUserItemsAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        var items = await _cacheService.GetOrCreateAsync(
+        var items = await cacheService.GetOrCreateAsync(
            GetLikedByUserCacheKey(userId),
-           async () => await _decorated.GetLikedByUserItemsAsync(userId, cancellationToken),
+           async () => await decorated.GetLikedByUserItemsAsync(userId, cancellationToken),
             _cacheOptions,
            cancellationToken);
 
@@ -34,18 +34,18 @@ public class CachedLikeRepository(
 
     public async Task AddAsync(Like like, CancellationToken cancellationToken = default)
     {
-        await _decorated.AddAsync(like, cancellationToken);
+        await decorated.AddAsync(like, cancellationToken);
 
-        await _cacheService.RemoveAsync(
+        await cacheService.RemoveAsync(
             GetLikedByUserCacheKey(like.UserId), 
             cancellationToken);
     }
 
     public async Task RemoveAsync(Like like, CancellationToken cancellationToken = default)
     {
-        await _decorated.RemoveAsync(like, cancellationToken);
+        await decorated.RemoveAsync(like, cancellationToken);
 
-        await _cacheService.RemoveAsync(
+        await cacheService.RemoveAsync(
             GetLikedByUserCacheKey(like.UserId), 
             cancellationToken);
     }

@@ -8,14 +8,14 @@ namespace Item.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CategoriesController(ICategoryService _categoryService) 
+public class CategoriesController(ICategoryService categoryService) 
     : ControllerBase
 {
     // GET: api/<CategoriesController>
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-        var result = await _categoryService.GetAllAsync(cancellationToken);
+        var result = await categoryService.GetAllAsync(cancellationToken);
 
         return Ok(result);
     }
@@ -24,7 +24,7 @@ public class CategoriesController(ICategoryService _categoryService)
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.GetByIdAsync(id, cancellationToken);
+        var result = await categoryService.GetByIdAsync(id, cancellationToken);
 
         return Ok(result);
     }
@@ -34,7 +34,7 @@ public class CategoriesController(ICategoryService _categoryService)
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Post([FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.CreateAsync(categoryDto, cancellationToken);
+        var result = await categoryService.CreateAsync(categoryDto, cancellationToken);
 
         return Ok(result);
     }
@@ -44,7 +44,7 @@ public class CategoriesController(ICategoryService _categoryService)
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] CategoryDto categoryDto, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.UpdateAsync(id, categoryDto, cancellationToken);
+        var result = await categoryService.UpdateAsync(id, categoryDto, cancellationToken);
 
         return Ok(result);
     }
@@ -54,7 +54,7 @@ public class CategoriesController(ICategoryService _categoryService)
     [Authorize(Roles = nameof(Role.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.DeleteByIdAsync(id, cancellationToken);
+        var result = await categoryService.DeleteByIdAsync(id, cancellationToken);
 
         return Ok(result);
     }

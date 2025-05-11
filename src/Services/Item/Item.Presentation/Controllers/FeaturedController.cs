@@ -8,14 +8,14 @@ namespace Item.Presentation.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class FeaturedController(ILikeService _likeService)
+public class FeaturedController(ILikeService likeService)
     : ControllerBase
 {
     // GET: api/<FeaturedController>
     [HttpGet]
     public async Task<IActionResult> GetLikedItems(CancellationToken token)
     {
-        var result = await _likeService.GetLikedItemsAsync(token);
+        var result = await likeService.GetLikedItemsAsync(token);
 
         return Ok(result);
     }
@@ -24,7 +24,7 @@ public class FeaturedController(ILikeService _likeService)
     [HttpPost("like/{itemId:guid}")]
     public async Task<IActionResult> LikeItem([FromRoute] Guid itemId, CancellationToken token)
     {
-        await _likeService.LikeItemAsync(itemId, token);
+        await likeService.LikeItemAsync(itemId, token);
 
         return Ok();
     }
@@ -33,7 +33,7 @@ public class FeaturedController(ILikeService _likeService)
     [HttpPost("unlike/{itemId:guid}")]
     public async Task<IActionResult> UnlikeItem([FromRoute] Guid itemId, CancellationToken token)
     {
-        await _likeService.UnlikeItemAsync(itemId, token);
+        await likeService.UnlikeItemAsync(itemId, token);
 
         return Ok();
     }

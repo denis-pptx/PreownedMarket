@@ -10,8 +10,8 @@ namespace Item.DataAccess.Repositories.Cached;
 using Item = Models.Entities.Item;
 
 public class CachedItemRepository(
-    IItemRepository _decorated, 
-    ICacheService _cacheService) : IItemRepository
+    IItemRepository decorated, 
+    ICacheService cacheService) : IItemRepository
 {
     private readonly DistributedCacheEntryOptions _cacheOptions = new()
     {
@@ -20,16 +20,16 @@ public class CachedItemRepository(
     };
 
     public Task AddAsync(Item item, CancellationToken cancellationToken = default) 
-        => _decorated.AddAsync(item, cancellationToken);
+        => decorated.AddAsync(item, cancellationToken);
 
     public Task<PagedList<Item>> GetAsync(ItemFilterRequest filterRequest, CancellationToken token = default) =>
-        _decorated.GetAsync(filterRequest, token);
+        decorated.GetAsync(filterRequest, token);
 
     public async Task<Item?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var item = await _cacheService.GetOrCreateAsync(
+        var item = await cacheService.GetOrCreateAsync(
            typeof(Item).GetCacheKeyWithId(id),
-           async () => await _decorated.GetByIdAsync(id, cancellationToken),
+           async () => await decorated.GetByIdAsync(id, cancellationToken),
            _cacheOptions,
            cancellationToken);
 
@@ -38,15 +38,15 @@ public class CachedItemRepository(
 
     public async Task RemoveAsync(Item item, CancellationToken cancellationToken = default)
     {
-        await _decorated.RemoveAsync(item, cancellationToken);
+        await decorated.RemoveAsync(item, cancellationToken);
 
-        await _cacheService.RemoveAsync(item.GetCacheKeyWithId(), cancellationToken);
+        await cacheService.RemoveAsync(item.GetCacheKeyWithId(), cancellationToken);
     }
 
     public async Task UpdateAsync(Item item, CancellationToken cancellationToken = default)
     {
-        await _decorated.UpdateAsync(item, cancellationToken);
+        await decorated.UpdateAsync(item, cancellationToken);
 
-        await _cacheService.RemoveAsync(item.GetCacheKeyWithId(), cancellationToken);
+        await cacheService.RemoveAsync(item.GetCacheKeyWithId(), cancellationToken);
     }
 }

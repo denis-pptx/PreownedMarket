@@ -4,7 +4,7 @@ namespace Item.DataAccess.Data.Initializers;
 
 public static class LocationInitializer
 {
-    private static List<Region> _regions = [
+    private static readonly List<Region> Regions = [
         new() 
         { 
             Name = "Minsk", 
@@ -75,7 +75,7 @@ public static class LocationInitializer
 
     public static async Task SeedAsync(ApplicationDbContext dbContext)
     {
-        foreach (var region in _regions)
+        foreach (var region in Regions)
         {
             var dbRegion = dbContext.Regions.FirstOrDefault(x => x.Name == region.Name);
 

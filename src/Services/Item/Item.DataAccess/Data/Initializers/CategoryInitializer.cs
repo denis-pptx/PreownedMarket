@@ -8,8 +8,8 @@ public static class CategoryInitializer
 {
     private static IEnumerable<Category> GetAllCategories()
     {
-        Type type = typeof(CategoryValues);
-        PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
+        var type = typeof(CategoryValues);
+        var properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
 
         foreach (var property in properties)
         {

@@ -10,7 +10,7 @@ public class ImageRepository(ApplicationDbContext dbContext)
 {
     public async Task<IEnumerable<ItemImage>> GetByItemIdAsync(Guid itemId, CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .Where(image => image.ItemId == itemId)
             .ToListAsync(cancellationToken);
     }

@@ -10,11 +10,11 @@ public class StatusRepository(ApplicationDbContext dbContext)
 {
     public async Task<Status> GetByItemIdAsync(Guid itemId, CancellationToken cancellationToken = default)
     {
-        var item = await _dbContext.Items
+        var item = await DbContext.Items
             .Where(item => item.Id == itemId)
             .SingleAsync(cancellationToken);
 
-        var status = await _dbContext.Statuses
+        var status = await DbContext.Statuses
             .Where(status => status.Id == item.StatusId)
             .SingleAsync(cancellationToken);
 
@@ -23,7 +23,7 @@ public class StatusRepository(ApplicationDbContext dbContext)
 
     public async Task<Status> GetByNormalizedNameAsync(string normalizedName, CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .Where(status => status.NormalizedName == normalizedName)
             .SingleAsync(cancellationToken);
     }

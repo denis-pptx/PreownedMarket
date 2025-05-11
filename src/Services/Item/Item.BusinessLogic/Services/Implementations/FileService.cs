@@ -6,14 +6,14 @@ using Shared.Errors.Exceptions;
 
 namespace Item.BusinessLogic.Services.Implementations;
 
-public class FileService(IWebHostEnvironment _webHostEnvironment) 
+public class FileService(IWebHostEnvironment webHostEnvironment) 
     : IFileService
 {
     public static string ImagesDirectory => Path.Combine("uploads", "images");
 
     public void DeleteFile(string relativePath)
     {
-        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, relativePath.TrimStart('/'));
+        var filePath = Path.Combine(webHostEnvironment.WebRootPath, relativePath.TrimStart('/'));
 
         if (File.Exists(filePath))
         {
@@ -28,7 +28,7 @@ public class FileService(IWebHostEnvironment _webHostEnvironment)
             throw new BadRequestException(FileErrorMessages.Empty);
         }
 
-        var uploadDirectory = Path.Combine(_webHostEnvironment.WebRootPath, directoryName);
+        var uploadDirectory = Path.Combine(webHostEnvironment.WebRootPath, directoryName);
 
         if (!Directory.Exists(uploadDirectory))
         {

@@ -14,7 +14,7 @@ public class LikeRepository(ApplicationDbContext dbContext)
 {
     public Task<Like?> GetByItemAndUserAsync(Guid itemId, Guid userId, CancellationToken cancellationToken = default)
     {
-        return _entities.SingleOrDefaultAsync(
+        return Entities.SingleOrDefaultAsync(
             like => 
                 like.ItemId == itemId && 
                 like.UserId == userId, 
@@ -25,8 +25,8 @@ public class LikeRepository(ApplicationDbContext dbContext)
         Guid userId,
         CancellationToken cancellationToken = default)
     {
-        var itemsQuery = from like in _dbContext.Likes
-                         join item in _dbContext.Items
+        var itemsQuery = from like in DbContext.Likes
+                         join item in DbContext.Items
                          on like.ItemId equals item.Id
                          where like.UserId == userId
                          orderby like.CreatedOn

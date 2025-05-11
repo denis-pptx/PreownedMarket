@@ -19,7 +19,7 @@ public class ItemRepository(ApplicationDbContext dbContext)
         ItemFilterRequest filter, 
         CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.Items.ApplySpecification(new ItemSpecification());
+        var query = DbContext.Items.ApplySpecification(new ItemSpecification());
 
         if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
         {
@@ -82,7 +82,7 @@ public class ItemRepository(ApplicationDbContext dbContext)
 
     public override async Task<Item?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .ApplySpecification(new ItemSpecification())
             .SingleOrDefaultAsync(entity => entity.Id == id, cancellationToken);
     }

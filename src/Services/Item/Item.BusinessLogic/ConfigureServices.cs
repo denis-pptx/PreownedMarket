@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Item.BusinessLogic.Consumers.Users;
-using Item.BusinessLogic.Mappings;
 using Item.BusinessLogic.Models.Validators;
 using Item.BusinessLogic.Options.Jwt;
 using Item.BusinessLogic.Options.MessageBroker;
@@ -39,8 +38,6 @@ public static class ConfigureServices
         services
             .AddValidatorsFromAssemblyContaining<CategoryValidator>()
             .AddFluentValidationAutoValidation();
-
-        services.AddAutoMapper(Assembly.GetAssembly(typeof(CategoryProfile)));
 
         services.AddGrpc();
 

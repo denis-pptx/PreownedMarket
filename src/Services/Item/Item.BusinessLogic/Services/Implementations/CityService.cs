@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Item.BusinessLogic.Models.DTOs;
+﻿using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models.Entities;
@@ -10,51 +9,53 @@ using Shared.Errors.Exceptions;
 namespace Item.BusinessLogic.Services.Implementations;
 
 public class CityService(
-    IUnitOfWork _unitOfWork,
-    ICityRepository _cityRepository, 
-    IMapper _mapper) 
+    IUnitOfWork unitOfWork,
+    ICityRepository cityRepository) 
     : ICityService
 {
     public async Task<City> CreateAsync(CityDto cityDto, CancellationToken cancellationToken)
     {
-        var existingCity = await _cityRepository.GetByNameAsync(cityDto.Name, cancellationToken);
+        var existingCity = await cityRepository.GetByNameAsync(cityDto.Name, cancellationToken);
 
         if (existingCity is not null)
         {
             throw new ConflictException(CityErrorMessages.UniqueName);
         }
 
-        var city = _mapper.Map<CityDto, City>(cityDto);
+        var city = new City
+        {
+            Name = cityDto.Name
+        };
+        
+        await cityRepository.AddAsync(city, cancellationToken);
 
-        await _cityRepository.AddAsync(city, cancellationToken);
-
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return city;
     }
 
     public async Task<City> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var city = await _cityRepository.GetByIdAsync(id, cancellationToken);
+        var city = await cityRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(city);
 
-        await _cityRepository.RemoveAsync(city, cancellationToken);
+        await cityRepository.RemoveAsync(city, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return city;
     }
 
     public async Task<IEnumerable<City>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var cities = await _cityRepository.GetAllAsync(cancellationToken);
+        var cities = await cityRepository.GetAllAsync(cancellationToken);
 
         return cities;
     }
 
     public async Task<City> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var city = await _cityRepository.GetByIdAsync(id, cancellationToken);
+        var city = await cityRepository.GetByIdAsync(id, cancellationToken);
 
         NotFoundException.ThrowIfNull(city);
 
@@ -63,14 +64,14 @@ public class CityService(
 
     public async Task<City> UpdateAsync(Guid id, CityDto cityDto, CancellationToken cancellationToken)
     {
-        var city = await _cityRepository.GetByIdAsync(id, cancellationToken);
+        var city = await cityRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(city);
 
-        _mapper.Map(cityDto, city);
+        city.Name = cityDto.Name;
 
-        await _cityRepository.UpdateAsync(city, cancellationToken);
+        await cityRepository.UpdateAsync(city, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return city;
     }

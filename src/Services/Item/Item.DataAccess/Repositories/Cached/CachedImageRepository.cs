@@ -6,8 +6,8 @@ using Microsoft.Extensions.Caching.Distributed;
 namespace Item.DataAccess.Repositories.Cached;
 
 public class CachedImageRepository(
-    IImageRepository _decorated, 
-    ICacheService _cacheService) 
+    IImageRepository decorated, 
+    ICacheService cacheService) 
     : IImageRepository
 {
     private readonly DistributedCacheEntryOptions _cacheOptions = new()
@@ -18,27 +18,27 @@ public class CachedImageRepository(
 
     public async Task AddAsync(ItemImage image, CancellationToken cancellationToken = default)
     {
-        await _decorated.AddAsync(image, cancellationToken);
+        await decorated.AddAsync(image, cancellationToken);
 
-        await _cacheService.RemoveAsync(GetImagesByItemIdCacheKey(image.Id), cancellationToken);
+        await cacheService.RemoveAsync(GetImagesByItemIdCacheKey(image.Id), cancellationToken);
     }
 
     public async Task<IEnumerable<ItemImage>> GetByItemIdAsync(Guid itemId, CancellationToken cancellationToken = default)
     {
         var key = GetImagesByItemIdCacheKey(itemId);
 
-        var factory = async () => await _decorated.GetByItemIdAsync(itemId, cancellationToken);
+        var factory = async () => await decorated.GetByItemIdAsync(itemId, cancellationToken);
 
-        var images = await _cacheService.GetOrCreateAsync(key, factory, _cacheOptions, cancellationToken);
+        var images = await cacheService.GetOrCreateAsync(key, factory, _cacheOptions, cancellationToken);
 
         return images ?? [];
     }
 
     public async Task RemoveAsync(ItemImage image, CancellationToken cancellationToken = default)
     {
-        await _decorated.RemoveAsync(image, cancellationToken);
+        await decorated.RemoveAsync(image, cancellationToken);
 
-        await _cacheService.RemoveAsync(GetImagesByItemIdCacheKey(image.Id), cancellationToken);
+        await cacheService.RemoveAsync(GetImagesByItemIdCacheKey(image.Id), cancellationToken);
     }
 
     public static string GetImagesByItemIdCacheKey(Guid itemId) =>

@@ -10,7 +10,7 @@ public class CategoryRepository(ApplicationDbContext dbContext)
 {
     public async Task<Category?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await _entities
+        return await Entities
             .Where(category => category.Name == name)
             .SingleOrDefaultAsync(cancellationToken);
     }

@@ -4,12 +4,12 @@ using System.Data;
 
 namespace Item.DataAccess.UnitOfWork;
 
-public class EfUnitOfWork(ApplicationDbContext _dbContext)
+public class EfUnitOfWork(ApplicationDbContext dbContext)
     : IUnitOfWork
 {
     public IDbTransaction BeginTransaction()
     {
-        var transaction = _dbContext
+        var transaction = dbContext
             .Database
             .BeginTransaction();
 
@@ -18,6 +18,6 @@ public class EfUnitOfWork(ApplicationDbContext _dbContext)
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

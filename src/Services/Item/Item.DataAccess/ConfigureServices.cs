@@ -25,7 +25,7 @@ public static class ConfigureServices
         services
             .AddScoped<IUnitOfWork, EfUnitOfWork>()
             .AddScoped<ICategoryRepository, CategoryRepository>().Decorate<ICategoryRepository, CachedCategoryRepository>()
-            .AddScoped<IUserRepository, UserRepository>().Decorate<IUserRepository, CachedUserRepository>()
+            .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IStatusRepository, StatusRepository>().Decorate<IStatusRepository, CachedStatusRepository>()
             .AddScoped<IRegionRepository, RegionRepository>().Decorate<IRegionRepository, CachedRegionRepository>()
             .AddScoped<IItemRepository, ItemRepository>().Decorate<IItemRepository, CachedItemRepository>()

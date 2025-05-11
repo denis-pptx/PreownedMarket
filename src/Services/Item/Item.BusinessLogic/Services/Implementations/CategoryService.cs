@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Item.BusinessLogic.Models.DTOs;
+﻿using Item.BusinessLogic.Models.DTOs;
 using Item.BusinessLogic.Services.Interfaces;
 using Item.DataAccess.ErrorMessages;
 using Item.DataAccess.Models.Entities;
@@ -10,51 +9,54 @@ using Shared.Errors.Exceptions;
 namespace Item.BusinessLogic.Services.Implementations;
 
 public class CategoryService(
-    IUnitOfWork _unitOfWork,
-    ICategoryRepository _categoryRepository, 
-    IMapper _mapper) 
+    IUnitOfWork unitOfWork,
+    ICategoryRepository categoryRepository) 
     : ICategoryService
 {
     public async Task<Category> CreateAsync(CategoryDto categoryDto, CancellationToken cancellationToken)
     {
-        var existingCategory = await _categoryRepository.GetByNameAsync(categoryDto.Name, cancellationToken);
+        var existingCategory = await categoryRepository.GetByNameAsync(categoryDto.Name, cancellationToken);
 
         if (existingCategory is not null)
         {
             throw new ConflictException(CategoryErrorMessages.UniqueName);
         }
 
-        var category = _mapper.Map<CategoryDto, Category>(categoryDto);
+        var category = new Category
+        {
+            Name = categoryDto.Name,
+            NormalizedName = categoryDto.NormalizedName
+        };
+        
+        await categoryRepository.AddAsync(category, cancellationToken);
 
-        await _categoryRepository.AddAsync(category);
-
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return category;
     }
 
     public async Task<Category> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetByIdAsync(id, cancellationToken);
+        var category = await categoryRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(category);
 
-        await _categoryRepository.RemoveAsync(category);
+        await categoryRepository.RemoveAsync(category, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return category;
     }
 
     public async Task<IEnumerable<Category>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var categories = await _categoryRepository.GetAllAsync(cancellationToken);
+        var categories = await categoryRepository.GetAllAsync(cancellationToken);
 
         return categories;
     }
 
     public async Task<Category> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetByIdAsync(id, cancellationToken);
+        var category = await categoryRepository.GetByIdAsync(id, cancellationToken);
 
         NotFoundException.ThrowIfNull(category);
 
@@ -63,14 +65,15 @@ public class CategoryService(
 
     public async Task<Category> UpdateAsync(Guid id, CategoryDto categoryDto, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetByIdAsync(id, cancellationToken);
+        var category = await categoryRepository.GetByIdAsync(id, cancellationToken);
         NotFoundException.ThrowIfNull(category);
 
-        _mapper.Map(categoryDto, category);
+        category.Name = categoryDto.Name;
+        category.NormalizedName = categoryDto.NormalizedName;
 
-        await _categoryRepository.UpdateAsync(category);
+        await categoryRepository.UpdateAsync(category, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return category;
     }
