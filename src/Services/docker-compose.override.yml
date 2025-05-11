@@ -17,14 +17,13 @@ services:
 
   identity.db:
     environment:
-      MYSQL_DATABASE: identity_db
-      MYSQL_USER: dbuser 
-      MYSQL_PASSWORD: dbpassword
-      MYSQL_ROOT_PASSWORD: dbrootpassword
+      POSTGRES_DB: identity_db
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpassword
     ports:
-      - 3307:3306
+      - 5433:5432
     volumes:
-      - identity.db-data:/var/lib/mysql 
+      - identity.db-data:/var/lib/postgresql/data
     networks:
       - my-network
   
@@ -63,14 +62,13 @@ services:
  
   item.db:
     environment:
-      MYSQL_DATABASE: item_db
-      MYSQL_USER: dbuser 
-      MYSQL_PASSWORD: dbpassword
-      MYSQL_ROOT_PASSWORD: dbrootpassword
+      POSTGRES_DB: item_db
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpassword
     ports:
-      - 3308:3306 
+      - 5434:5432
     volumes:
-      - item.db-data:/var/lib/mysql 
+      - item.db-data:/var/lib/postgresql/data
     networks:
       - my-network
 

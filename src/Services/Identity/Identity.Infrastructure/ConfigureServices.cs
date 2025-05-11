@@ -18,9 +18,9 @@ public static class ConfigureServices
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        var connection = configuration.GetConnectionString("MySQL");
-        services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
+        var connection = configuration.GetConnectionString("PostgreSQL");
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(connection));
 
         services.AddHttpContextAccessor();
 

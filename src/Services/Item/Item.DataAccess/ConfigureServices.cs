@@ -18,9 +18,9 @@ public static class ConfigureServices
     {
         services.ConfigureOptions<CacheOptionsSetup>();
 
-        var connection = configurationManager.GetConnectionString("MySQL");
-        services.AddDbContext<ApplicationDbContext>(
-            options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3, 0))));
+        var connection = configurationManager.GetConnectionString("PostgreSQL");
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(connection));
 
         services
             .AddScoped<IUnitOfWork, EfUnitOfWork>()

@@ -13,7 +13,7 @@ services:
       - market.mq
     
   identity.db:
-    image: mysql:8.3.0
+    image: postgres:latest
     container_name: identity-db
 
   elasticsearch:
@@ -38,7 +38,7 @@ services:
       - redis
 
   item.db:
-    image: mysql:8.3.0
+    image: postgres:latest
     container_name: item-db
 
   chat.api:
