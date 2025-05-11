@@ -4,11 +4,11 @@ using System.Security.Claims;
 
 namespace Identity.Infrastructure.Services;
 
-public class CurrentUserService(IHttpContextAccessor _httpContextAccessor) 
+public class CurrentUserService(IHttpContextAccessor httpContextAccessor) 
     : ICurrentUserService
 {
     public string? UserId =>
-        _httpContextAccessor
+        httpContextAccessor
         .HttpContext?
         .User?
         .FindFirstValue(ClaimTypes.NameIdentifier);

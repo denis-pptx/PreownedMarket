@@ -1,7 +1,7 @@
-﻿using Identity.Domain.Models;
+﻿using Identity.Domain.Entities;
 using Identity.Infrastructure.Data;
 using Identity.Presentation.ExceptionHandlers;
-using Identity.Presentation.OptionsSetup;
+using Identity.Presentation.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 

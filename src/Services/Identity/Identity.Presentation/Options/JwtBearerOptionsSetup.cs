@@ -1,15 +1,15 @@
-﻿using Identity.Application.Options.Jwt;
+﻿using System.Text;
+using Identity.Application.Options.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
-namespace Identity.Presentation.OptionsSetup;
+namespace Identity.Presentation.Options;
 
-public class JwtBearerOptionsSetup(IOptions<JwtOptions> _jwtOptions)
+public class JwtBearerOptionsSetup(IOptions<JwtOptions> jwtOptions)
     : IConfigureNamedOptions<JwtBearerOptions>
 {
-    private readonly JwtOptions _jwtOptions = _jwtOptions.Value;
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
     public void Configure(JwtBearerOptions options)
     {

@@ -1,7 +1,7 @@
 ﻿using Identity.Application.Abstractions;
 using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Exceptions.ErrorMessages;
-using Identity.Domain.Models;
+using Identity.Domain.Entities;
+using Identity.Domain.Exceptions.ErrorMessages;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -11,30 +11,30 @@ using Shared.Events.Users;
 namespace Identity.Application.Features.Users.Commands.DeleteUser;
 
 public class DeleteUserByIdHandler(
-    UserManager<User> _userManager, 
-    ICurrentUserService _userService, 
-    IPublishEndpoint _publishEndpoint) 
+    UserManager<User> userManager, 
+    ICurrentUserService userService, 
+    IPublishEndpoint publishEndpoint) 
     : ICommandHandler<DeleteUserByIdCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteUserByIdCommand request, CancellationToken cancellationToken)
     {
-        var userIdentity = await _userManager.FindByIdAsync(request.Id.ToString());
+        var userIdentity = await userManager.FindByIdAsync(request.Id.ToString());
 
         if (userIdentity is null)
         {
             throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
-        var userActorId = _userService.UserId;
+        var userActorId = userService.UserId;
 
         if (userActorId == userIdentity.Id)
         {
             throw new ConflictException(UserErrorMessages.DeleteYourself);
         }
 
-        await _userManager.DeleteAsync(userIdentity);
+        await userManager.DeleteAsync(userIdentity);
 
-        await _publishEndpoint.Publish(
+        await publishEndpoint.Publish(
             new UserDeletedEvent 
             { 
                 UserId = Guid.Parse(userIdentity.Id) 

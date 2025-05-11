@@ -4,13 +4,8 @@ using Shared.Errors.Exceptions;
 
 namespace Identity.Domain.Exceptions;
 
-public class IdentityException : BaseApiException
+public class IdentityException(IEnumerable<IdentityError> errors)
+    : BaseApiException(StatusCodes.Status401Unauthorized, errorMessage: null)
 {
-    public IEnumerable<IdentityError> Errors { get; }
-
-    public IdentityException(IEnumerable<IdentityError> errors) 
-        : base(StatusCodes.Status401Unauthorized, errorMessage: null)
-    {
-        Errors = errors;
-    }
+    public IEnumerable<IdentityError> Errors { get; } = errors;
 }

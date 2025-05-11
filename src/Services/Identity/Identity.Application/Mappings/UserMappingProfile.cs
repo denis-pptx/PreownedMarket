@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Identity.Application.Models.DataTransferObjects.Identity.Requests;
 using Identity.Application.Models.DataTransferObjects.Users.Responses;
-using Identity.Domain.Models;
+using Identity.Domain.Entities;
 
 namespace Identity.Application.Mappings;
 

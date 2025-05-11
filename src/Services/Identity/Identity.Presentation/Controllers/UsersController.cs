@@ -12,7 +12,7 @@ namespace Identity.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController(IMediator _mediator) : Controller
+public class UsersController(IMediator mediator) : Controller
 {
     // GET api/<UsersController>
     [Authorize(Roles = nameof(Role.Administrator))]
@@ -20,7 +20,7 @@ public class UsersController(IMediator _mediator) : Controller
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
         var query = new GetAllUsersQuery();
-        var users = await _mediator.Send(query, cancellationToken);
+        var users = await mediator.Send(query, cancellationToken);
 
         return Ok(users);
     }
@@ -31,7 +31,7 @@ public class UsersController(IMediator _mediator) : Controller
     public async Task<IActionResult> GetUserById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(id);
-        var user = await _mediator.Send(query, cancellationToken);
+        var user = await mediator.Send(query, cancellationToken);
 
         return Ok(user);
     }
@@ -42,7 +42,7 @@ public class UsersController(IMediator _mediator) : Controller
     public async Task<IActionResult> DeleteUserById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteUserByIdCommand(id);    
-        await _mediator.Send(command, cancellationToken);
+        await mediator.Send(command, cancellationToken);
 
         return Ok();
     }
@@ -53,7 +53,7 @@ public class UsersController(IMediator _mediator) : Controller
     public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateUserRoleCommand(request);
-        await _mediator.Send(command, cancellationToken);
+        await mediator.Send(command, cancellationToken);
 
         return Ok();
     }

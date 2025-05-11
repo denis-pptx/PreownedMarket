@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Exceptions.ErrorMessages;
 using Identity.Application.Models.DataTransferObjects.Users.Responses;
-using Identity.Domain.Models;
+using Identity.Domain.Entities;
+using Identity.Domain.Exceptions.ErrorMessages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shared.Errors.Exceptions;
 
 namespace Identity.Application.Features.Users.Queries.GetUserById;
 
-public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper) 
+public class GetUserByIdHandler(UserManager<User> userManager, IMapper mapper) 
     : IQueryHandler<GetUserByIdQuery, GetUserResponse>
 {
     public async Task<GetUserResponse> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users
+        var user = await userManager.Users
             .FirstOrDefaultAsync(x => x.Id == request.Id.ToString(), cancellationToken);
         
         if (user is null)
@@ -22,9 +22,9 @@ public class GetUserByIdHandler(UserManager<User> _userManager, IMapper _mapper)
             throw new NotFoundException(UserErrorMessages.NotFound);
         }
 
-        var role = (await _userManager.GetRolesAsync(user)).Single();
+        var role = (await userManager.GetRolesAsync(user)).Single();
 
-        var userResponse = _mapper.Map<User, GetUserResponse>(user);
+        var userResponse = mapper.Map<User, GetUserResponse>(user);
         userResponse.Role = role;
 
         return userResponse;

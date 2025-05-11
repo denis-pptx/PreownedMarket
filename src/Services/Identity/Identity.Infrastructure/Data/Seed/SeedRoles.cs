@@ -5,7 +5,7 @@ namespace Identity.Infrastructure.Data.Seed;
 
 public static class SeedRoles
 {
-    public async static Task SeedAsync(this RoleManager<IdentityRole> roleManager)
+    public static async Task SeedAsync(this RoleManager<IdentityRole> roleManager)
     {
         foreach (var role in Enum.GetNames(typeof(Role)))
         {

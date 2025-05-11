@@ -1,6 +1,6 @@
 ﻿using Identity.Application.Models;
-using Identity.Domain.Models;
 using System.Security.Claims;
+using Identity.Domain.Entities;
 
 namespace Identity.Application.Abstractions;
 

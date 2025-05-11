@@ -1,6 +1,6 @@
 ﻿using Shared.Errors.Messages;
 
-namespace Identity.Application.Exceptions.ErrorMessages;
+namespace Identity.Domain.Exceptions.ErrorMessages;
 
 public static class RoleErrorMessages
 {

@@ -1,7 +1,6 @@
 ﻿using Identity.Application.Abstractions;
 using Identity.Application.Models;
 using Identity.Application.Options.Jwt;
-using Identity.Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -10,21 +9,22 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Identity.Domain.Entities;
 
 namespace Identity.Application.Services;
 
 public class JwtProvider(
-    IOptions<JwtOptions> _jwtOptions,
-    IOptions<JwtBearerOptions> _jwtBearerOptions,
-    UserManager<User> _userManager)
+    IOptions<JwtOptions> jwtOptions,
+    IOptions<JwtBearerOptions> jwtBearerOptions,
+    UserManager<User> userManager)
     : IJwtProvider
 {
-    private readonly JwtOptions _jwtOptions = _jwtOptions.Value;
-    private readonly JwtBearerOptions _jwtBearerOptions = _jwtBearerOptions.Value;
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+    private readonly JwtBearerOptions _jwtBearerOptions = jwtBearerOptions.Value;
 
     public async Task<string> GenerateAccessTokenAsync(User user)
     {
-        string role = (await _userManager.GetRolesAsync(user)).Single();
+        var role = (await userManager.GetRolesAsync(user)).Single();
 
         var claims = new Claim[]
         {
@@ -45,7 +45,7 @@ public class JwtProvider(
             expires: DateTime.Now.AddMinutes(_jwtOptions.AccessTokenLifeTimeMinutes),
             signingCredentials: signingCredentials);
 
-        string tokenValue = new JwtSecurityTokenHandler()
+        var tokenValue = new JwtSecurityTokenHandler()
             .WriteToken(token);
 
         return tokenValue;
@@ -58,10 +58,10 @@ public class JwtProvider(
         using var numberGenerator = RandomNumberGenerator.Create();
         numberGenerator.GetBytes(randomNumber);
 
-        string tokenString = Convert.ToBase64String(randomNumber);
-        DateTime tokenLifeTime = DateTime.Now.AddMinutes(_jwtOptions.RefreshTokenLifeTimeMinutes);
+        var tokenString = Convert.ToBase64String(randomNumber);
+        var tokenLifeTime = DateTime.Now.AddMinutes(_jwtOptions.RefreshTokenLifeTimeMinutes);
 
-        return new(tokenString, tokenLifeTime);
+        return new RefreshTokenModel(tokenString, tokenLifeTime);
     }
 
     public ClaimsPrincipal? GetPrincipalFromAccessToken(string accessToken)

@@ -1,4 +1,4 @@
-﻿using Identity.Domain.Models;
+﻿using Identity.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Shared;
 using Shared.Models;
@@ -7,7 +7,7 @@ namespace Identity.Infrastructure.Data.Seed;
 
 public static class SeedUsers
 {
-    public async static Task SeedAsync(this UserManager<User> userManager)
+    public static async Task SeedAsync(this UserManager<User> userManager)
     {
         foreach (var role in Enum.GetNames(typeof(Role)))
         {

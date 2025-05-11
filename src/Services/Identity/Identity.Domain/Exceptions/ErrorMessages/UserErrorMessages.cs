@@ -1,12 +1,13 @@
 ﻿using Shared.Errors.Messages;
 
-namespace Identity.Application.Exceptions.ErrorMessages;
+namespace Identity.Domain.Exceptions.ErrorMessages;
 
 public static class UserErrorMessages
 {
     public static ErrorMessage NotFound => new(
         "User.NotFound",
         "User not found");
+    
     public static ErrorMessage IncorrectCredentials => new(
         "User.IncorrectCredentials",
         "Incorrect Email or Password");
