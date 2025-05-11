@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Identity.Application.Abstractions.Messaging;
-using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+﻿using Identity.Application.Abstractions.Messaging;
 using Identity.Domain.Entities;
 using Identity.Domain.Exceptions;
 using MassTransit;
@@ -13,7 +11,6 @@ namespace Identity.Application.Features.Identity.Commands.RegisterUser;
 
 public class RegisterUserHandler(
     UserManager<User> userManager, 
-    IMapper mapper, 
     IPublishEndpoint publishEndpoint)
     : ICommandHandler<RegisterUserCommand, Unit>
 {
@@ -21,8 +18,12 @@ public class RegisterUserHandler(
     {
         var request = command.Request;
 
-        var user = mapper.Map<RegisterUserRequest, User>(request);
-
+        var user = new User
+        {
+            UserName = request.UserName,
+            Email = request.Email
+        };
+        
         var result = await userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)

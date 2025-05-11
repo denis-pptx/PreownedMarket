@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Identity.Application.Abstractions.Messaging;
+﻿using Identity.Application.Abstractions.Messaging;
 using Identity.Application.Models.DataTransferObjects.Users.Responses;
 using Identity.Domain.Entities;
 using Identity.Domain.Exceptions.ErrorMessages;
@@ -9,7 +8,7 @@ using Shared.Errors.Exceptions;
 
 namespace Identity.Application.Features.Users.Queries.GetUserById;
 
-public class GetUserByIdHandler(UserManager<User> userManager, IMapper mapper) 
+public class GetUserByIdHandler(UserManager<User> userManager) 
     : IQueryHandler<GetUserByIdQuery, GetUserResponse>
 {
     public async Task<GetUserResponse> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
@@ -24,9 +23,12 @@ public class GetUserByIdHandler(UserManager<User> userManager, IMapper mapper)
 
         var role = (await userManager.GetRolesAsync(user)).Single();
 
-        var userResponse = mapper.Map<User, GetUserResponse>(user);
-        userResponse.Role = role;
-
-        return userResponse;
+        return new GetUserResponse
+        {
+            Id = user.Id,
+            UserName = user.UserName!,
+            Email = user.Email!,
+            Role = role
+        };
     }
 }
