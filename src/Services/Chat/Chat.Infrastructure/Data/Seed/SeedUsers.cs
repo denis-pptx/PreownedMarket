@@ -8,7 +8,7 @@ namespace Chat.Infrastructure.Data.Seed;
 
 internal static class SeedUsers
 {
-    public async static Task SeedUsersAsync(this IApplicationDbContext dbContext)
+    public static async Task SeedUsersAsync(this IApplicationDbContext dbContext)
     {
         foreach (var role in Enum.GetNames(typeof(Role)))
         {

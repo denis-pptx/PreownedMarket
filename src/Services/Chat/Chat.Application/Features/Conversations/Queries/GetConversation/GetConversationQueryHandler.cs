@@ -9,23 +9,23 @@ using Shared.Errors.Exceptions;
 namespace Chat.Application.Features.Conversations.Queries.GetConversation;
 
 public class GetConversationQueryHandler(
-    IUserContext _userContext,
-    IItemService _itemService,
-    IConversationRepository _conversationRepository,
-    IMessageRepository _messageRepository,
-    IUserRepository _userRepository)
+    IUserContext userContext,
+    IItemService itemService,
+    IConversationRepository conversationRepository,
+    IMessageRepository messageRepository,
+    IUserRepository userRepository)
     : IQueryHandler<GetConversationQuery, GetConversationResponse>
 {
     public async Task<GetConversationResponse> Handle(
         GetConversationQuery query, 
         CancellationToken cancellationToken)
     {
-        var conversation = await _conversationRepository.GetByIdAsync(query.ConversationId, cancellationToken);
+        var conversation = await conversationRepository.GetByIdAsync(query.ConversationId, cancellationToken);
         NotFoundException.ThrowIfNull(conversation);
 
-        var userId = _userContext.UserId;
+        var userId = userContext.UserId;
 
-        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var user = await userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(user);
 
         if (!conversation.MembersIds.Contains(user.Id)) 
@@ -33,12 +33,12 @@ public class GetConversationQueryHandler(
             throw new ForbiddenException(ConversationErrorMessages.AlienConversation);
         }
 
-        var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
+        var item = await itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
-        var members = await _userRepository.GetMembersByConversationIdAsync(conversation.Id, cancellationToken);
+        var members = await userRepository.GetMembersByConversationIdAsync(conversation.Id, cancellationToken);
 
-        var messages = await _messageRepository.GetByConversationIdAsync(conversation.Id, cancellationToken);
+        var messages = await messageRepository.GetByConversationIdAsync(conversation.Id, cancellationToken);
 
         return new GetConversationResponse(
             conversation.Id,

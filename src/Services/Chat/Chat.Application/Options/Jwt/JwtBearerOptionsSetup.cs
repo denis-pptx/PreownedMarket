@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Chat.Application.Options.Jwt;
 
-public class JwtBearerOptionsSetup(IOptions<JwtOptions> _jwtOptions)
+public class JwtBearerOptionsSetup(IOptions<JwtOptions> jwtOptions)
     : IConfigureNamedOptions<JwtBearerOptions>
 {
-    private readonly JwtOptions _jwtOptions = _jwtOptions.Value;
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
     public void Configure(JwtBearerOptions options)
     {

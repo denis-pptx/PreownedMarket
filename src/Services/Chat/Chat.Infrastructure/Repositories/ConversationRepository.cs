@@ -11,33 +11,33 @@ public class ConversationRepository(IApplicationDbContext dbContext)
 {
     public async Task<IEnumerable<Conversation>> GetByUserIdAsync(Guid userId, CancellationToken token = default)
     {
-        return await _collection
+        return await Collection
             .Find(conversation => conversation.MembersIds.Contains(userId))
             .ToListAsync(token);
     }
 
     public async Task<Conversation?> FirstOrDefaultAsync(Expression<Func<Conversation, bool>> filter, CancellationToken token = default)
     {
-        return await _collection.Find(filter).FirstOrDefaultAsync(token);
+        return await Collection.Find(filter).FirstOrDefaultAsync(token);
     }
 
     public async Task DeleteByUserIdAsync(Guid userId, CancellationToken token = default)
     {
-        await _collection.DeleteManyAsync(
+        await Collection.DeleteManyAsync(
             conversation => conversation.MembersIds.Contains(userId), 
             token);
     }
 
     public async Task DeleteByItemIdAsync(Guid itemId, CancellationToken token = default)
     {
-        await _collection.DeleteManyAsync(
+        await Collection.DeleteManyAsync(
             conversation => conversation.ItemId == itemId,
             token);
     }
 
     public async Task<IEnumerable<Guid>> GetConversationsIdsByItemIdAsync(Guid itemId, CancellationToken token = default)
     {
-        return await _collection
+        return await Collection
             .Find(conversation => conversation.ItemId == itemId)
             .Project(conversation => conversation.Id)
             .ToListAsync(token);

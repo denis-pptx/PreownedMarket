@@ -10,11 +10,11 @@ using Shared.Errors.Exceptions;
 namespace Chat.Application.Features.Messages.Commands.UpdateMessage;
 
 public class UpdateMessageCommandHandler(
-    IUserContext _userContext,
-    IMessageNotificationService _notificationService,
-    IItemService _itemService,
-    IMessageRepository _messageRepository,
-    IConversationRepository _conversationRepository) 
+    IUserContext userContext,
+    IMessageNotificationService notificationService,
+    IItemService itemService,
+    IMessageRepository messageRepository,
+    IConversationRepository conversationRepository) 
     : ICommandHandler<UpdateMessageCommand, Message>
 {
     public async Task<Message> Handle(
@@ -24,18 +24,18 @@ public class UpdateMessageCommandHandler(
         var messageId = command.MessageId;
         var request = command.Request;
 
-        var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
+        var message = await messageRepository.GetByIdAsync(messageId, cancellationToken);
         NotFoundException.ThrowIfNull(message);
 
-        if (message.SenderId != _userContext.UserId)
+        if (message.SenderId != userContext.UserId)
         {
             throw new ForbiddenException(MessageErrorMessages.UpdateAlienMessage);
         }
 
-        var conversation = await _conversationRepository.GetByIdAsync(message.ConversationId, cancellationToken);
+        var conversation = await conversationRepository.GetByIdAsync(message.ConversationId, cancellationToken);
         NotFoundException.ThrowIfNull(conversation);
 
-        var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
+        var item = await itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         if (item.IsActive == false)
@@ -45,9 +45,9 @@ public class UpdateMessageCommandHandler(
 
         message.Text = request.Text;
 
-        await _messageRepository.UpdateAsync(message, cancellationToken);
+        await messageRepository.UpdateAsync(message, cancellationToken);
 
-        await _notificationService.UpdateMessageAsync(message, cancellationToken);
+        await notificationService.UpdateMessageAsync(message, cancellationToken);
 
         return message;
     }

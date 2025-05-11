@@ -11,7 +11,7 @@ namespace Chat.Presentation.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class MessagesController(IMediator _mediator) 
+public class MessagesController(IMediator mediator) 
     : ControllerBase
 {
     // POST api/<MessagesController>
@@ -23,7 +23,7 @@ public class MessagesController(IMediator _mediator)
     public async Task<IActionResult> Post([FromBody] CreateMessageRequest request, CancellationToken token)
     {
         var command = new CreateMessageCommand(request);
-        var response = await _mediator.Send(command, token);
+        var response = await mediator.Send(command, token);
 
         return Ok(response);
     }
@@ -37,7 +37,7 @@ public class MessagesController(IMediator _mediator)
     public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] UpdateMessageRequest request, CancellationToken token)
     {
         var command = new UpdateMessageCommand(id, request);
-        var response = await _mediator.Send(command, token);
+        var response = await mediator.Send(command, token);
 
         return Ok(response);
     }
@@ -51,7 +51,7 @@ public class MessagesController(IMediator _mediator)
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
     {
         var command = new DeleteMessageCommand(id);
-        var response = await _mediator.Send(command, token);
+        var response = await mediator.Send(command, token);
 
         return Ok(response);
     }

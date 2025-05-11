@@ -8,32 +8,32 @@ using Shared.Errors.Exceptions;
 namespace Chat.Application.Features.Conversations.Queries.GetUserConversations;
 
 public class GetAllUserConversationsQueryHandler(
-    IUserContext _userContext,
-    IItemService _itemService,
-    IUserRepository _userRepository,
-    IConversationRepository _conversationRepository,
-    IMessageRepository _messageRepository) 
+    IUserContext userContext,
+    IItemService itemService,
+    IUserRepository userRepository,
+    IConversationRepository conversationRepository,
+    IMessageRepository messageRepository) 
     : IQueryHandler<GetAllUserConversationsQuery, IEnumerable<GetConversationWithLastMessageResponse>>
 {
     public async Task<IEnumerable<GetConversationWithLastMessageResponse>> Handle(
         GetAllUserConversationsQuery query, 
         CancellationToken cancellationToken)
     {
-        var userId = _userContext.UserId;
+        var userId = userContext.UserId;
 
-        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var user = await userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(user);
 
-        var conversations = await _conversationRepository.GetByUserIdAsync(userId, cancellationToken);
+        var conversations = await conversationRepository.GetByUserIdAsync(userId, cancellationToken);
 
         var response = conversations.Select(async conversation =>
         {
-            var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
+            var item = await itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
             NotFoundException.ThrowIfNull(item);
 
-            var lastMessage = await _messageRepository.GetLastMessageInConversationAsync(conversation.Id, cancellationToken);
+            var lastMessage = await messageRepository.GetLastMessageInConversationAsync(conversation.Id, cancellationToken);
 
-            var members = await _userRepository.GetMembersByConversationIdAsync(conversation.Id, cancellationToken);
+            var members = await userRepository.GetMembersByConversationIdAsync(conversation.Id, cancellationToken);
 
             return new GetConversationWithLastMessageResponse(
                 conversation.Id,

@@ -10,7 +10,7 @@ public class MessageRepository(IApplicationDbContext dbContext)
 {
     public async Task DeleteByConversationIdAsync(Guid conversationId, CancellationToken token = default)
     {
-        await _collection.DeleteManyAsync(message => message.ConversationId == conversationId, token);
+        await Collection.DeleteManyAsync(message => message.ConversationId == conversationId, token);
     }
 
     public Task DeleteByItemIdAsync(Guid itemId, CancellationToken token = default)
@@ -20,19 +20,19 @@ public class MessageRepository(IApplicationDbContext dbContext)
 
     public async Task DeleteByUserIdAsync(Guid userId, CancellationToken token = default)
     {
-        await _collection.DeleteManyAsync(message => message.SenderId == userId, token);    
+        await Collection.DeleteManyAsync(message => message.SenderId == userId, token);    
     }
 
     public async Task<IEnumerable<Message>> GetByConversationIdAsync(Guid conversationId, CancellationToken token = default)
     {
-        return await _collection
+        return await Collection
             .Find(message => message.ConversationId == conversationId)
             .ToListAsync(token);
     }
 
     public async Task<Message?> GetLastMessageInConversationAsync(Guid conversationId, CancellationToken token = default)
     {
-        return await _collection
+        return await Collection
             .Find(message => message.ConversationId == conversationId)
             .SortByDescending(message => message.CreatedAt)
             .FirstOrDefaultAsync(token);

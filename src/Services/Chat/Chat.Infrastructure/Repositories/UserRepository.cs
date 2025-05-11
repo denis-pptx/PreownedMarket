@@ -10,12 +10,12 @@ public class UserRepository(IApplicationDbContext dbContext)
 {
     public async Task<IEnumerable<User>> GetMembersByConversationIdAsync(Guid conversationId, CancellationToken token = default)
     {
-        var membersIds = await _dbContext.Conversations
+        var membersIds = await DbContext.Conversations
             .Find(conversation => conversation.Id == conversationId)
             .Project(conversation => conversation.MembersIds)
             .SingleAsync(token);
 
-        var members = await _collection
+        var members = await Collection
             .Find(user => membersIds.Contains(user.Id))
             .ToListAsync(token);
 

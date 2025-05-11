@@ -1,7 +1,7 @@
 ﻿using Chat.Application.Features.Conversations.Commands.CreateConversation;
 using Chat.Application.Features.Conversations.Commands.DeleteConversation;
 using Chat.Application.Features.Conversations.Queries.GetConversation;
-using Chat.Application.Features.Conversations.Queries.GetConversatoinByItem;
+using Chat.Application.Features.Conversations.Queries.GetConversationByItem;
 using Chat.Application.Features.Conversations.Queries.GetUserConversations;
 using Chat.Application.Models.Conversations.Requests;
 using MediatR;
@@ -13,7 +13,7 @@ namespace Chat.Presentation.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class ConversationsController(ISender _sender) 
+public class ConversationsController(ISender sender) 
     : ControllerBase
 {
     // GET: api/<ConversationsController>
@@ -24,7 +24,7 @@ public class ConversationsController(ISender _sender)
     public async Task<IActionResult> GetUserConversations(CancellationToken token)
     {
         var query = new GetAllUserConversationsQuery();
-        var result = await _sender.Send(query, token);
+        var result = await sender.Send(query, token);
 
         return Ok(result);
     }
@@ -37,7 +37,7 @@ public class ConversationsController(ISender _sender)
     public async Task<IActionResult> GetConversation([FromRoute] Guid id, CancellationToken token)
     {
         var query = new GetConversationQuery(id);
-        var result = await _sender.Send(query, token);
+        var result = await sender.Send(query, token);
 
         return Ok(result);
     }
@@ -51,7 +51,7 @@ public class ConversationsController(ISender _sender)
     public async Task<IActionResult> GetConversationByItem([FromRoute] Guid itemId, CancellationToken token)
     {
         var query = new GetConversationByItemQuery(itemId); 
-        var result = await _sender.Send(query, token);
+        var result = await sender.Send(query, token);
 
         return Ok(result);
     }
@@ -65,7 +65,7 @@ public class ConversationsController(ISender _sender)
     public async Task<IActionResult> Post([FromBody] CreateConversationRequest request, CancellationToken token)
     {
         var command = new CreateConversationCommand(request);
-        var result = await _sender.Send(command, token);
+        var result = await sender.Send(command, token);
 
         return Ok(result);
     }
@@ -79,7 +79,7 @@ public class ConversationsController(ISender _sender)
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
     {
         var command = new DeleteConversationCommand(id);
-        await _sender.Send(command, token);
+        await sender.Send(command, token);
 
         return NoContent();
     }

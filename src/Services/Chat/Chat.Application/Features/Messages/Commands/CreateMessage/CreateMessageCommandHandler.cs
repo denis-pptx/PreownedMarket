@@ -10,29 +10,29 @@ using Shared.Errors.Exceptions;
 namespace Chat.Application.Features.Messages.Commands.CreateMessage;
 
 public class CreateMessageCommandHandler(
-    IUserContext _userContext,
-    IItemService _itemService,
-    IUserRepository _userRepository,
-    IMessageRepository _messageRepository,
-    IConversationRepository _conversationRepository,
-    IMessageNotificationService _notificationService)
+    IUserContext userContext,
+    IItemService itemService,
+    IUserRepository userRepository,
+    IMessageRepository messageRepository,
+    IConversationRepository conversationRepository,
+    IMessageNotificationService notificationService)
     : ICommandHandler<CreateMessageCommand, Message>
 {
     public async Task<Message> Handle(
         CreateMessageCommand command,
         CancellationToken cancellationToken)
     {
-        var userId = _userContext.UserId;
+        var userId = userContext.UserId;
 
-        var sender = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var sender = await userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(sender);
 
         var request = command.Request;
 
-        var conversation = await _conversationRepository.GetByIdAsync(request.ConversationId, cancellationToken);
+        var conversation = await conversationRepository.GetByIdAsync(request.ConversationId, cancellationToken);
         NotFoundException.ThrowIfNull(conversation);
 
-        var item = await _itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
+        var item = await itemService.GetByIdAsync(conversation.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         if (item.IsActive is false)
@@ -48,9 +48,9 @@ public class CreateMessageCommandHandler(
             ConversationId = conversation.Id
         };
 
-        await _messageRepository.AddAsync(message, cancellationToken);
+        await messageRepository.AddAsync(message, cancellationToken);
 
-        await _notificationService.SendMessageAsync(message, cancellationToken);
+        await notificationService.SendMessageAsync(message, cancellationToken);
 
         return message;
     }

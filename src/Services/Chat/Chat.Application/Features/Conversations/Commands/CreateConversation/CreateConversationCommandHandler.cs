@@ -11,23 +11,23 @@ using Shared.Errors.Exceptions;
 namespace Chat.Application.Features.Conversations.Commands.CreateConversation;
 
 public class CreateConversationCommandHandler(
-    IUserContext _userContext,
-    IConversationNotificationService _notificationService,
-    IItemService _itemService,
-    IUserRepository _userRepository,
-    IConversationRepository _conversationRepository)
+    IUserContext userContext,
+    IConversationNotificationService notificationService,
+    IItemService itemService,
+    IUserRepository userRepository,
+    IConversationRepository conversationRepository)
     : ICommandHandler<CreateConversationCommand, CreateConversationResponse>
 {
     public async Task<CreateConversationResponse> Handle(
         CreateConversationCommand command,
         CancellationToken cancellationToken)
     {
-        var userId = _userContext.UserId;
+        var userId = userContext.UserId;
 
-        var customer = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var customer = await userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(customer);
 
-        var item = await _itemService.GetByIdAsync(command.Request.ItemId, cancellationToken);
+        var item = await itemService.GetByIdAsync(command.Request.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
         if (item.UserId == customer.Id)
@@ -35,7 +35,7 @@ public class CreateConversationCommandHandler(
             throw new ConflictException(ConversationErrorMessages.MyselfConversation);
         }
 
-        var existingConversation = await _conversationRepository.FirstOrDefaultAsync(
+        var existingConversation = await conversationRepository.FirstOrDefaultAsync(
             conversation => 
                 conversation.ItemId == item.Id && 
                 conversation.MembersIds.Contains(customer.Id),
@@ -51,7 +51,7 @@ public class CreateConversationCommandHandler(
             throw new ConflictException(ConversationErrorMessages.CreateOnInactiveItem);
         }
 
-        var seller = await _userRepository.GetByIdAsync(item.UserId, cancellationToken);
+        var seller = await userRepository.GetByIdAsync(item.UserId, cancellationToken);
         NotFoundException.ThrowIfNull(seller);
 
         var conversation = new Conversation
@@ -60,9 +60,9 @@ public class CreateConversationCommandHandler(
             MembersIds = [customer.Id, seller.Id]
         };
 
-        await _conversationRepository.AddAsync(conversation, cancellationToken);
+        await conversationRepository.AddAsync(conversation, cancellationToken);
 
-        await _notificationService.CreateConversationAsync(conversation, cancellationToken);
+        await notificationService.CreateConversationAsync(conversation, cancellationToken);
 
         return new CreateConversationResponse(
             conversation.Id,

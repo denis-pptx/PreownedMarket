@@ -6,7 +6,7 @@ namespace Chat.Infrastructure.Services;
 
 using Item = Application.Models.Items.Item;
 
-public class ItemService(Protos.Item.ItemClient _itemClient) 
+public class ItemService(Protos.Item.ItemClient itemClient) 
     : IItemService
 {
     public async Task<Item?> GetByIdAsync(Guid id, CancellationToken token = default)
@@ -18,7 +18,7 @@ public class ItemService(Protos.Item.ItemClient _itemClient)
 
         try
         {
-            var itemResponse = await _itemClient.GetItemAsync(request, cancellationToken: token);
+            var itemResponse = await itemClient.GetItemAsync(request, cancellationToken: token);
 
             return new Item(
                 Guid.Parse(itemResponse.Id),

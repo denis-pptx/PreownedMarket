@@ -9,21 +9,21 @@ using Shared.Errors.Exceptions;
 namespace Chat.Application.Features.Conversations.Commands.DeleteConversation;
 
 public class DeleteConversationCommandHandler(
-    IUserContext _userContext,
-    IConversationNotificationService _notificationService,
-    IConversationRepository _conversationRepository,
-    IUserRepository _userRepository,
-    IMessageRepository _messageRepository)
+    IUserContext userContext,
+    IConversationNotificationService notificationService,
+    IConversationRepository conversationRepository,
+    IUserRepository userRepository,
+    IMessageRepository messageRepository)
     : ICommandHandler<DeleteConversationCommand, Unit>
 {
     public async Task<Unit> Handle(
         DeleteConversationCommand command, 
         CancellationToken cancellationToken)
     {
-        var conversation = await _conversationRepository.GetByIdAsync(command.ConversationId, cancellationToken);
+        var conversation = await conversationRepository.GetByIdAsync(command.ConversationId, cancellationToken);
         NotFoundException.ThrowIfNull(conversation);
 
-        var user = await _userRepository.GetByIdAsync(_userContext.UserId, cancellationToken);
+        var user = await userRepository.GetByIdAsync(userContext.UserId, cancellationToken);
         NotFoundException.ThrowIfNull(user);
 
         if (!conversation.MembersIds.Contains(user.Id))
@@ -31,11 +31,11 @@ public class DeleteConversationCommandHandler(
             throw new ForbiddenException(ConversationErrorMessages.AlienConversation);
         }
 
-        await _messageRepository.DeleteByConversationIdAsync(conversation.Id, cancellationToken);
+        await messageRepository.DeleteByConversationIdAsync(conversation.Id, cancellationToken);
 
-        await _conversationRepository.DeleteAsync(conversation, cancellationToken);
+        await conversationRepository.DeleteAsync(conversation, cancellationToken);
 
-        await _notificationService.DeleteConversationAsync(conversation, cancellationToken);
+        await notificationService.DeleteConversationAsync(conversation, cancellationToken);
 
         return Unit.Value;
     }

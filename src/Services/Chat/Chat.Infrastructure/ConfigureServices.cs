@@ -32,7 +32,7 @@ public static class ConfigureServices
 
         services
             .AddScoped<IMessageNotificationService, MessageNotificationService>()
-            .AddScoped<IConversationNotificationService, ConversationNofiticationService>()
+            .AddScoped<IConversationNotificationService, ConversationNotificationService>()
             .AddScoped<IItemService, ItemService>();
 
         services

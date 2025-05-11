@@ -10,28 +10,28 @@ using Shared.Errors.Exceptions;
 namespace Chat.Application.Features.Messages.Commands.DeleteMessage;
 
 public class DeleteMessageCommandHandler(
-    IUserContext _userContext,
-    IMessageNotificationService _notificationService,
-    IMessageRepository _messageRepository) 
+    IUserContext userContext,
+    IMessageNotificationService notificationService,
+    IMessageRepository messageRepository) 
     : ICommandHandler<DeleteMessageCommand, Message>
 {
     public async Task<Message> Handle(
         DeleteMessageCommand command, 
         CancellationToken cancellationToken)
     {
-        var message = await _messageRepository.GetByIdAsync(command.MessageId, cancellationToken);
+        var message = await messageRepository.GetByIdAsync(command.MessageId, cancellationToken);
         NotFoundException.ThrowIfNull(message);
 
-        var userId = _userContext.UserId;
+        var userId = userContext.UserId;
 
         if (userId != message.SenderId)
         {
             throw new ForbiddenException(MessageErrorMessages.DeleteAlienMessage);
         }
 
-        await _messageRepository.DeleteAsync(message, cancellationToken);
+        await messageRepository.DeleteAsync(message, cancellationToken);
 
-        await _notificationService.DeleteMessageAsync(message, cancellationToken);
+        await notificationService.DeleteMessageAsync(message, cancellationToken);
 
         return message;
     }

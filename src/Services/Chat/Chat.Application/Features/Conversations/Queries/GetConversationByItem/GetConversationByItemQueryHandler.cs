@@ -5,29 +5,29 @@ using Chat.Application.Models.Conversations.Responses;
 using Chat.Domain.Repositories;
 using Shared.Errors.Exceptions;
 
-namespace Chat.Application.Features.Conversations.Queries.GetConversatoinByItem;
+namespace Chat.Application.Features.Conversations.Queries.GetConversationByItem;
 
 public class GetConversationByItemQueryHandler(
-    IUserContext _userContext,
-    IItemService _itemService,
-    IUserRepository _userRepository, 
-    IMessageRepository _messageRepository,
-    IConversationRepository _conversationRepository) 
+    IUserContext userContext,
+    IItemService itemService,
+    IUserRepository userRepository, 
+    IMessageRepository messageRepository,
+    IConversationRepository conversationRepository) 
     : IQueryHandler<GetConversationByItemQuery, GetConversationResponse>
 {
     public async Task<GetConversationResponse> Handle(
         GetConversationByItemQuery query, 
         CancellationToken cancellationToken)
     {
-        var item = await _itemService.GetByIdAsync(query.itemId, cancellationToken);
+        var item = await itemService.GetByIdAsync(query.ItemId, cancellationToken);
         NotFoundException.ThrowIfNull(item);
 
-        var userId = _userContext.UserId;
+        var userId = userContext.UserId;
 
-        var customer = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var customer = await userRepository.GetByIdAsync(userId, cancellationToken);
         NotFoundException.ThrowIfNull(customer);
 
-        var seller = await _userRepository.GetByIdAsync(item.UserId, cancellationToken);
+        var seller = await userRepository.GetByIdAsync(item.UserId, cancellationToken);
         NotFoundException.ThrowIfNull(seller);
 
         if (customer.Id == seller.Id)
@@ -35,7 +35,7 @@ public class GetConversationByItemQueryHandler(
             throw new BadRequestException();
         }
 
-        var conversation = await _conversationRepository.FirstOrDefaultAsync(
+        var conversation = await conversationRepository.FirstOrDefaultAsync(
             conversation => 
                 conversation.ItemId == item.Id && 
                 conversation.MembersIds.Contains(customer.Id) && 
@@ -44,7 +44,7 @@ public class GetConversationByItemQueryHandler(
 
         NotFoundException.ThrowIfNull(conversation);
 
-        var messages = await _messageRepository.GetByConversationIdAsync(conversation.Id, cancellationToken);
+        var messages = await messageRepository.GetByConversationIdAsync(conversation.Id, cancellationToken);
 
         return new GetConversationResponse(
             conversation.Id,

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Infrastructure.Services;
 
-public class ConversationNofiticationService(IHubContext<ChatHub, IChatHub> _hubContext)
+public class ConversationNotificationService(IHubContext<ChatHub, IChatHub> hubContext)
     : IConversationNotificationService
 {
     public async Task CreateConversationAsync(Conversation conversation, CancellationToken token = default)
@@ -15,7 +15,7 @@ public class ConversationNofiticationService(IHubContext<ChatHub, IChatHub> _hub
 
         var notification = new ConversationCreatedNotification(conversation.Id);
 
-        await _hubContext.Clients
+        await hubContext.Clients
             .Users(receiversIds)
             .CreateConversation(notification);
     }
@@ -26,7 +26,7 @@ public class ConversationNofiticationService(IHubContext<ChatHub, IChatHub> _hub
 
         var notification = new ConversationDeletedNotification(conversation.Id);
 
-        await _hubContext.Clients
+        await hubContext.Clients
             .Users(receiversIds)
             .DeleteConversation(notification);
     }
