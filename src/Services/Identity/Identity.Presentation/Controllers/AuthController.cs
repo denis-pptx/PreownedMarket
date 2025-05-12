@@ -1,7 +1,9 @@
-﻿using Identity.Application.Features.Identity.Commands.LoginUser;
+﻿using System.Net;
+using Identity.Application.Features.Identity.Commands.LoginUser;
 using Identity.Application.Features.Identity.Commands.RefreshToken;
 using Identity.Application.Features.Identity.Commands.RegisterUser;
 using Identity.Application.Models.DataTransferObjects.Identity.Requests;
+using Identity.Application.Models.DataTransferObjects.Identity.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +16,7 @@ public class AuthController(IMediator mediator)
 {
     // POST api/<AuthController>/register
     [HttpPost("register")]
+    [ProducesResponseType( (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Register([FromBody] RegisterUserRequest request, CancellationToken cancellationToken)
     {
         var command = new RegisterUserCommand(request);
@@ -24,6 +27,7 @@ public class AuthController(IMediator mediator)
 
     // POST api/<AuthController>/login
     [HttpPost("login")]
+    [ProducesResponseType(typeof(LoginUserResponse), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Login([FromBody] LoginUserRequest request, CancellationToken cancellationToken)
     {
         var command = new LoginUserCommand(request);
@@ -34,6 +38,7 @@ public class AuthController(IMediator mediator)
 
     // POST api/<AuthController>/refresh
     [HttpPost("refresh")]
+    [ProducesResponseType(typeof(RefreshTokenResponse), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
         var command = new RefreshTokenCommand(request);
