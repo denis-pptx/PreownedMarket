@@ -5,6 +5,7 @@ using Identity.Presentation.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Shared.Configuration;
+using Shared.Errors;
 
 namespace Identity.Presentation;
 
@@ -38,7 +39,7 @@ public static class ConfigureServices
         services
             .AddProblemDetails()
             .AddExceptionHandler<IdentityExceptionHandler>()
-            .AddExceptionHandler<GlobalExceptionHandler>();
+            .AddExceptionHandler<BaseApiExceptionHandler>();
 
         services.AddRouting(options => options.LowercaseUrls = true);
 

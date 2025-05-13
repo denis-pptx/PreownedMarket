@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Shared.Errors.Exceptions;
 
-namespace Identity.Presentation.ExceptionHandlers;
+namespace Shared.Errors;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class BaseApiExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext, 
@@ -18,8 +19,8 @@ public class GlobalExceptionHandler : IExceptionHandler
             {
                 Status = baseException.StatusCode,
                 Title = ReasonPhrases.GetReasonPhrase(baseException.StatusCode),
-                Detail = baseException.ErrorMessage?.Description ?? string.Empty,
-                Type = baseException.Type,
+                Detail = baseException.ErrorMessage?.Description,
+                Type = baseException.ErrorMessage?.Code,
             };
 
             httpContext.Response.StatusCode = problemDetails.Status.Value;

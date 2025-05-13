@@ -1,7 +1,7 @@
-﻿using Item.Presentation.ExceptionHandlers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
 using Shared.Configuration;
+using Shared.Errors;
 
 namespace Item.Presentation;
 
@@ -24,7 +24,7 @@ public static class ConfigureServices
         services.AddHttpContextAccessor();
 
         services
-            .AddExceptionHandler<GlobalExceptionHandler>()
+            .AddExceptionHandler<BaseApiExceptionHandler>()
             .AddProblemDetails();
 
         services

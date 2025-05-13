@@ -1,5 +1,6 @@
 ﻿using Chat.Presentation.ExceptionHandlers;
 using Shared.Configuration;
+using Shared.Errors;
 
 namespace Chat.Presentation;
 
